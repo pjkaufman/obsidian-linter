@@ -69,9 +69,7 @@ export default class LinterPlugin extends Plugin {
     async onload() {
       logInfo('Loading plugin');
 
-      console.log(iconInfo);
-
-      // eslint-disable-next-line guard-for-in'
+      // eslint-disable-next-line guard-for-in
       for (const key in iconInfo) {
         const svg = iconInfo[key];
         addIcon(svg.id, svg.source);
