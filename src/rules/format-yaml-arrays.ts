@@ -32,10 +32,10 @@ export default class RuleTemplate extends RuleBuilder<FormatYamlArrayOptions> {
     return FormatYamlArrayOptions;
   }
   get name(): string {
-    return 'Format Yaml Array';
+    return 'Format YAML Array';
   }
   get description(): string {
-    return 'Allows for the formatting of regular yaml arrays as either multi-line or single-line and `tags` and `aliases` are allowed to have some Obsidian specific yaml formats. Note that single string to single-line goes from a single string entry to a single-line array if more than 1 entry is present. The same is true for single string to multi-line except it becomes a multi-line array.';
+    return 'Allows for the formatting of regular YAML arrays as either multi-line or single-line and `tags` and `aliases` are allowed to have some Obsidian specific YAML formats. **_Note that_ `single string to single-line` _goes from a single string entry to a single-line array if more than 1 entry is present. The same is true for_ `single string to multi-line` _except it becomes a multi-line array._**';
   }
   get type(): RuleType {
     return RuleType.YAML;
@@ -107,9 +107,9 @@ export default class RuleTemplate extends RuleBuilder<FormatYamlArrayOptions> {
           ${''}
           # Notes:
           ${''}
-          Nesting yaml arrays may result in unexpected results.
+          Nesting YAML arrays may result in unexpected results.
           ${''}
-          Multi-line arrays will have empty values removed only leaving one if it is completely empty. The same is not true for single-line arrays as that is invalid yaml unless it comes as the last entry in the array.
+          Multi-line arrays will have empty values removed only leaving one if it is completely empty. The same is not true for single-line arrays as that is invalid YAML unless it comes as the last entry in the array.
         `,
         after: dedent`
           ---
@@ -122,9 +122,9 @@ export default class RuleTemplate extends RuleBuilder<FormatYamlArrayOptions> {
           ${''}
           # Notes:
           ${''}
-          Nesting yaml arrays may result in unexpected results.
+          Nesting YAML arrays may result in unexpected results.
           ${''}
-          Multi-line arrays will have empty values removed only leaving one if it is completely empty. The same is not true for single-line arrays as that is invalid yaml unless it comes as the last entry in the array.
+          Multi-line arrays will have empty values removed only leaving one if it is completely empty. The same is not true for single-line arrays as that is invalid YAML unless it comes as the last entry in the array.
         `,
         options: {
           aliasArrayStyle: NormalArrayFormats.MultiLine,
@@ -132,7 +132,7 @@ export default class RuleTemplate extends RuleBuilder<FormatYamlArrayOptions> {
         },
       }),
       new ExampleBuilder({
-        description: 'Format tags as a single string with space delimiters, ignore aliases, and format regular yaml arrays as single-line arrays',
+        description: 'Format tags as a single string with space delimiters, ignore aliases, and format regular YAML arrays as single-line arrays',
         before: dedent`
           ---
           aliases: Typescript
@@ -160,8 +160,8 @@ export default class RuleTemplate extends RuleBuilder<FormatYamlArrayOptions> {
     return [
       new DropdownOptionBuilder({
         OptionsClass: FormatYamlArrayOptions,
-        name: 'Yaml aliases section style',
-        description: 'The style of the yaml aliases section',
+        name: 'YAML aliases section style',
+        description: 'The style of the YAML aliases section',
         optionsKey: 'aliasArrayStyle',
         records: [
           { // as types is needed to allow for the proper types as options otherwise it assumes it has to be the specific enum value
@@ -188,14 +188,14 @@ export default class RuleTemplate extends RuleBuilder<FormatYamlArrayOptions> {
       }),
       new BooleanOptionBuilder({
         OptionsClass: FormatYamlArrayOptions,
-        name: 'Format yaml aliases section',
-        description: 'Turns on formatting for the yaml aliases section. You should not enable this option alongside the rule `YAML Title Alias` as they may not work well together or they may have different format styles selected causing unexpected results.',
+        name: 'Format YAML aliases section',
+        description: 'Turns on formatting for the YAML aliases section. **You should not enable this option alongside the rule `YAML Title Alias` as they may not work well together or they may have different format styles selected causing unexpected results.**',
         optionsKey: 'formatAliasKey',
       }),
       new DropdownOptionBuilder({
         OptionsClass: FormatYamlArrayOptions,
-        name: 'Yaml tags section style',
-        description: 'The style of the yaml tags section',
+        name: 'YAML tags section style',
+        description: 'The style of the YAML tags section',
         optionsKey: 'tagArrayStyle',
         records: [
           {
@@ -230,14 +230,14 @@ export default class RuleTemplate extends RuleBuilder<FormatYamlArrayOptions> {
       }),
       new BooleanOptionBuilder({
         OptionsClass: FormatYamlArrayOptions,
-        name: 'Format yaml tags section',
-        description: 'Turns on formatting for the yaml tags section.',
+        name: 'Format YAML tags section',
+        description: 'Turns on formatting for the YAML tags section.',
         optionsKey: 'formatTagKey',
       }),
       new DropdownOptionBuilder({
         OptionsClass: FormatYamlArrayOptions,
-        name: 'Default yaml array section style',
-        description: 'The style of other yaml arrays that are not `tags`, `aliases` or  in `Force key values to be single-line arrays` and `Force key values to be multi-line arrays`',
+        name: 'Default YAML array section style',
+        description: 'The style of other YAML arrays that are not `tags`, `aliases` or  in `Force key values to be single-line arrays` and `Force key values to be multi-line arrays`',
         optionsKey: 'defaultArrayStyle',
         records: [
           {
@@ -252,20 +252,20 @@ export default class RuleTemplate extends RuleBuilder<FormatYamlArrayOptions> {
       }),
       new BooleanOptionBuilder({
         OptionsClass: FormatYamlArrayOptions,
-        name: 'Format yaml array sections',
-        description: 'Turns on formatting for regular yaml arrays',
+        name: 'Format YAML array sections',
+        description: 'Turns on formatting for regular YAML arrays',
         optionsKey: 'formatArrayKeys',
       }),
       new TextAreaOptionBuilder({
         OptionsClass: FormatYamlArrayOptions,
         name: 'Force key values to be single-line arrays',
-        description: 'Forces the yaml array for the new line separated keys to be in single-line format (leave empty to disable this option)',
+        description: 'Forces the YAML array for the new line separated keys to be in single-line format (leave empty to disable this option)',
         optionsKey: 'forceSingleLineArrayStyle',
       }),
       new TextAreaOptionBuilder({
         OptionsClass: FormatYamlArrayOptions,
         name: 'Force key values to be multi-line arrays',
-        description: 'Forces the yaml array for the new line separated keys to be in multi-line format (leave empty to disable this option)',
+        description: 'Forces the YAML array for the new line separated keys to be in multi-line format (leave empty to disable this option)',
         optionsKey: 'forceMultiLineArrayStyle',
       }),
     ];

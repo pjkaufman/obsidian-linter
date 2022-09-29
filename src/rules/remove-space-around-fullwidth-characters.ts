@@ -16,7 +16,7 @@ export default class RemoveSpaceAroundFullwidthCharacters extends RuleBuilder<Re
     return 'Remove Space around Fullwidth Characters';
   }
   get description(): string {
-    return 'Ensures that fullwidth characters are not followed by whitespace (either single spaces or a tab). Note that this may causes issues with markdown format in some cases.';
+    return 'Ensures that fullwidth characters are not followed by whitespace (either single spaces or a tab). **_Note that this may causes issues with markdown format in some cases._**';
   }
   get type(): RuleType {
     return RuleType.SPACING;
@@ -70,14 +70,14 @@ export default class RemoveSpaceAroundFullwidthCharacters extends RuleBuilder<Re
           + \t［ another item here］
           * ［ one last item here］
           ${''}
-          # Nested in a block quote
+          # Nested in a blockquote
           ${''}
           > - ［ contents here］
           >   - \t［ more contents here］ more text here
           > + \t［ another item here］
           > * ［ one last item here］
           ${''}
-          # Doubly nested in a block quote
+          # Doubly nested in a blockquote
           ${''}
           > The following is doubly nested
           > > - ［ contents here］
@@ -93,14 +93,14 @@ export default class RemoveSpaceAroundFullwidthCharacters extends RuleBuilder<Re
           + ［another item here］
           * ［one last item here］
           ${''}
-          # Nested in a block quote
+          # Nested in a blockquote
           ${''}
           > - ［contents here］
           >   - ［more contents here］more text here
           > + ［another item here］
           > * ［one last item here］
           ${''}
-          # Doubly nested in a block quote
+          # Doubly nested in a blockquote
           ${''}
           > The following is doubly nested
           > > - ［contents here］

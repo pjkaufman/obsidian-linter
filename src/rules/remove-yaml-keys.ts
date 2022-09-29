@@ -86,7 +86,7 @@ export default class RemoveYamlKeys extends RuleBuilder<RemoveYamlKeysOptions> {
       new TextAreaOptionBuilder({
         OptionsClass: RemoveYamlKeysOptions,
         name: 'YAML Keys to Remove',
-        description: 'The yaml keys to remove from the yaml frontmatter with or without colons',
+        description: 'The YAML keys to remove from the YAML frontmatter with or without colons',
         optionsKey: 'yamlKeysToRemove',
       }),
     ];

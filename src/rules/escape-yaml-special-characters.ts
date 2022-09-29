@@ -20,7 +20,7 @@ export default class EscapeYamlSpecialCharacters extends RuleBuilder<EscapeYamlS
     return 'Escape YAML Special Characters';
   }
   get description(): string {
-    return 'Escapes colons with a space after them (: ), single quotes (\'), and double quotes (") in YAML.';
+    return 'Escapes colons with a space after them, single quotes, and double quotes in YAML (i.e. `: `, `\'`, and `"`).';
   }
   get type(): RuleType {
     return RuleType.YAML;
@@ -280,13 +280,13 @@ export default class EscapeYamlSpecialCharacters extends RuleBuilder<EscapeYamlS
       new BooleanOptionBuilder({
         OptionsClass: EscapeYamlSpecialCharactersOptions,
         name: 'Try to Escape Single Line Arrays',
-        description: 'Tries to escape array values assuming that an array starts with "[", ends with "]", and has items that are delimited by ",".',
+        description: 'Tries to escape array values assuming that an array starts with `[`, ends with `]`, and has items that are delimited by `,`.',
         optionsKey: 'tryToEscapeSingleLineArrays',
       }),
       new TextAreaOptionBuilder({
         OptionsClass: EscapeYamlSpecialCharactersOptions,
-        name: 'Force Yaml Escape on Keys',
-        description: 'Uses the Yaml escape character on the specified Yaml keys separated by a new line character if it is not already escaped. Do not use on Yaml arrays.',
+        name: 'Force YAML Escape on Keys',
+        description: 'Uses the YAML escape character on the specified YAML keys separated by a new line character if it is not already escaped. **Do not use on YAML arrays.**',
         optionsKey: 'forceYamlEscape',
       }),
     ];

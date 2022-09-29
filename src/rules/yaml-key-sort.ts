@@ -31,7 +31,7 @@ export default class YamlKeySort extends RuleBuilder<YamlKeySortOptions> {
     return 'YAML Key Sort';
   }
   get description(): string {
-    return 'Sorts the YAML keys based on the order and priority specified. Note: may remove blank lines as well.';
+    return 'Sorts the YAML keys based on the order and priority specified. **_Note that this rule may remove blank lines as well._**';
   }
   get type(): RuleType {
     return RuleType.YAML;
@@ -269,13 +269,13 @@ export default class YamlKeySort extends RuleBuilder<YamlKeySortOptions> {
       new BooleanOptionBuilder({
         OptionsClass: YamlKeySortOptions,
         name: 'Priority Keys at Start of YAML',
-        description: 'YAML Key Priority Sort Order is placed at the start of the YAML frontmatter',
+        description: '`YAML Key Priority Sort Order` is placed at the start of the YAML frontmatter',
         optionsKey: 'priorityKeysAtStartOfYaml',
       }),
       new DropdownOptionBuilder<YamlKeySortOptions, YamlSortOrderForOtherKeys>({
         OptionsClass: YamlKeySortOptions,
         name: 'YAML Sort Order for Other Keys',
-        description: 'The way in which to sort the keys that are not found in the YAML Key Priority Sort Order text area',
+        description: 'The way in which to sort the keys that are not found in the `YAML Key Priority Sort Order` text area',
         optionsKey: 'yamlSortOrderForOtherKeys',
         records: [
           {

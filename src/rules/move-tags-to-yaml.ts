@@ -86,7 +86,7 @@ export default class MoveTagsToYaml extends RuleBuilder<MoveTagsToYamlOptions> {
   get exampleBuilders(): ExampleBuilder<MoveTagsToYamlOptions>[] {
     return [
       new ExampleBuilder({
-        description: 'Move tags from body to Yaml',
+        description: 'Move tags from body to YAML',
         before: dedent`
           Text has to do with #test and #markdown
           ${''}
@@ -114,7 +114,7 @@ export default class MoveTagsToYaml extends RuleBuilder<MoveTagsToYamlOptions> {
         `,
       }),
       new ExampleBuilder({
-        description: 'Move tags from body to Yaml with existing tags retains the already existing ones and only adds new ones',
+        description: 'Move tags from body to YAML with existing tags retains the already existing ones and only adds new ones',
         before: dedent`
           ---
           tags: [test, tag2]
@@ -129,7 +129,7 @@ export default class MoveTagsToYaml extends RuleBuilder<MoveTagsToYamlOptions> {
         `,
       }),
       new ExampleBuilder({
-        description: 'Move tags to Yaml frontmatter and then remove hashtags in body content tags `Remove the hashtag from tags in content body = true` ',
+        description: 'Move tags to YAML frontmatter and then remove hashtags in body content tags `Remove the hashtag from tags in content body = true` ',
         before: dedent`
           ---
           tags: [test, tag2]
@@ -152,8 +152,8 @@ export default class MoveTagsToYaml extends RuleBuilder<MoveTagsToYamlOptions> {
     return [
       new DropdownOptionBuilder({
         OptionsClass: MoveTagsToYamlOptions,
-        name: 'Yaml tags section style',
-        description: 'The style of the Yaml tags section',
+        name: 'YAML tags section style',
+        description: 'The style of the YAML tags section',
         optionsKey: 'tagArrayStyle',
         records: [
           {
