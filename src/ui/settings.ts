@@ -10,6 +10,21 @@ import {TabSearcher} from './linter-components/tab-components/tab-searcher';
 import {DebugTab} from './linter-components/tab-components/debug-tab';
 import {getTextInLanguage} from 'src/lang/helpers';
 
+// export type AutosaveInfo = {enumName: string, valueInMilliseconds: number | undefined};
+
+// export enum Autosave {
+//   Never = 'never',
+//   FiveSeconds = 'five seconds',
+//   TenSeconds = 'ten seconds',
+//   ThirtySeconds = 'thirty seconds',
+//   OneMinute = 'one minute',
+// }
+
+// export const autosaveInfo: Record<string, AutosaveInfo> {
+//   SingleLine = 'single-line',
+//   MultiLine = 'multi-line',
+// }
+
 export class SettingTab extends PluginSettingTab {
   navContainer: HTMLElement;
   tabNavEl: HTMLDivElement;

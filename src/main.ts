@@ -52,6 +52,7 @@ export default class LinterPlugin extends Plugin {
   private isEnabled: boolean = true;
   private rulesRunner = new RulesRunner();
   private lastActiveFile: TFile;
+  private AutosaveEventRef: EventRef;
 
   async onload() {
     setLanguage(window.localStorage.getItem('language'));
@@ -191,6 +192,7 @@ export default class LinterPlugin extends Plugin {
     eventRef = this.app.workspace.on('active-leaf-change', () => this.onActiveLeafChange());
     this.registerEvent(eventRef);
     this.eventRefs.push(eventRef);
+    this.upsertAutosave();
 
     // Source for save setting
     // https://github.com/hipstersmoothie/obsidian-plugin-prettier/blob/main/src/main.ts
@@ -221,6 +223,49 @@ export default class LinterPlugin extends Plugin {
     const that = this;
     window.CodeMirrorAdapter.commands.save = () => {
       that.app.commands.executeCommandById('editor:save-file');
+    };
+  }
+
+  upsertAutosave() {
+    const autosave = this.debounce(5000, async (editor: Editor) => {
+      if (/* this.settings.lintOnAutoSave &&*/ this.isEnabled) {
+        if (!editor) {
+          return;
+        }
+        console.log(editor.getValue());
+        const file = this.app.workspace.getActiveFile();
+        if (!this.shouldIgnoreFile(file)) {
+          this.runLinterEditor(editor);
+        }
+      }
+    });
+
+    // make sure to remove the existing autosave method if it exists
+    if (this.AutosaveEventRef) {
+      this.app.workspace.offref(this.AutosaveEventRef);
+      this.eventRefs.remove(this.AutosaveEventRef);
+    }
+
+    // fires every keystroke, but is behind a letter
+    this.AutosaveEventRef = this.app.workspace.on('editor-change', (editor, _2) => {
+      autosave(editor);
+    });
+    this.registerEvent(this.AutosaveEventRef);
+    this.eventRefs.push(this.AutosaveEventRef);
+  }
+
+  private debounce(n: number, fn: (...params: any[]) => any, immed: boolean = false) {
+    let timer: number | undefined = undefined;
+    return function(this: any, ...args: any[]): number {
+      if (timer === undefined && immed) {
+        // eslint-disable-next-line no-invalid-this
+        fn.apply(this, args);
+      }
+      clearTimeout(timer);
+      // @ts-ignore -- for some reason it thinks the return type is NodeJS.Timeout, but it seems to act as a number
+      // eslint-disable-next-line no-invalid-this
+      timer = setTimeout(() => fn.apply(this, args), n);
+      return timer;
     };
   }
 
