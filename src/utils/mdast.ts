@@ -52,6 +52,16 @@ export enum UnorderedListItemStyles {
   Consistent = 'consistent',
 }
 
+export type LinkInfo = {
+  text: string,
+  link: string,
+  position: {
+    startIndex: number,
+    endIndex: number,
+  },
+  size?: string,
+}
+
 function parseTextToAST(text: string): Root {
   const textHash = hashString53Bit(text);
   if (LRU.has(textHash)) {
@@ -471,7 +481,6 @@ export function makeSureThereIsOnlyOneBlankLineBeforeAndAfterParagraphs(text: st
   return text;
 }
 
-
 /**
  * Removes spaces before and after markdown link text
  * @param {string} text The text to make that there are no spaces around the link text of
@@ -497,6 +506,36 @@ export function removeSpacesInLinkText(text: string): string {
   }
 
   return text;
+}
+
+export function convertMarkdownLinkToWikiLink(text: string): LinkInfo[] {
+  const positions: Position[] = getPositions(MDAstTypes.Link, text);
+
+  const linkInfo: LinkInfo[] = [];
+  for (const position of positions) {
+    if (position == null) {
+      continue;
+    }
+
+    const regularLink = text.substring(position.start.offset, position.end.offset);
+    // skip links that are not are not in markdown format
+    if (!regularLink.match(genericLinkRegex)) {
+      continue;
+    }
+
+
+    const endLinkTextPosition = regularLink.indexOf(']');
+    linkInfo.unshift({
+      text: regularLink.substring(1, endLinkTextPosition),
+      link: regularLink.substring(endLinkTextPosition + 1, regularLink.length - 1),
+      position: {
+        startIndex: position.start.offset,
+        endIndex: position.end.offset,
+      },
+    });
+  }
+
+  return linkInfo;
 }
 
 export function updateItalicsText(text: string, func:(text: string) => string): string {
