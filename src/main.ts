@@ -1,4 +1,4 @@
-import {normalizePath, App, Editor, EventRef, MarkdownView, Menu, Notice, Plugin, TAbstractFile, TFile, TFolder, addIcon, htmlToMarkdown, EditorSelection, EditorChange} from 'obsidian';
+import {normalizePath, App, Editor, EventRef, MarkdownView, Menu, Notice, Plugin, TAbstractFile, TFile, TFolder, addIcon, htmlToMarkdown, EditorSelection, EditorChange, Debouncer, debounce} from 'obsidian';
 import {Options, rules} from './rules';
 import DiffMatchPatch from 'diff-match-patch';
 import dedent from 'ts-dedent';
@@ -52,7 +52,9 @@ export default class LinterPlugin extends Plugin {
   private isEnabled: boolean = true;
   private rulesRunner = new RulesRunner();
   private lastActiveFile: TFile;
-  private AutosaveEventRef: EventRef;
+  private autosaveFileInfo: WeakMap<TFile, AutosaveInfo> = new WeakMap();
+  // autosave needs to be disable while the Linter runs so that it does not accidentally cause the editor change logic to get called due to its changes
+  private disableAutosave: boolean = false;
 
   async onload() {
     setLanguage(window.localStorage.getItem('language'));
@@ -227,46 +229,62 @@ export default class LinterPlugin extends Plugin {
   }
 
   upsertAutosave() {
-    const autosave = this.debounce(5000, async (editor: Editor) => {
-      if (/* this.settings.lintOnAutoSave &&*/ this.isEnabled) {
+    // fires every keystroke, but is behind a letter
+    const eventRef = this.app.workspace.on('editor-change', (_, _2) => {
+      console.log('debounce', this.disableAutosave);
+      if (this.disableAutosave) {
+        return;
+      }
+
+      const currentFile = this.app.workspace.getActiveFile();
+      if (this.autosaveFileInfo.has(currentFile)) {
+        const autosaveInfo = this.autosaveFileInfo.get(currentFile);
+        autosaveInfo.autosave(currentFile);
+      } else {
+        const autosaveInfo = {
+          alreadyHandled: false,
+          autosave: this.createDebounce(),
+        };
+        this.autosaveFileInfo.set(currentFile, autosaveInfo);
+
+        autosaveInfo.autosave(currentFile);
+      }
+    });
+
+    this.registerEvent(eventRef);
+    this.eventRefs.push(eventRef);
+  }
+
+  createDebounce(): Debouncer<TFile[], void> {
+    return debounce<TFile[], void>(async (updatedFile: TFile) => {
+      if (/* this.settings.lintOnAutoSave &&*/ this.isEnabled && !this.shouldIgnoreFile(updatedFile) && this.autosaveFileInfo.has(updatedFile)) {
+        const file = this.app.workspace.getActiveFile();
+        if (file.path !== updatedFile.path) {
+          try {
+            this.disableAutosave = true;
+            await this.runLinterFile(updatedFile);
+          } finally {
+            this.autosaveFileInfo.delete(updatedFile);
+            this.disableAutosave = false;
+          }
+
+          return;
+        }
+
+        const editor = this.getEditor();
         if (!editor) {
           return;
         }
-        console.log(editor.getValue());
-        const file = this.app.workspace.getActiveFile();
-        if (!this.shouldIgnoreFile(file)) {
+
+        try {
+          this.disableAutosave = true;
           this.runLinterEditor(editor);
+        } finally {
+          this.autosaveFileInfo.delete(updatedFile);
+          this.disableAutosave = false;
         }
       }
-    });
-
-    // make sure to remove the existing autosave method if it exists
-    if (this.AutosaveEventRef) {
-      this.app.workspace.offref(this.AutosaveEventRef);
-      this.eventRefs.remove(this.AutosaveEventRef);
-    }
-
-    // fires every keystroke, but is behind a letter
-    this.AutosaveEventRef = this.app.workspace.on('editor-change', (editor, _2) => {
-      autosave(editor);
-    });
-    this.registerEvent(this.AutosaveEventRef);
-    this.eventRefs.push(this.AutosaveEventRef);
-  }
-
-  private debounce(n: number, fn: (...params: any[]) => any, immed: boolean = false) {
-    let timer: number | undefined = undefined;
-    return function(this: any, ...args: any[]): number {
-      if (timer === undefined && immed) {
-        // eslint-disable-next-line no-invalid-this
-        fn.apply(this, args);
-      }
-      clearTimeout(timer);
-      // @ts-ignore -- for some reason it thinks the return type is NodeJS.Timeout, but it seems to act as a number
-      // eslint-disable-next-line no-invalid-this
-      timer = setTimeout(() => fn.apply(this, args), n);
-      return timer;
-    };
+    }, 5000, true);
   }
 
   onMenuOpenCallback(menu: Menu, file: TAbstractFile, _source: string) {
@@ -347,6 +365,7 @@ export default class LinterPlugin extends Plugin {
 
   async runLinterAllFiles(app: App) {
     let numberOfErrors = 0;
+    this.disableAutosave = true;
     await Promise.all(app.vault.getMarkdownFiles().map(async (file) => {
       if (!this.shouldIgnoreFile(file)) {
         try {
@@ -365,6 +384,8 @@ export default class LinterPlugin extends Plugin {
       const errorMessage = numberOfErrors === 1 ? getTextInLanguage('commands.lint-all-files.errors-message-singular') : getTextInLanguage('commands.lint-all-files.errors-message-plural').replace('{NUM}', numberOfErrors.toString());
       new Notice(errorMessage, userClickTimeout);
     }
+
+    this.disableAutosave = false;
   }
 
   async runLinterAllFilesInFolder(folder: TFolder) {
@@ -372,6 +393,7 @@ export default class LinterPlugin extends Plugin {
 
     let numberOfErrors = 0;
     let lintedFiles = 0;
+    this.disableAutosave = true;
     const filesInFolder = this.getAllFilesInFolder(folder);
     await Promise.all(filesInFolder.map(async (file) => {
       if (!this.shouldIgnoreFile(file)) {
@@ -394,6 +416,8 @@ export default class LinterPlugin extends Plugin {
       getTextInLanguage('commands.lint-all-files-in-folder.message-plural').replace('{FILE_COUNT}', lintedFiles.toString()).replace('{FOLDER_NAME}', folder.name).replace('{ERROR_COUNT}', numberOfErrors.toString());
       new Notice(errorMessageText, userClickTimeout);
     }
+
+    this.disableAutosave = false;
   }
 
   // handles the creation of the folder linting modal since this happens in multiple places and it should be consistent
@@ -410,6 +434,7 @@ export default class LinterPlugin extends Plugin {
 
     logInfo(getTextInLanguage('logs.linter-run'));
 
+    this.disableAutosave = true;
     const file = this.app.workspace.getActiveFile();
     const oldText = editor.getValue();
     let newText: string;
@@ -457,6 +482,7 @@ export default class LinterPlugin extends Plugin {
     }
 
     setCollectLogs(false);
+    this.disableAutosave = false;
   }
 
   // based on https://github.com/liamcain/obsidian-calendar-ui/blob/03ceecbf6d88ef260dadf223ee5e483d98d24ffc/src/localization.ts#L85-L109
