@@ -28,11 +28,15 @@ jobs:
       - name: Build
         run: npm run build
       - name: Run unit tests
+        run: npm run test
+      - name: Run ESLint to fix errors
         run: npm run lint
-      - name: Fix fixable eslint errors
+      - name: Fix fixable ESLint errors
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           branch: master
-          commit_message: "Bot: fix eslint errors"
+          commit_message: "Bot: fix ESLint errors"
+          skip_fetch: true
+          skip_checkout: true
       - name: Run ESLint
         run: npx eslint . --ext .ts
