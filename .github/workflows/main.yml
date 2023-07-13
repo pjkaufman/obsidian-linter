@@ -36,5 +36,6 @@ jobs:
         with:
           branch: master
           commit_message: "Bot: fix ESLint errors"
+          skip_checkout: true
       - name: Run ESLint
         run: npx eslint . --ext .ts
