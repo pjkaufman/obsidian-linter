@@ -12,7 +12,7 @@ export default class RemoveYamlKeys extends RuleBuilder<RemoveYamlKeysOptions> {
   constructor() {
     super({
       nameKey: 'rules.remove-yaml-keys.name',
-      descriptionKey: "rules.remove-yaml-keys.description",
+      descriptionKey: 'rules.remove-yaml-keys.description',
       type: RuleType.YAML,
     });
   }
