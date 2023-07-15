@@ -414,6 +414,11 @@ export default {
       'name': 'Line Break at Document End',
       'description': 'Ensures that there is exactly one line break at the end of a document.',
     },
+    // link-format.ts
+    'link-format': {
+      'name': 'Link Format',
+      'description': 'Formats images and file links in the specified manner',
+    },
     // move-footnotes-to-the-bottom.ts
     'move-footnotes-to-the-bottom': {
       'name': 'Move Footnotes to the bottom',

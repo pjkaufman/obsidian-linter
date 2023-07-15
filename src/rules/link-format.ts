@@ -2,39 +2,76 @@ import {IgnoreTypes} from '../utils/ignore-types';
 import {Options, RuleType} from '../rules';
 import RuleBuilder, {DropdownOptionBuilder, ExampleBuilder, OptionBuilderBase} from './rule-builder';
 import dedent from 'ts-dedent';
-import {convertMarkdownLinkToWikiLink, makeEmphasisOrBoldConsistent, MDAstTypes} from '../utils/mdast';
+import {getMarkdownImageLinkInfo, getMarkdownLinkInfo, LinkInfo} from '../utils/mdast';
+import {isURL, replaceTextBetweenStartAndEndWithNewValue} from '../utils/strings';
 
-type LinkStyleValues = 'wiki' | 'markdown';
+type LinkFormatValues = 'wiki' | 'markdown';
 
-class LinkStyleOptions implements Options {
-  style: LinkStyleValues = 'markdown';
+class LinkFormatOptions implements Options {
+  style: LinkFormatValues = 'markdown';
 }
 
 @RuleBuilder.register
-export default class EmphasisStyle extends RuleBuilder<LinkStyleOptions> {
+export default class LinkFormat extends RuleBuilder<LinkFormatOptions> {
   constructor() {
     super({
-      nameKey: 'rules.link-style.name',
-      descriptionKey: 'rules.link-style.description',
+      nameKey: 'rules.link-format.name',
+      descriptionKey: 'rules.link-format.description',
       type: RuleType.CONTENT,
-      ruleIgnoreTypes: [IgnoreTypes.code, IgnoreTypes.math, IgnoreTypes.yaml, IgnoreTypes.tag, IgnoreTypes.math, IgnoreTypes.inlineMath],
+      ruleIgnoreTypes: [IgnoreTypes.code, IgnoreTypes.math, IgnoreTypes.yaml, IgnoreTypes.math, IgnoreTypes.inlineMath],
     });
   }
-  get OptionsClass(): new () => LinkStyleOptions {
-    return LinkStyleOptions;
+  get OptionsClass(): new () => LinkFormatOptions {
+    return LinkFormatOptions;
   }
-  apply(text: string, options: LinkStyleOptions): string {
-    return makeEmphasisOrBoldConsistent(text, options.style, MDAstTypes.Italics);
-  }
-  convertToWikiLinks(text: string) {
-    const markdownInfo = convertMarkdownLinkToWikiLink(text);
-    for (const markdwonLinkInfo of markdownInfo) {
-
+  apply(text: string, options: LinkFormatOptions): string {
+    if (options.style === 'wiki') {
+      return this.convertToWikiLinks(text);
     }
+
+    return text;
   }
-  get exampleBuilders(): ExampleBuilder<LinkStyleOptions>[] {
+  convertToWikiLinks(text: string): string {
+    const markdownLinkInfo = getMarkdownLinkInfo(text);
+    for (const linkInfo of markdownLinkInfo) {
+      text = replaceTextBetweenStartAndEndWithNewValue(text, linkInfo.position.startIndex, linkInfo.position.endIndex, this.linkInfoToWikiLink(linkInfo));
+    }
+
+    const markdownImageInfo = getMarkdownImageLinkInfo(text);
+    for (const imageLinkInfo of markdownImageInfo) {
+      text = replaceTextBetweenStartAndEndWithNewValue(text, imageLinkInfo.position.startIndex, imageLinkInfo.position.endIndex, this.linkInfoToWikiLink(imageLinkInfo));
+    }
+
+    return text;
+  }
+  linkInfoToWikiLink(linkInfo: LinkInfo): string {
+    let linkText = linkInfo.link;
+    let fileEnding = '';
+    let link = linkInfo.link;
+    if (!isURL(linkInfo.link)) {
+      fileEnding = '.md';
+    } else if (link.endsWith('/')) {
+      link = link.substring(0, link.length - 1);
+    }
+
+    if (linkInfo.text && !link.endsWith(encodeURIComponent(linkInfo.text + fileEnding))) {
+      linkText += '|' + linkInfo.text;
+    }
+
+    if (linkInfo.size) {
+      linkText += '|' + linkInfo.size;
+    }
+
+    let startingChar = '';
+    if (linkInfo.isImage) {
+      startingChar = '!';
+    }
+
+    return startingChar + '[[' + linkText + ']]';
+  }
+  get exampleBuilders(): ExampleBuilder<LinkFormatOptions>[] {
     return [
-      new ExampleBuilder<LinkStyleOptions>({
+      new ExampleBuilder<LinkFormatOptions>({
         description: 'Emphasis indicators should use underscores when style is set to \'underscore\'',
         before: dedent`
           # Emphasis Cases
@@ -72,119 +109,23 @@ export default class EmphasisStyle extends RuleBuilder<LinkStyleOptions> {
           style: 'underscore',
         },
       }),
-      new ExampleBuilder<LinkStyleOptions>({
-        description: 'Emphasis indicators should use asterisks when style is set to \'asterisk\'',
-        before: dedent`
-          # Emphasis Cases
-          ${''}
-          _Test emphasis_
-          _ Test not emphasized _
-          This is _emphasized_ mid sentence
-          This is _emphasized_ mid sentence with a second _emphasis_ on the same line
-          This is ___bold and emphasized___
-          This is ___nested bold__ and ending emphasized_
-          This is ___nested emphasis_ and ending bold__
-          ${''}
-          __Test bold__
-        `,
-        after: dedent`
-          # Emphasis Cases
-          ${''}
-          *Test emphasis*
-          _ Test not emphasized _
-          This is *emphasized* mid sentence
-          This is *emphasized* mid sentence with a second *emphasis* on the same line
-          This is *__bold and emphasized__*
-          This is *__nested bold__ and ending emphasized*
-          This is __*nested emphasis* and ending bold__
-          ${''}
-          __Test bold__
-        `,
-        options: {
-          style: 'asterisk',
-        },
-      }),
-      new ExampleBuilder<LinkStyleOptions>({
-        description: 'Emphasis indicators should use consistent style based on first emphasis indicator in a file when style is set to \'consistent\'',
-        before: dedent`
-          # Emphasis First Emphasis Is an Asterisk
-          ${''}
-          *First emphasis*
-          This is _emphasized_ mid sentence
-          This is *emphasized* mid sentence with a second _emphasis_ on the same line
-          This is *__bold and emphasized__*
-          This is *__nested bold__ and ending emphasized*
-          This is **_nested emphasis_ and ending bold**
-          ${''}
-          __Test bold__
-        `,
-        after: dedent`
-          # Emphasis First Emphasis Is an Asterisk
-          ${''}
-          *First emphasis*
-          This is *emphasized* mid sentence
-          This is *emphasized* mid sentence with a second *emphasis* on the same line
-          This is *__bold and emphasized__*
-          This is *__nested bold__ and ending emphasized*
-          This is ***nested emphasis* and ending bold**
-          ${''}
-          __Test bold__
-        `,
-        options: {
-          style: 'consistent',
-        },
-      }),
-      new ExampleBuilder<LinkStyleOptions>({
-        description: 'Emphasis indicators should use consistent style based on first emphasis indicator in a file when style is set to \'consistent\'',
-        before: dedent`
-          # Emphasis First Emphasis Is an Underscore
-          ${''}
-          **_First emphasis_**
-          This is _emphasized_ mid sentence
-          This is *emphasized* mid sentence with a second _emphasis_ on the same line
-          This is *__bold and emphasized__*
-          This is _**nested bold** and ending emphasized_
-          This is __*nested emphasis* and ending bold__
-          ${''}
-          __Test bold__
-        `,
-        after: dedent`
-          # Emphasis First Emphasis Is an Underscore
-          ${''}
-          **_First emphasis_**
-          This is _emphasized_ mid sentence
-          This is _emphasized_ mid sentence with a second _emphasis_ on the same line
-          This is ___bold and emphasized___
-          This is _**nested bold** and ending emphasized_
-          This is ___nested emphasis_ and ending bold__
-          ${''}
-          __Test bold__
-        `,
-        options: {
-          style: 'consistent',
-        },
-      }),
     ];
   }
-  get optionBuilders(): OptionBuilderBase<LinkStyleOptions>[] {
+  get optionBuilders(): OptionBuilderBase<LinkFormatOptions>[] {
     return [
-      new DropdownOptionBuilder<LinkStyleOptions, LinkStyleValues>({
-        OptionsClass: LinkStyleOptions,
-        nameKey: 'rules.link-style.style.name',
-        descriptionKey: 'rules.link-style.style.description',
+      new DropdownOptionBuilder<LinkFormatOptions, LinkFormatValues>({
+        OptionsClass: LinkFormatOptions,
+        nameKey: 'rules.link-format.style.name',
+        descriptionKey: 'rules.link-format.style.description',
         optionsKey: 'style',
         records: [
           {
-            value: 'consistent',
-            description: 'Makes sure the first instance of emphasis is the style that will be used throughout the document',
+            value: 'markdown',
+            description: 'Makes sure that all links are markdown links',
           },
           {
-            value: 'asterisk',
-            description: 'Makes sure * is the emphasis indicator',
-          },
-          {
-            value: 'underscore',
-            description: 'Makes sure _ is the emphasis indicator',
+            value: 'wiki',
+            description: 'Makes sure that all links are wiki links',
           },
         ],
       }),

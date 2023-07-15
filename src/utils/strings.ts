@@ -349,3 +349,13 @@ export function isNumeric(str: string) {
   return !isNaN(str as unknown as number) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
          !isNaN(parseFloat(str)); // ...and ensure strings of whitespace fail
 }
+
+export function isURL(potentialURL: string) {
+  try {
+    new URL(potentialURL);
+
+    return true;
+  } catch (_) {
+    return false;
+  }
+}

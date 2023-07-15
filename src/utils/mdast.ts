@@ -59,6 +59,7 @@ export type LinkInfo = {
     startIndex: number,
     endIndex: number,
   },
+  isImage: boolean,
   size?: string,
 }
 
@@ -508,7 +509,7 @@ export function removeSpacesInLinkText(text: string): string {
   return text;
 }
 
-export function convertMarkdownLinkToWikiLink(text: string): LinkInfo[] {
+export function getMarkdownLinkInfo(text: string): LinkInfo[] {
   const positions: Position[] = getPositions(MDAstTypes.Link, text);
 
   const linkInfo: LinkInfo[] = [];
@@ -525,13 +526,39 @@ export function convertMarkdownLinkToWikiLink(text: string): LinkInfo[] {
 
 
     const endLinkTextPosition = regularLink.indexOf(']');
-    linkInfo.unshift({
+    linkInfo.push({
       text: regularLink.substring(1, endLinkTextPosition),
-      link: regularLink.substring(endLinkTextPosition + 1, regularLink.length - 1),
+      link: regularLink.substring(endLinkTextPosition + 2, regularLink.length - 1),
       position: {
         startIndex: position.start.offset,
         endIndex: position.end.offset,
       },
+      isImage: false,
+    });
+  }
+
+  return linkInfo;
+}
+
+export function getMarkdownImageLinkInfo(text: string): LinkInfo[] {
+  const positions: Position[] = getPositions(MDAstTypes.Image, text);
+
+  const linkInfo: LinkInfo[] = [];
+  for (const position of positions) {
+    if (position == null) {
+      continue;
+    }
+
+    const imageLink = text.substring(position.start.offset, position.end.offset);
+    const endLinkTextPosition = imageLink.indexOf(']');
+    linkInfo.push({
+      text: imageLink.substring(2, endLinkTextPosition),
+      link: imageLink.substring(endLinkTextPosition + 2, imageLink.length - 1),
+      position: {
+        startIndex: position.start.offset,
+        endIndex: position.end.offset,
+      },
+      isImage: true,
     });
   }
 
