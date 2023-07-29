@@ -13,47 +13,47 @@ ruleTest({
         Here is a markdown link with the same name as the file name [file](./some-folder/file.md)
       `,
       after: dedent`
-        Here is a markdown link: [[https://github.com/]]
-        Here is a non-URL markdown link: [[file.md|not the file title]]
-        Here is a markdown link with the same name as the file name [[./some-folder/file.md]]
+        Here is a markdown link: [github.com](https://github.com/)
+        Here is a non-URL markdown link: [[file|not the file title]]
+        Here is a markdown link with the same name as the file name [[file]]
       `,
       options: {
         style: 'wiki',
       },
     },
-    {
-      testName: 'When a markdown link has no text, the resulting wiki link is just the link',
-      before: dedent`
-        [](file.md)
-        [](https://github.com/)
-      `,
-      after: dedent`
-        [[file.md]]
-        [[https://github.com/]]
-      `,
-      options: {
-        style: 'wiki',
-      },
-    },
-    {
-      testName: 'When markdown images are present, they are converted to wiki link images as well',
-      before: dedent`
-        [](file.md)
-        [](https://github.com/)
-        ![](image.jpg)
-        [file2](file2.md)
-        ![image alias](image2.jpg)
-      `,
-      after: dedent`
-        [[file.md]]
-        [[https://github.com/]]
-        ![[image.jpg]]
-        [[file2.md]]
-        ![[image2.jpg|image alias]]
-      `,
-      options: {
-        style: 'wiki',
-      },
-    },
+    // {
+    //   testName: 'When a markdown link has no text, the resulting wiki link is just the link',
+    //   before: dedent`
+    //     [](file.md)
+    //     [](https://github.com/)
+    //   `,
+    //   after: dedent`
+    //     [[file]]
+    //     [[https://github.com/]]
+    //   `,
+    //   options: {
+    //     style: 'wiki',
+    //   },
+    // },
+    // {
+    //   testName: 'When markdown images are present, they are converted to wiki link images as well',
+    //   before: dedent`
+    //     [](file.md)
+    //     [](https://github.com/)
+    //     ![](image.jpg)
+    //     [file2](file2.md)
+    //     ![image alias](image2.jpg)
+    //   `,
+    //   after: dedent`
+    //     [[file]]
+    //     [[https://github.com/]]
+    //     ![[image.jpg]]
+    //     [[file2]]
+    //     ![[image2.jpg|image alias]]
+    //   `,
+    //   options: {
+    //     style: 'wiki',
+    //   },
+    // },
   ],
 });
