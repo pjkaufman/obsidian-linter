@@ -13,6 +13,11 @@ class LinkFormatOptions implements Options {
   style: LinkFormatValues = 'markdown';
 
   // @RuleBuilder.noSettingControl()
+  //   isInternalLink?: () => boolean = () => {
+  //     return true;
+  //   };
+
+  // @RuleBuilder.noSettingControl()
   //   currentFilePath?: string = '';
   // @RuleBuilder.noSettingControl()
   //   getFirstLinkpathDestString: GetLinkPathFunction;
@@ -41,6 +46,7 @@ export default class LinkFormat extends RuleBuilder<LinkFormatOptions> {
   convertToWikiLinks(text: string): string {
     const markdownLinkInfo = getMarkdownLinkInfo(text);
     for (const linkInfo of markdownLinkInfo) {
+      console.log(linkInfo);
       if (isURL(linkInfo.link)) {
         continue;
       }
@@ -56,56 +62,27 @@ export default class LinkFormat extends RuleBuilder<LinkFormatOptions> {
     return text;
   }
   linkInfoToWikiLink(linkInfo: LinkInfo): string {
-    console.log(linkInfo);
-    const indexOfBasename = linkInfo.link.lastIndexOf('/');
-    let fileLink = indexOfBasename !== -1 ? linkInfo.link.substring(indexOfBasename + 1) : linkInfo.link;
+    let fileLink = linkInfo.link;
     const indexOfHashtag = fileLink.indexOf('#');
-    let altOrBlockRef = '';
+    let headerOrBlockRef = '';
     if (indexOfHashtag !== -1) {
-      altOrBlockRef = decodeURI(fileLink.substring(indexOfHashtag + 1));
+      headerOrBlockRef = decodeURI(fileLink.substring(indexOfHashtag));
       fileLink = fileLink.substring(0, indexOfHashtag);
     }
 
+    const extensionStart = fileLink.lastIndexOf('.');
+    if (extensionStart !== -1) {
+      fileLink = fileLink.substring(0, extensionStart);
+    }
+
     let altText: string;
-
-    const filePathAddition = linkInfo.text.endsWith('.md') ? '' : '.md';
-
-    if (linkInfo.text !== '' && linkInfo.link.endsWith('.md')) {
-      if (fileLink === linkInfo.text + filePathAddition) {
-        altText = '';
-      } else {
-        altText = '|' + linkInfo.text;
-      }
-      fileLink = fileLink.substring(0, fileLink.length - 3);
+    if (linkInfo.text !== '') {
+      altText = '|' + linkInfo.text;
     } else {
       altText = '';
     }
 
-    return `[[${fileLink}${altText}]]`;
-
-    // let linkText = linkInfo.link;
-    // let fileEnding = '';
-    // let link = linkInfo.link;
-    // if (!isURL(linkInfo.link)) {
-    //   fileEnding = '.md';
-    // } else if (link.endsWith('/')) {
-    //   link = link.substring(0, link.length - 1);
-    // }
-
-    // if (linkInfo.text && !link.endsWith(encodeURIComponent(linkInfo.text + fileEnding))) {
-    //   linkText += '|' + linkInfo.text;
-    // }
-
-    // if (linkInfo.size) {
-    //   linkText += '|' + linkInfo.size;
-    // }
-
-    // let startingChar = '';
-    // if (linkInfo.isImage) {
-    //   startingChar = '!';
-    // }
-
-    // return startingChar + '[[' + linkText + ']]';
+    return `[[${fileLink}${headerOrBlockRef}${altText}]]`;
   }
   get exampleBuilders(): ExampleBuilder<LinkFormatOptions>[] {
     return [

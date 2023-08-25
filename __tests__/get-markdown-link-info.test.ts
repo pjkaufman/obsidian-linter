@@ -36,6 +36,7 @@ const getMarkdownLinkInfoTestCases: markdownLinkInfoTestCase[] = [
     `,
     expectedMarkdownLinksInText: 1,
     expectedInfo: [{
+      isImage: false,
       text: 'github.com',
       link: 'https://github.com/',
       position: {
@@ -54,6 +55,7 @@ const getMarkdownLinkInfoTestCases: markdownLinkInfoTestCase[] = [
     `,
     expectedMarkdownLinksInText: 2,
     expectedInfo: [{
+      isImage: false,
       text: 'markdown file',
       link: 'markdown%20file.md',
       position: {
@@ -62,6 +64,7 @@ const getMarkdownLinkInfoTestCases: markdownLinkInfoTestCase[] = [
       },
     },
     {
+      isImage: false,
       text: 'github.com',
       link: 'https://github.com/',
       position: {
