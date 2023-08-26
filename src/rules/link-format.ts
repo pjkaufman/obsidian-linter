@@ -4,9 +4,11 @@ import RuleBuilder, {DropdownOptionBuilder, ExampleBuilder, OptionBuilderBase} f
 import dedent from 'ts-dedent';
 import {getMarkdownImageLinkInfo, getMarkdownLinkInfo, LinkInfo} from '../utils/mdast';
 import {isURL, replaceTextBetweenStartAndEndWithNewValue} from '../utils/strings';
+import {getWikiLinkInfo} from '../utils/regex';
 
 type LinkFormatValues = 'wiki' | 'markdown';
 
+type GetLinkPathFunction = (linkpath: string) => string
 // type GetLinkPathFunction = (linkpath: string, sourcePath: string) => string
 
 class LinkFormatOptions implements Options {
@@ -19,8 +21,10 @@ class LinkFormatOptions implements Options {
 
   // @RuleBuilder.noSettingControl()
   //   currentFilePath?: string = '';
-  // @RuleBuilder.noSettingControl()
-  //   getFirstLinkpathDestString: GetLinkPathFunction;
+  @RuleBuilder.noSettingControl()
+    getFirstLinkpathDestString?: GetLinkPathFunction = (_) => {
+      return '';
+    };
 }
 
 @RuleBuilder.register
@@ -41,17 +45,34 @@ export default class LinkFormat extends RuleBuilder<LinkFormatOptions> {
       return this.convertToWikiLinks(text);
     }
 
-    return text;
+    return this.convertToMarkdownLinks(text, options.getFirstLinkpathDestString);
+
+    // return text;
   }
   convertToWikiLinks(text: string): string {
     const markdownLinkInfo = getMarkdownLinkInfo(text);
     for (const linkInfo of markdownLinkInfo) {
-      console.log(linkInfo);
+      // console.log(linkInfo);
+
+      text = replaceTextBetweenStartAndEndWithNewValue(text, linkInfo.position.startIndex, linkInfo.position.endIndex, this.linkInfoToWikiLink(linkInfo));
+    }
+
+    // const markdownImageInfo = getMarkdownImageLinkInfo(text);
+    // for (const imageLinkInfo of markdownImageInfo) {
+    //   text = replaceTextBetweenStartAndEndWithNewValue(text, imageLinkInfo.position.startIndex, imageLinkInfo.position.endIndex, this.linkInfoToWikiLink(imageLinkInfo));
+    // }
+
+    return text;
+  }
+  convertToMarkdownLinks(text: string, resolveLinkPath: GetLinkPathFunction): string {
+    const markdownLinkInfo = getWikiLinkInfo(text);
+    for (const linkInfo of markdownLinkInfo) {
+      // console.log(linkInfo);
       if (isURL(linkInfo.link)) {
         continue;
       }
 
-      text = replaceTextBetweenStartAndEndWithNewValue(text, linkInfo.position.startIndex, linkInfo.position.endIndex, this.linkInfoToWikiLink(linkInfo));
+      text = replaceTextBetweenStartAndEndWithNewValue(text, linkInfo.position.startIndex, linkInfo.position.endIndex, this.linkInfoToMarkdownLink(linkInfo, resolveLinkPath));
     }
 
     // const markdownImageInfo = getMarkdownImageLinkInfo(text);
@@ -83,6 +104,26 @@ export default class LinkFormat extends RuleBuilder<LinkFormatOptions> {
     }
 
     return `[[${fileLink}${headerOrBlockRef}${altText}]]`;
+  }
+  linkInfoToMarkdownLink(linkInfo: LinkInfo, resolveLinkPath: GetLinkPathFunction): string {
+    let fileLink = linkInfo.link;
+    const indexOfHashtag = fileLink.indexOf('#');
+    let headerOrBlockRef = '';
+    if (indexOfHashtag !== -1) {
+      headerOrBlockRef = encodeURI(fileLink.substring(indexOfHashtag));
+      fileLink = fileLink.substring(0, indexOfHashtag);
+    }
+
+    let altText: string;
+    if (linkInfo.text !== '') {
+      altText = linkInfo.text;
+    } else if (headerOrBlockRef && headerOrBlockRef.indexOf('#^') === -1) {
+      altText = decodeURI(headerOrBlockRef);
+    } else {
+      altText = '';
+    }
+
+    return `[${altText}](${resolveLinkPath(fileLink)}${headerOrBlockRef})`;
   }
   get exampleBuilders(): ExampleBuilder<LinkFormatOptions>[] {
     return [

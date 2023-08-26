@@ -107,6 +107,24 @@ ruleTest({
         style: 'wiki',
       },
     },
+    {
+      testName: 'Converts simple wiki links to markdown links',
+      before: dedent`
+        Here is a non-URL wiki link: [[not the file title]]
+        Here is a wiki link with the same name as the file name [[file|file]]
+      `,
+      after: dedent`
+        Here is a non-URL wiki link: ()[not-the-file-title.md]
+        Here is a wiki link with the same name as the file name [file](./some-folder/file.md)
+      `,
+      options: {
+        style: 'markdown',
+        getFirstLinkpathDestString: createGetFirstLinkPathFunction(new Map<string, string>([
+          ['not the file title', 'not-the-file-title.md'],
+          ['file', './some-folder/file.md'],
+        ])),
+      },
+    },
     // {
     //   testName: 'When markdown images are present, they are converted to wiki link images as well',
     //   before: dedent`
@@ -129,3 +147,9 @@ ruleTest({
     // },
   ],
 });
+
+function createGetFirstLinkPathFunction(stringToPath: Map<string, string>): (text: string) => string {
+  return (text: string) => {
+    return stringToPath.get(text) ?? 'not found';
+  };
+}

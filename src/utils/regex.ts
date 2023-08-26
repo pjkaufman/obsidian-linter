@@ -1,5 +1,5 @@
 
-import {getAllTablesInText} from './mdast';
+import {LinkInfo, getAllTablesInText} from './mdast';
 import {makeSureContentHasEmptyLinesAddedBeforeAndAfter} from './strings';
 
 // Useful regexes
@@ -72,6 +72,46 @@ export function removeSpacesInWikiLinkText(text: string): string {
   }
 
   return text;
+}
+
+export function getWikiLinkInfo(text: string): LinkInfo[] {
+  const linkInfo: LinkInfo[] = [];
+  const linkMatches = text.match(wikiLinkRegex);
+  if (linkMatches) {
+    for (let i = 0; i < linkMatches.length; i++) {
+      const link = linkMatches[i];
+      if (link.startsWith('!')) {
+        continue;
+      }
+
+      const startOfLinkTextPosition = link.indexOf('|');
+      let text = '';
+      let linkPath = '';
+      if (startOfLinkTextPosition !== -1) {
+        text = link.substring(startOfLinkTextPosition+1, link.length - 2).trim();
+        linkPath = link.substring(2, startOfLinkTextPosition);
+      } else {
+        linkPath = link.substring(2, link.length - 2).trim();
+      }
+
+      const start = linkMatches[i].index;
+      linkInfo.push({
+        text: text,
+        link: linkPath,
+        position: {
+          startIndex: start,
+          endIndex: start + link.length,
+        },
+        isImage: false,
+      });
+    }
+    // for (const link of linkMatches) {
+
+
+    // }
+  }
+
+  return linkInfo;
 }
 
 /**
