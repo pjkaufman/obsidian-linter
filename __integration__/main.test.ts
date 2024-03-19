@@ -3,6 +3,7 @@ import LinterPlugin from 'src/main';
 import {obsidianModeTestCases} from './obsidian-mode.test';
 import {setWorkspaceItemMode} from './utils.test';
 import {customCommandTestCases} from './custom-commands.test';
+import {livePreviewTestCases} from './live-preview.test';
 
 export type IntegrationTestCase = {
   name: string,
@@ -12,7 +13,7 @@ export type IntegrationTestCase = {
 }
 
 export default class TestLinterPlugin extends Plugin {
-  regularTests: Array<IntegrationTestCase> = [...obsidianModeTestCases];
+  regularTests: Array<IntegrationTestCase> = [...obsidianModeTestCases, ...livePreviewTestCases];
   afterCacheUpdateTests: Array<IntegrationTestCase> = [...customCommandTestCases];
   plugin: LinterPlugin;
 
