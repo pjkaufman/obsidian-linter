@@ -369,7 +369,7 @@ export default class CapitalizeHeadings extends RuleBuilder<CapitalizeHeadingsOp
   get exampleBuilders(): ExampleBuilder<CapitalizeHeadingsOptions>[] {
     return [
       new ExampleBuilder({
-        description: 'With `Title Case=true`, `Ignore Cased Words=false`',
+        description: 'With `Title case=true`, `Ignore cased words=false`',
         before: dedent`
           # this is a heading 1
           ## THIS IS A HEADING 2
@@ -386,7 +386,7 @@ export default class CapitalizeHeadings extends RuleBuilder<CapitalizeHeadingsOp
         },
       }),
       new ExampleBuilder({
-        description: 'With `Title Case=true`, `Ignore Cased Words=true`',
+        description: 'With `Title Case=true`, `Ignore cased words=true`',
         before: dedent`
           # this is a heading 1
           ## THIS IS A HEADING 2
