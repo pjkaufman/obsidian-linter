@@ -164,15 +164,15 @@ export default {
         'description': 'Display the number of characters changed after linting',
       },
       'suppress-message-when-no-change': {
-        'name': 'Suppress Message When No Change',
+        'name': 'Suppress message when no change',
         'description': 'If enabled, no message will be shown when no actual changes occur.',
       },
       'lint-on-file-change': {
-        'name': 'Lint on Focused File Change',
+        'name': 'Lint on focused file change',
         'description': 'When a file is closed or a new file is swapped to, the previous file is linted.',
       },
       'display-lint-on-file-change-message': {
-        'name': 'Display Lint on File Change Message',
+        'name': 'Display lint on file change message',
         'description': 'Displays a message when <code>Lint on focused file change</code> occurs',
       },
       'folders-to-ignore': {
@@ -213,26 +213,26 @@ export default {
         'description': 'The style of the YAML tags section',
       },
       'default-escape-character': {
-        'name': 'Default Escape Character',
+        'name': 'Default escape character',
         'description': 'The default character to use to escape YAML values when a single quote and double quote are not present.',
       },
       'remove-unnecessary-escape-chars-in-multi-line-arrays': {
-        'name': 'Remove Unnecessary Escape Characters when in Multi-Line Array Format',
+        'name': 'Remove unnecessary escape characters when in multi-line array format',
         'description': 'Escape characters for multi-line YAML arrays don\'t need the same escaping as single-line arrays, so when in multi-line format remove extra escapes that are not necessary',
       },
       'number-of-dollar-signs-to-indicate-math-block': {
-        'name': 'Number of Dollar Signs to Indicate Math Block',
+        'name': 'Number of dollar signs to indicate math block',
         'description': 'The amount of dollar signs to consider the math content to be a math block instead of inline math',
       },
     },
     'debug': {
       // debug-tab.ts
       'log-level': {
-        'name': 'Log Level',
+        'name': 'Log level',
         'description': 'The types of logs that will be allowed to be logged by the service. The default is ERROR.',
       },
       'linter-config': {
-        'name': 'Linter Config',
+        'name': 'Linter config',
         'description': 'The contents of the data.json for the Linter as of the setting page loading',
       },
       'log-collection': {
@@ -240,7 +240,7 @@ export default {
         'description': 'Goes ahead and collects logs when you <code>Lint on save</code> and linting the current file. These logs can be helpful for debugging and create bug reports.',
       },
       'linter-logs': {
-        'name': 'Linter Logs',
+        'name': 'Linter logs',
         'description': 'The logs from the last <code>Lint on save</code> or the last lint current file run if enabled.',
       },
     },
@@ -249,7 +249,7 @@ export default {
   'options': {
     'custom-command': {
       // custom-command-option.ts
-      'name': 'Custom Commands',
+      'name': 'Custom commands',
       'description': 'Custom commands are Obsidian commands that get run after the linter is finished running its regular rules. This means that they do not run before the YAML timestamp logic runs, so they can cause YAML timestamp to be triggered on the next run of the linter. You may only select an Obsidian command once.',
       'warning': 'When selecting an option, make sure to select the option either by using the mouse or by hitting the enter key. Other selection methods may not work and only selections of an actual Obsidian command or an empty string will be saved.',
 
@@ -261,7 +261,7 @@ export default {
     },
     'custom-replace': {
       // custom-replace-option.ts
-      'name': 'Custom Regex Replacement',
+      'name': 'Custom regex replacement',
       'description': 'Custom regex replacement can be used to replace anything that matches the find regex with the replacement value. The replace and find values will need to be valid regex values.',
       'warning': 'Use this with caution if you do not know regex. Also, please make sure that if you use lookbehinds in your regex on iOS mobile that you are on a version that supports using them.',
       'add-input-button-text': 'Add new regex replacement',
