@@ -36,13 +36,13 @@ export class DebugTab extends Tab {
 
     this.addSettingSearchInfo(tempDiv, settingName, settingDesc);
 
-    let logDisplay: TextBoxFull = null;
+    let logDisplay: TextBoxFull | null = null;
     tempDiv = this.contentEl.createDiv();
     const recordLintOnSaveLogsSetting = new ToggleSetting(tempDiv, 'tabs.debug.log-collection.name', 'tabs.debug.log-collection.description', 'recordLintOnSaveLogs', this.plugin, (value: boolean) => {
       if (value) {
-        logDisplay.unhide();
+        logDisplay!.unhide();
       } else {
-        logDisplay.hide();
+        logDisplay!.hide();
       }
     });
     this.addSettingSearchInfoForGeneralSettings(recordLintOnSaveLogsSetting);

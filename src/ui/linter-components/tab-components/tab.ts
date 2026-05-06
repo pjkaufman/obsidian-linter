@@ -65,7 +65,7 @@ export abstract class Tab {
 
   abstract display(): void;
 
-  addSettingSearchInfo(containerEl: HTMLDivElement, name: string = '', description: string = '', options: SearchOptionInfo[] = null, alias: string = null) {
+  addSettingSearchInfo(containerEl: HTMLDivElement, name: string = '', description: string = '', options: SearchOptionInfo[] = [], alias: string = undefined) {
     this.searchSettingInfo.push({
       containerEl: containerEl,
       name: name.toLowerCase(),
@@ -80,8 +80,8 @@ export abstract class Tab {
       containerEl: generalSetting.containerEl,
       name: generalSetting.name.toLowerCase(),
       description: generalSetting.description.toLowerCase(),
-      options: null,
-      alias: null,
+      options: [],
+      alias: undefined,
     });
   }
 
