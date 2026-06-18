@@ -10,7 +10,7 @@ git clone https://github.com/{USERNAME_HERE}/obsidian-linter/
 ## Node and NPM
 
 Next you will want to install the appropriate versions of Node and NPM.  
-_This plugin requires Node version `15.x` or higher._
+_This plugin requires Node version `20.x` or higher._
 
 ### Windows
 
