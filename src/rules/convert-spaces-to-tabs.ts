@@ -4,7 +4,7 @@ import RuleBuilder, {ExampleBuilder, NumberOptionBuilder, OptionBuilderBase} fro
 import dedent from 'ts-dedent';
 
 class ConvertSpacesToTabsOptions implements Options {
-  tabsize: Number = 4;
+  tabsize: number = 4;
 }
 
 @RuleBuilder.register
@@ -47,7 +47,7 @@ export default class ConvertSpacesToTabs extends RuleBuilder<ConvertSpacesToTabs
   }
   get exampleBuilders(): ExampleBuilder<ConvertSpacesToTabsOptions>[] {
     return [
-      /* eslint-disable no-mixed-spaces-and-tabs, no-tabs */
+       
       new ExampleBuilder({
         description: 'Converting spaces to tabs with `tabsize = 3`',
         before: dedent`
@@ -85,7 +85,7 @@ export default class ConvertSpacesToTabs extends RuleBuilder<ConvertSpacesToTabs
           tabsize: 3,
         },
       }),
-      /* eslint-enable no-mixed-spaces-and-tabs, no-tabs */
+       
     ];
   }
   get optionBuilders(): OptionBuilderBase<ConvertSpacesToTabsOptions>[] {

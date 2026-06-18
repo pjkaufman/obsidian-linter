@@ -99,7 +99,7 @@ export const obsidianModeTestCases: IntegrationTestCase[] = [
     name: 'Updating YAML in live preview mode does not break YAML and keeps cursor at the expected location',
     filePath: 'obsidian-mode/mode-yaml.md',
     async setup(plugin: TestLinterPlugin, editor: Editor) {
-      await modeSetup(plugin, editor),
+      await modeSetup(plugin, editor);
       await setWorkspaceItemMode(plugin.app, false);
     },
     assertions: modeAssertions,
@@ -114,7 +114,7 @@ export const obsidianModeTestCases: IntegrationTestCase[] = [
     name: 'Updating YAML in live preview mode does not break YAML when an update is being made to the end of the frontmatter',
     filePath: 'obsidian-mode/edge-case-yaml.md',
     async setup(plugin: TestLinterPlugin, editor: Editor) {
-      await edgeCaseSetup(plugin, editor),
+      await edgeCaseSetup(plugin, editor);
       await setWorkspaceItemMode(plugin.app, false);
     },
     modifyExpected: edgeCaseExpectedTextModifications,
@@ -129,7 +129,7 @@ export const obsidianModeTestCases: IntegrationTestCase[] = [
     name: 'Moving tag to YAML when just the tag is present works in live preview mode',
     filePath: 'obsidian-mode/move-tag-to-yaml.md',
     async setup(plugin: TestLinterPlugin, editor: Editor) {
-      await moveToYamlSetup(plugin, editor),
+      await moveToYamlSetup(plugin, editor);
       await setWorkspaceItemMode(plugin.app, false);
     },
   },
@@ -142,7 +142,7 @@ export const obsidianModeTestCases: IntegrationTestCase[] = [
     name: 'Moving tag to YAML when some text and then a tag is present works in live preview mode',
     filePath: 'obsidian-mode/move-tag-to-yaml-2.md',
     async setup(plugin: TestLinterPlugin, editor: Editor) {
-      await moveToYamlSetup(plugin, editor),
+      await moveToYamlSetup(plugin, editor);
       await setWorkspaceItemMode(plugin.app, false);
     },
   },
