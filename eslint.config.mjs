@@ -7,6 +7,23 @@ import obsidianlinter from 'eslint-plugin-obsidian-linter';
 import obsidianmd from 'eslint-plugin-obsidianmd';
 import globals from 'globals';
 
+const baseLanguageOptions = {
+      parser: tsparser,
+      ecmaVersion: 2021,
+      sourceType: 'module',
+
+      parserOptions: {
+        ecmaVersion: 12,
+        sourceType: 'module',
+        project: ['./tsconfig.json', './packages/*/tsconfig.json'],
+      },
+
+       globals: {
+        ...globals.node,
+        ...globals.browser,
+      },
+    };
+
 export default [
   {
     ignores: [
@@ -27,22 +44,7 @@ export default [
   {
     files: ['**/*.{js,cjs,mjs,ts,tsx}'],
 
-    languageOptions: {
-      parser: tsparser,
-      ecmaVersion: 2021,
-      sourceType: 'module',
-
-      parserOptions: {
-        ecmaVersion: 12,
-        sourceType: 'module',
-        project: ['./tsconfig.json', './packages/*/tsconfig.json'],
-      },
-
-       globals: {
-        ...globals.node,
-        ...globals.browser,
-      },
-    },
+    languageOptions: baseLanguageOptions,
 
     plugins: {
       '@typescript-eslint': tsPlugin,
@@ -82,6 +84,21 @@ export default [
 
       // Obsidian linter
       'obsidian-linter/no-duplicate-ignore-types': 'error',
+    },
+  },
+  {
+    files: ['**/*.test.{js,ts,tsx}', '**/__tests__/**/*.{js,ts,tsx}'],
+    plugins: {
+      jest: jestPlugin,
+    },
+    languageOptions: {
+      ...baseLanguageOptions,
+      globals: {
+        ...globals.jest,
+      },
+    },
+    rules: {
+      ...jestPlugin.configs.recommended.rules,
     },
   },
 ];
