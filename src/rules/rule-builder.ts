@@ -29,7 +29,7 @@ export abstract class RuleBuilderBase {
     const optionsFromSettings = rule.getOptions(settings);
     if (optionsFromSettings[rule.enabledOptionName()]) {
       timingBegin(rule.alias);
-      const options = Object.assign({}, optionsFromSettings, extraOptions) as Options;
+      const options = Object.assign({}, optionsFromSettings, extraOptions);
       logDebug(`${getTextInLanguage('logs.run-rule-text')} ${rule.getName()}`);
 
       try {
@@ -121,7 +121,7 @@ export default abstract class RuleBuilder<TOptions extends Options> extends Rule
   buildRuleOptions(options?: Options): TOptions {
     options = options ?? {};
     const defaultOptions = new this.OptionsClass();
-    const ruleOptions = Object.assign(defaultOptions, options) as TOptions;
+    const ruleOptions = Object.assign(defaultOptions, options);
 
     for (const optionBuilder of this.optionBuilders) {
       optionBuilder.setRuleOption(ruleOptions, options);
@@ -152,7 +152,7 @@ export default abstract class RuleBuilder<TOptions extends Options> extends Rule
   }
 
   static noSettingControl() {
-    return (target: Object, propertyKey: string) => {
+    return (target: object, propertyKey: string) => {
       const optionsClassName = target.constructor.name;
       RuleBuilderBase.setNoSettingControl(optionsClassName, propertyKey);
     };
@@ -251,7 +251,7 @@ export class BooleanOptionBuilder<TOptions extends Options> extends OptionBuilde
   }
 }
 
-export class NumberOptionBuilder<TOptions extends Options> extends OptionBuilder<TOptions, Number> {
+export class NumberOptionBuilder<TOptions extends Options> extends OptionBuilder<TOptions, number> {
   protected buildOption(): Option {
     return new TextOption(this.configKey, this.nameKey, this.descriptionKey, this.defaultValue);
   }

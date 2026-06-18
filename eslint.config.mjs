@@ -79,12 +79,14 @@ export default [
           argsIgnorePattern: '(^_)|(options)',
         },
       ],
+      '@typescript-eslint/no-explicit-any': 'off', // this is not necessary for my use case as any can be used well
 
       // Deprecation
       '@typescript-eslint/no-deprecated': 'warn',
 
       // Obsidian linter
       'obsidian-linter/no-duplicate-ignore-types': 'error',
+
     },
   },
   {

@@ -175,7 +175,7 @@ function replaceMarkdownLinks(text: string, regularLinkPlaceholder: string): [pl
 function replaceTags(text: string, placeholder: string): [placeholderInfo[], string] {
   const replacedValues: placeholderInfo[] = [];
 
-  text = text.replace(tagWithLeadingWhitespaceRegex, (_, whitespace, tag) => {
+  text = text.replace(tagWithLeadingWhitespaceRegex, (_, whitespace: string, tag: string) => {
     const id = getNewPlaceHolder(placeholder);
 
     replacedValues.push({placeholder: id, replacedValue: tag});
@@ -188,7 +188,7 @@ function replaceTags(text: string, placeholder: string): [placeholderInfo[], str
 function replaceTables(text: string, tablePlaceholder: string): [placeholderInfo[], string] {
   const tablePositions = getAllTablesInText(text);
 
-  const replacedTables: placeholderInfo[] = new Array(tablePositions.length);
+  const replacedTables: placeholderInfo[] = new Array(tablePositions.length) as placeholderInfo[];
   let index = 0;
   const length = replacedTables.length;
   for (const tablePosition of tablePositions) {
@@ -207,7 +207,7 @@ function replaceTables(text: string, tablePlaceholder: string): [placeholderInfo
 function replaceCustomIgnore(text: string, customIgnorePlaceholder: string): [placeholderInfo[], string] {
   const customIgnorePositions = getAllCustomIgnoreSectionsInText(text);
 
-  const replacedSections: placeholderInfo[] = new Array(customIgnorePositions.length);
+  const replacedSections: placeholderInfo[] = new Array(customIgnorePositions.length) as placeholderInfo[];
   let index = 0;
   const length = replacedSections.length;
   for (const customIgnorePosition of customIgnorePositions) {

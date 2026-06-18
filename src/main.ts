@@ -89,7 +89,7 @@ export default class LinterPlugin extends Plugin {
     logInfo(getTextInLanguage('logs.plugin-load'));
 
     this.isEnabled = true;
-    // eslint-disable-next-line guard-for-in
+     
     for (const key in iconInfo) {
       const svg = iconInfo[key];
       addIcon(svg.id, svg.source);
@@ -207,7 +207,7 @@ export default class LinterPlugin extends Plugin {
       id: 'lint-all-files-in-folder',
       name: getTextInLanguage('commands.lint-all-files-in-folder.name'),
       icon: iconInfo.folder.id,
-      editorCheckCallback: (checking: Boolean, _, ctx) => {
+      editorCheckCallback: (checking: boolean, _, ctx) => {
         if (checking) {
           if (ctx && ctx.file && ctx.file instanceof TFile && ctx.file.parent) {
             return !ctx.file.parent.isRoot();
@@ -875,7 +875,7 @@ export default class LinterPlugin extends Plugin {
   }
 
   private updateEditor(oldText: string, newText: string, editor: Editor): DiffMatchPatch.Diff[] {
-    const dmp = new DiffMatchPatch.diff_match_patch(); // eslint-disable-line new-cap
+    const dmp = new DiffMatchPatch.diff_match_patch();  
     const changes = dmp.diff_main(oldText, newText);
     let curText = '';
     changes.forEach((change) => {
@@ -887,7 +887,7 @@ export default class LinterPlugin extends Plugin {
           changes: [{
             from: editor.posToOffset(this.endOfDocument(curText)),
             insert: value,
-          } as ChangeSpec],
+          }],
           filter: false,
         });
         curText += value;
@@ -903,7 +903,7 @@ export default class LinterPlugin extends Plugin {
             from: editor.posToOffset(start),
             to: editor.posToOffset(end),
             insert: '',
-          } as ChangeSpec],
+          }],
           filter: false,
         });
       } else {

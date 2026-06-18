@@ -35,7 +35,7 @@ export class DropdownSetting extends BaseSetting<string> {
     if (this.dropdownRecords.isForEnum) {
       for (const value of this.dropdownRecords.values) {
         const key = ('enums.' + value) as LanguageStringKey;
-        dropdown.addOption(value as string, getTextInLanguage(key));
+        dropdown.addOption(value, getTextInLanguage(key));
       }
 
       return;

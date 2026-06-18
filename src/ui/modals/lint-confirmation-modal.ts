@@ -41,7 +41,7 @@ export class LintConfirmationModal extends Modal {
         this.close();
         await btnSubmitAction();
       });
-      setTimeout(() => {
+      window.setTimeout(() => {
         btnSubmit.focus();
       }, 50);
     });

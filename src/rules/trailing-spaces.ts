@@ -60,12 +60,12 @@ export default class TrailingSpaces extends RuleBuilder<TrailingSpacesOptions> {
     return [
       new ExampleBuilder({
         description: 'Removes trailing spaces and tabs.',
-        /* eslint-disable no-tabs */
+         
         before: dedent`
           # H1
           Line with trailing spaces and tabs.	        ${''}
         `,
-        /* eslint-enable no-tabs */
+         
         after: dedent`
           # H1
           Line with trailing spaces and tabs.

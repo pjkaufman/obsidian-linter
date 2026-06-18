@@ -255,7 +255,7 @@ export function formatYamlArrayValue(value: string | string[], format: NormalArr
 }
 
 function getDefaultYAMLArrayValue(format: NormalArrayFormats | SpecialArrayFormats | TagSpecificArrayFormats): string {
-  /* eslint-disable no-fallthrough */
+   
   switch (format) {
     case NormalArrayFormats.SingleLine:
     case TagSpecificArrayFormats.SingleLineSpaceDelimited:
@@ -267,7 +267,7 @@ function getDefaultYAMLArrayValue(format: NormalArrayFormats | SpecialArrayForma
     case SpecialArrayFormats.SingleStringCommaDelimited:
       return ' ';
   }
-  /* eslint-enable no-fallthrough */
+   
 }
 
 function convertStringArrayToSingleLineArray(arrayItems: string[]): string {

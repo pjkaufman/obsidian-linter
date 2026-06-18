@@ -251,7 +251,7 @@ export default class RuleTemplate extends RuleBuilder<FormatYamlArrayOptions> {
         optionsKey: 'defaultArrayStyle',
         records: [
           {
-            value: NormalArrayFormats.MultiLine as NormalArrayFormats,
+            value: NormalArrayFormats.MultiLine,
             description: '```key:\\n  - value```',
           },
           {

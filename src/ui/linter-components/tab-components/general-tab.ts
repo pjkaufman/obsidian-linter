@@ -23,9 +23,9 @@ export class GeneralTab extends Tab {
     let displayCharactersChangedSetting: ToggleSetting | null = null;
     const lintOnSaveSetting = new ToggleSetting(tempDiv, 'tabs.general.lint-on-save.name', 'tabs.general.lint-on-save.description', 'lintOnSave', this.plugin, (value: boolean) => {
       if (value) {
-        displayCharactersChangedSetting!.unhide();
+        displayCharactersChangedSetting.unhide();
       } else {
-        displayCharactersChangedSetting!.hide();
+        displayCharactersChangedSetting.hide();
       }
     });
     this.addSettingSearchInfoForGeneralSettings(lintOnSaveSetting);
@@ -41,9 +41,9 @@ export class GeneralTab extends Tab {
     tempDiv = this.contentEl.createDiv();
     const lintOnActiveFileChangeSetting = new ToggleSetting(tempDiv, 'tabs.general.lint-on-file-change.name', 'tabs.general.lint-on-file-change.description', 'lintOnFileChange', this.plugin, (value: boolean) => {
       if (value) {
-        displayLintOnActiveFileChangeSetting!.unhide();
+        displayLintOnActiveFileChangeSetting.unhide();
       } else {
-        displayLintOnActiveFileChangeSetting!.hide();
+        displayLintOnActiveFileChangeSetting.hide();
       }
     });
     this.addSettingSearchInfoForGeneralSettings(lintOnActiveFileChangeSetting);
