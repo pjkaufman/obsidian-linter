@@ -1,3 +1,5 @@
+/* eslint-disable obsidianmd/rule-custom-message */
+/* eslint-disable import/no-nodejs-modules */
 import {readFileSync, writeFileSync, existsSync} from 'fs';
 import dedent from 'ts-dedent';
 import {DropdownOption} from './option';

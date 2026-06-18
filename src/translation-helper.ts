@@ -1,3 +1,5 @@
+/* eslint-disable obsidianmd/rule-custom-message */
+/* eslint-disable import/no-nodejs-modules */
 import * as readline from 'readline';
 import {stdout, stdin, exit} from 'process';
 import {LanguageStringKey, setLanguage, getTextInLanguage, localeHasKey, localeMap, LanguageLocale, getLanguageSourceFile} from './lang/helpers';
@@ -149,7 +151,7 @@ function getNextTranslation(missingKeys: string[], element: string, language: st
 }
 
 function setValueInLanguage(language: string, key: string, value: string) {
-  let object = localeMap[language] as {[k: string]: any};
+  let object = localeMap[language] as {[k: string]: unknown};
   const keyParts = key.split('.');
   keyParts.forEach((keyPart: string, index: number) => {
     if (keyParts.length -1 === index) {
@@ -177,7 +179,7 @@ function getMissingKeysInLanguage(selectedLanguage: LanguageLocale): string[] {
   return missingKeys;
 }
 
-function getObjectKeys(obj: any, prefix: string = ''): string[] {
+function getObjectKeys(obj: unknown, prefix: string = ''): string[] {
   return Object.entries(obj).reduce((collector, [key, val]) => {
     const newKeys = [...collector, prefix ? `${prefix}.${key}` : key];
     if (Object.prototype.toString.call(val) === '[object Object]') {
