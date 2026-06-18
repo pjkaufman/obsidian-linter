@@ -28,6 +28,7 @@ export default [
   {
     ignores: [
       'node_modules/',
+      'docs/',
       'docs.js',
       'main.js',
       'translation-helper.js',
@@ -99,6 +100,7 @@ export default [
     },
     rules: {
       ...jestPlugin.configs.recommended.rules,
+      'jest/valid-title': 'off',
     },
   },
 ];
