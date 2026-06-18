@@ -58,10 +58,10 @@
     "ts-node": "^10.9.2",
     "tslib": "^2.4.1",
     "typescript": "^5.4.2",
-    "unified-lint-rule": "^2.1.1"
+    "unified-lint-rule": "^2.1.1",
+    "@codemirror/state": "^6.5.0",
   },
   "dependencies": {
-    "@codemirror/state": "^6.5.0",
     "@popperjs/core": "^2.11.6",
     "async-lock": "^1.4.1",
     "diff-match-patch": "^1.0.5",
