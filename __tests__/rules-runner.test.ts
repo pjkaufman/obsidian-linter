@@ -2,31 +2,31 @@ import {Command} from 'obsidian';
 import {RulesRunner} from '../src/rules-runner';
 import {CustomReplace} from '../src/ui/linter-components/custom-replace-option';
 import dedent from 'ts-dedent';
-import {LintCommand} from 'src/ui/linter-components/custom-command-option';
+import {LintCommand} from '../src/ui/linter-components/custom-command-option';
 
 const rulesRunner = new RulesRunner();
 const appCommandsMock = {
   numberOfCommands: 0,
   numberOfHitsPerId: new Map<string, number>(),
   executeCommandById: function(id: string): void {
-    this.numberOfCommands += 1;
-    if (!this.numberOfHitsPerId.has(id)) {
-      this.numberOfHitsPerId.set(id, 1);
+    appCommandsMock.numberOfCommands += 1;
+    if (!appCommandsMock.numberOfHitsPerId.has(id)) {
+      appCommandsMock.numberOfHitsPerId.set(id, 1);
     } else {
-      this.numberOfHitsPerId.set(id, this.numberOfHitsPerId.get(id) + 1);
+      appCommandsMock.numberOfHitsPerId.set(id, appCommandsMock.numberOfHitsPerId.get(id) + 1);
     }
   },
   commands: {
     'editor:save-file': {
-      callback: () => {},
+      checkCallback: () => {},
     },
   },
   listCommands: (): Command[] => {
     return [];
   },
   resetStats: function() {
-    this.numberOfCommands = 0;
-    this.numberOfHitsPerId = new Map<string, number>();
+    appCommandsMock.numberOfCommands = 0;
+    appCommandsMock.numberOfHitsPerId = new Map<string, number>();
   },
 };
 
