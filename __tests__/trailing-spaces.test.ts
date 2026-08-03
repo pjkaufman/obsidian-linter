@@ -192,5 +192,45 @@ ruleTest({
         ${''}
       `,
     },
+    { // accounts for https://github.com/platers/obsidian-linter/issues/1542
+      testName: 'Whitespace only lines are emptied instead of being replaced with a literal "$1" when two space line break is enabled',
+      before: dedent`
+        Some text
+        ${' '}
+        More text
+        ${'   '}
+        Even more text
+        ${'\t'}
+        The end
+      `,
+      after: dedent`
+        Some text
+        ${''}
+        More text
+        ${''}
+        Even more text
+        ${''}
+        The end
+      `,
+      options: {
+        twoSpaceLineBreak: true,
+      },
+    },
+    { // accounts for https://github.com/platers/obsidian-linter/issues/1542
+      testName: 'A whitespace only line of exactly two spaces is still preserved when two space line break is enabled',
+      before: dedent`
+        Some text
+        ${'  '}
+        More text
+      `,
+      after: dedent`
+        Some text
+        ${'  '}
+        More text
+      `,
+      options: {
+        twoSpaceLineBreak: true,
+      },
+    },
   ],
 });

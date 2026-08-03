@@ -49,8 +49,8 @@ export default class TrailingSpaces extends RuleBuilder<TrailingSpacesOptions> {
     if (!options.twoSpaceLineBreak) {
       text = text.replace(/^[ \t]+$/gm, '');
     } else {
-      text = text.replace(/^[ \t]$/gm, '$1'); // one whitespace
-      text = text.replace(/^[ \t]{3,}$/gm, '$1'); // three or more whitespaces
+      text = text.replace(/^[ \t]$/gm, ''); // one whitespace
+      text = text.replace(/^[ \t]{3,}$/gm, ''); // three or more whitespaces
       text = text.replace(/^( ?\t\t? ?)$/gm, '$1'); // two whitespaces with at least one tab
     }
 
