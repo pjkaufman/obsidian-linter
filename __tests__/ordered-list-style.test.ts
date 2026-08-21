@@ -1,6 +1,7 @@
 import OrderedListStyle from '../src/rules/ordered-list-style';
 import dedent from 'ts-dedent';
 import {ruleTest} from './common';
+import {OrderListItemStyles} from '../src/utils/mdast';
 
 ruleTest({
   RuleBuilderClass: OrderedListStyle,
@@ -188,6 +189,32 @@ ruleTest({
         - c
           1. d
           2. d
+      `,
+    },
+    {
+      testName: 'Parenthesis-terminated indicators keep their numbers when preserve start is enabled',
+      options: {preserveStart: true},
+      before: dedent`
+        1) Item 1
+        1) Item 2
+        1) Item 3
+      `,
+      after: dedent`
+        1. Item 1
+        2. Item 2
+        3. Item 3
+      `,
+    },
+    {
+      testName: 'Parenthesis-terminated indicators keep their numbers when number style is preserve',
+      options: {numberStyle: OrderListItemStyles.Preserve},
+      before: dedent`
+        3) Item 3
+        4) Item 4
+      `,
+      after: dedent`
+        3. Item 3
+        4. Item 4
       `,
     },
   ],
