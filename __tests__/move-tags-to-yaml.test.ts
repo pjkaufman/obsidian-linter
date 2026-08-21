@@ -384,5 +384,23 @@ ruleTest({
         howToHandleExistingTags: 'Remove whole tag',
       },
     },
+    { // accounts for https://github.com/platers/obsidian-linter/issues/1535
+      testName: 'Purely numeric hashes are not treated as tags since Obsidian requires at least one non-numerical character',
+      before: dedent`
+        Numeric only: #123
+        Year like: #1984
+        Valid tag with digits: #y1984
+        Valid tag ending in digits: #1984book
+      `,
+      after: dedent`
+        ---
+        tags: [y1984, 1984book]
+        ---
+        Numeric only: #123
+        Year like: #1984
+        Valid tag with digits: #y1984
+        Valid tag ending in digits: #1984book
+      `,
+    },
   ],
 });
