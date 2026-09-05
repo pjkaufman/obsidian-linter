@@ -92,7 +92,7 @@ export default class LinterPlugin extends Plugin {
     logInfo(getTextInLanguage('logs.plugin-load'));
 
     this.isEnabled = true;
-    // eslint-disable-next-line guard-for-in
+     
     for (const key in iconInfo) {
       const svg = iconInfo[key];
       addIcon(svg.id, svg.source);
@@ -980,7 +980,7 @@ export default class LinterPlugin extends Plugin {
   }
 
   private updateEditor(oldText: string, newText: string, editor: Editor): DiffMatchPatch.Diff[] {
-    const dmp = new DiffMatchPatch.diff_match_patch(); // eslint-disable-line new-cap
+    const dmp = new DiffMatchPatch.diff_match_patch();  
     const changes = dmp.diff_main(oldText, newText);
     let curText = '';
     changes.forEach((change) => {
