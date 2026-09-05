@@ -6,9 +6,11 @@ const tsPlugin = require('@typescript-eslint/eslint-plugin');
 const jestPlugin = require('eslint-plugin-jest');
 const unicornPlugin = require('eslint-plugin-unicorn');
 const obsidianLinterPlugin = require('eslint-plugin-obsidian-linter');
+const obsidianmd = require('eslint-plugin-obsidianmd').default;
 
 module.exports = [
   js.configs.recommended,
+  ...obsidianmd.configs.recommended,
 
   {
     files: ['**/*.ts'],
@@ -24,7 +26,8 @@ module.exports = [
       },
 
       parserOptions: {
-        project: ['./tsconfig.json', './packages/*/tsconfig.json'],
+        projectService: ['./tsconfig.json', './packages/*/tsconfig.json'],
+        tsconfigRootDir: __dirname,
       },
     },
 
@@ -70,7 +73,7 @@ module.exports = [
       'docs.js',
       'main.js',
       'translation-helper.js',
-      'eslint.config.js',
+      'eslint.config.cjs',
       'babel.config.js',
       'postcss.config.js',
       'eslint-rules',
