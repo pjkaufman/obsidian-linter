@@ -150,7 +150,7 @@ export class DiffPreviewView extends ItemView {
   }
 
   private createLineDiff(oldText: string, newText: string): DiffMatchPatch.Diff[] {
-    const diffMatchPatch = new DiffMatchPatch.diff_match_patch(); // eslint-disable-line new-cap
+    const diffMatchPatch = new DiffMatchPatch.diff_match_patch();  
     const lineMode = diffMatchPatch.diff_linesToChars_(oldText, newText);
     const diffs = diffMatchPatch.diff_main(lineMode.chars1, lineMode.chars2, false);
     diffMatchPatch.diff_charsToLines_(diffs, lineMode.lineArray);
