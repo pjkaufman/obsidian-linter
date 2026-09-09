@@ -392,13 +392,13 @@ ruleTest({
 
 describe('yaml-title', () => {
   it('should not show warning for invalid YAML string', () => {
-    const originalEmitWarning = process.emitWarning;
-    try {
-      process.emitWarning = jest.fn();
-      YamlTitle.getRule().apply('# !wrong-yaml-string');
-      expect(process.emitWarning).not.toHaveBeenCalled();
-    } finally {
-      process.emitWarning = originalEmitWarning;
-    }
+    const emitWarningSpy = jest
+      .spyOn(process, 'emitWarning')
+      .mockImplementation(() => {});
+
+    YamlTitle.getRule().apply('# !wrong-yaml-string');
+
+    expect(emitWarningSpy).not.toHaveBeenCalled();
   });
 });
+
