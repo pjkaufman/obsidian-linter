@@ -1017,7 +1017,7 @@ function addBlankLinesAroundStartAndStopMathIndicators(text: string, mathBlockSt
 
   // try to cleanup whitespace that may get left behind by this logic when moving the opening
   // math block indicators to its own line
-  // eslint-disable-next-line no-unmodified-loop-condition
+  // eslint-disable-next-line no-unmodified-loop-condition -- the loop does break out of things, so the eslint error can be ignored
   while (startingNewLineAdded && mathBlockStartIndex > 0) {
     const previousChar = text[mathBlockStartIndex-1];
     if (previousChar !== ' ' && previousChar !== '\t') {

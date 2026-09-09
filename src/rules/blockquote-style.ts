@@ -37,14 +37,14 @@ export default class BlockquoteStyle extends RuleBuilder<BlockquoteStyleOptions>
       return this.updateBlockquoteLines(blockquote, this.removeSpaceFromIndicator);
     });
   }
-  removeSpaceFromIndicator(startOfLine: string, isListItemMarkerLine: boolean): string {
+  removeSpaceFromIndicator(this:void, startOfLine: string, isListItemMarkerLine: boolean): string {
     if (isListItemMarkerLine) {
       return startOfLine.replace(/>[ \t]+>/g, '>>');
     }
 
     return startOfLine.replace(/>[ \t]+/g, '>');
   }
-  addSpaceToIndicator(startOfLine: string, isListItemMarkerLine: boolean): string {
+  addSpaceToIndicator(this:void, startOfLine: string, isListItemMarkerLine: boolean): string {
     // first we add spaces to blockquote indicators that are not followed by a space and then to catch any that were not handled already
     // we make sure to add a space between any 2 indicators that are side by side
     const newStartOfLine = startOfLine.replace(/>([^ ]|$)/g, '> $1').replace(/>>/g, '> >');

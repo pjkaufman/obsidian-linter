@@ -233,7 +233,7 @@ export class MomentFormatOption extends Option {
       render: (setting) => {
         setting.addMomentFormat((format) => format
             .setPlaceholder('dddd, MMMM Do YYYY, h:mm:ss a')
-            .setValue(this.getCurrentValue(plugin) ?? '')
+            .setValue((this.getCurrentValue(plugin) as string | undefined) ?? '')
             .onChange(async (value) => {
               await this.writeAndSave(value, plugin);
             }));

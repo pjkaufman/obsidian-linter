@@ -42,6 +42,8 @@ const mockedPlugins = [replace({
     'import {Modal, App} from \'obsidian\';': 'class Modal {}',
     // remove the use of app from a couple of settings for docs.js to run
     'import {App} from \'obsidian\';': '',
+    // remove the use of sanitizeHTMLToDom from the ui helpers for docs.js to run
+    'import { sanitizeHTMLToDom } from \'obsidian\';': '',
   },
   delimiters: ['', ''],
 })];
@@ -49,12 +51,6 @@ const unusedCodeForProduction = [replace({
   values: {
     // remove values for examples as they are not necessary in the actual plugin when it goes out to users
     'abstract get exampleBuilders(): ExampleBuilder<TOptions>[];': '',
-    // removes eslint disabling that was just meant for examples
-    '/* eslint-disable no-tabs */': '',
-    '/* eslint-disable no-mixed-spaces-and-tabs, no-tabs */': '',
-    // remove eslint enabling that was just meant for examples
-    '/* eslint-enable no-tabs */': '',
-    '/* eslint-enable no-mixed-spaces-and-tabs, no-tabs */': '',
     // add the multiline comment to remove the examples
     'get exampleBuilders():': '/*',
     // add the ending of the multiline comment that will remove the examples
