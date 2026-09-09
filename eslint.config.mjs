@@ -17,7 +17,8 @@ const typescriptLanguageOptions = {
     globals: {
         ...globals.es2020,
         ...globals.node,
-        ...globals.browser
+        ...globals.browser,
+        ...globals.jest,
     },
 };
 
@@ -49,6 +50,15 @@ const commonRules = {
   '@typescript-eslint/no-deprecated': 'warn',
 
   'obsidian-linter/no-duplicate-ignore-types': 'error',
+};
+// eslint rules that should be different from the source rules
+const nonSrcRules = {
+  'obsidianmd/no-nodejs-modules': 'off', // fs and other node libraries are pefectly fine in non-plugin code
+  'obsidianmd/rule-custom-message': 'off', // this should not be enabled for tests as console logs are valid for my uses
+  'obsidianmd/ui/sentence-case': 'off', // this shouldn't affect the integration tests
+  'obsidianmd/commands/no-plugin-name-in-command-name': 'off', // this shouldn't affect the integration tests
+  "import/no-extraneous-dependencies": ["warn", { "devDependencies": true }], // check for dev dependencies for tests
+  '@typescript-eslint/no-restricted-imports': 'off', // moment is to be used in the UTs and integration tests and should not be listed as an issue
 }
 
 export default defineConfig([
@@ -90,6 +100,7 @@ export default defineConfig([
         },
         rules:  {
           ...commonRules,
+          ...nonSrcRules,
         },
     },
 ]);

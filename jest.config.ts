@@ -1,4 +1,4 @@
-process.env.TZ = 'UTC'; // eslint-disable-line no-undef
+process.env.TZ = 'UTC';  
 
 // jest.config.ts
 import type {Config} from '@jest/types';
