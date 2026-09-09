@@ -194,9 +194,9 @@ export class MdFilePickerOption extends Option {
   }
 
   public getSettingDefinition(plugin: LinterPlugin, update: () => void): SettingDefinitionItem {
-    plugin.settings.ruleConfigs[this.ruleAlias][this.configKey] =
-        plugin.settings.ruleConfigs[this.ruleAlias][this.configKey] ?? [];
-    const filesPicked: CustomAutoCorrectContent[] = plugin.settings.ruleConfigs[this.ruleAlias][this.configKey];
+    (plugin.settings.ruleConfigs[this.ruleAlias] as {[k:string]: {[k:string]: CustomAutoCorrectContent[]}})[this.configKey] =
+        plugin.settings.ruleConfigs[this.ruleAlias][this.configKey] as CustomAutoCorrectContent[] | undefined ?? [];
+    const filesPicked: CustomAutoCorrectContent[] = plugin.settings.ruleConfigs[this.ruleAlias][this.configKey] as CustomAutoCorrectContent[];
     const app = plugin.app;
     const ruleName = getTextInLanguage('rules.auto-correct-common-misspellings.name');
     const warning = getTextInLanguage('options.custom-auto-correct.warning-text').replace('{NAME}', ruleName);
@@ -251,6 +251,7 @@ export class MdFilePickerOption extends Option {
       heading,
       addItem: {
         name: getTextInLanguage('options.custom-auto-correct.add-new-replacement-file-tooltip'),
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises -- I don't have control over this, so we may as well ignore the promise mismatch
         action: async () => {
           filesPicked.push({filePath: '', customReplacements: null});
           await plugin.saveSettings();
@@ -273,6 +274,7 @@ export class MdFilePickerOption extends Option {
               await plugin.saveSettings();
             }),
       ],
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises -- I don't have control over this, so we may as well ignore the promise mismatch
       onDelete: async (index) => {
         filesPicked.splice(index, 1);
         await plugin.saveSettings();

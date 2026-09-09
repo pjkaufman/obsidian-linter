@@ -63,7 +63,8 @@ const commonDisabledRules = {
   '@typescript-eslint/no-restricted-imports': 'off', // moment is going to be used for UTs and integration tests, but even as a dev import it triggers this rule
   'obsidianmd/object-assign': 'off', // I will determine when to actual use object assign
   'depend/ban-dependencies': 'off', // I am only importing moment for the UTs and integration tests as needed. So there is no need to have this enabled as it will just say there is an issue when there isn't
-   'obsidianmd/ui/sentence-case': 'off', // this shouldn't affect the integration tests and it is not used in the scanner, so I am turning it off
+  'obsidianmd/ui/sentence-case': 'off', // this shouldn't affect the integration tests and it is not used in the scanner, so I am turning it off
+  'obsidianmd/editor-drop-paste': 'off', // while this should be handled, it seems to be erroneously flagging a place where I do have this handled, so I am disabling it
 }
 
 export default defineConfig([

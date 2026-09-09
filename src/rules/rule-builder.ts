@@ -3,7 +3,7 @@ import {BooleanOption, DropdownOption, DropdownRecord, MdFilePickerOption, Momen
 import {logDebug, timingBegin, timingEnd} from '../utils/logger';
 import {getTextInLanguage, LanguageStringKey} from '../lang/helpers';
 import {IgnoreType, IgnoreTypes} from '../utils/ignore-types';
-import {LinterSettings} from 'src/settings-data';
+import {LinterSettings} from '../settings-data';
 import {App} from 'obsidian';
 
 // limit the amount of text that can be written to the logs to try to prevent memory issues
