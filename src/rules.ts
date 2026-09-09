@@ -63,16 +63,6 @@ export class Rule {
       if (value && disableConflictingOptions) {
         disableConflictingOptions(value, app);
       }
-
-      if (options.length > 1) {
-        for (let i = 1; i < options.length; i++) {
-          if (value) {
-            options[i].unhide();
-          } else {
-            options[i].hide();
-          }
-        }
-      }
     }));
     for (const option of options) {
       option.ruleAlias = alias;

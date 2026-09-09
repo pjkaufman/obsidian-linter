@@ -175,15 +175,13 @@ export default class TestLinterPlugin extends Plugin {
       return;
     }
 
-    const that = this;
-
     this.plugin.setCustomCommandCallback(async (file: TFile) => {
       if (file !== activeLeaf.file) {
         return;
       }
 
       if (originalText == null) {
-        that.plugin.setCustomCommandCallback(null);
+        this.plugin.setCustomCommandCallback(null);
       }
 
       const t = tests[index];
@@ -199,13 +197,13 @@ export default class TestLinterPlugin extends Plugin {
         this.handleTestCompletion(t.name, false, testStatuses, totalTestCount);
       }
 
-      await that.resetFileContents(activeLeaf, originalText);
+      await this.resetFileContents(activeLeaf, originalText);
 
       originalText = null;
       if (index+1 < tests.length) {
-        originalText = await that.setupMetadataTest(that, tests[++index], activeLeaf, testStatuses, totalTestCount);
+        originalText = await this.setupMetadataTest(this, tests[++index], activeLeaf, testStatuses, totalTestCount);
       } else { // remove the custom commands callback once all tests have run
-        that.plugin.setCustomCommandCallback(null);
+        this.plugin.setCustomCommandCallback(null);
       }
     });
   }
@@ -242,7 +240,7 @@ export default class TestLinterPlugin extends Plugin {
 
   async onunload(): void {
     if (this.plugin) {
-      await this.plugin.onunload();
+      this.plugin.onunload();
     }
   }
 

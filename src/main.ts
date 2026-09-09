@@ -385,7 +385,7 @@ export default class LinterPlugin extends Plugin {
       'editor:save-file'
     ];
 
-    this.originalSaveCallback = saveCommandDefinition?.checkCallback;
+    this.originalSaveCallback = saveCommandDefinition?.checkCallback?.bind(saveCommandDefinition);
 
     if (typeof this.originalSaveCallback === 'function') {
       saveCommandDefinition.checkCallback = (checking: boolean) => {
@@ -449,7 +449,7 @@ export default class LinterPlugin extends Plugin {
     this.defaultAutoCorrectMisspellings = parseCustomReplacements(stripCr(await readInMisspellingsFile(this)));
 
     // load custom-auto-correct replacements if they exist
-    for (const replacementFileInfo of this.settings.ruleConfigs['auto-correct-common-misspellings']['extra-auto-correct-files'] ?? [] as CustomAutoCorrectContent[]) {
+    for (const replacementFileInfo of (this.settings.ruleConfigs['auto-correct-common-misspellings'] as {[k: string]: CustomAutoCorrectContent[]})['extra-auto-correct-files'] ?? [] as CustomAutoCorrectContent[]) {
       if (replacementFileInfo.filePath != '') {
         const file = this.app.vault.getFileByPath(normalizePath(replacementFileInfo.filePath));
         if (file) {
@@ -1246,7 +1246,7 @@ export default class LinterPlugin extends Plugin {
         const ruleDescription = getTextInLanguage('rules.' + rule.alias + '.description' as LanguageStringKey);
         // move description config value to new setting location
         const newSettingValues: Options = {
-          enabled: ruleSettings[ruleDescription] ?? false,
+          enabled: ruleSettings[ruleDescription] as boolean | undefined ?? false,
         };
 
         // move option config values to new setting location
@@ -1257,7 +1257,7 @@ export default class LinterPlugin extends Plugin {
           }
 
           const configKeyName = getTextInLanguage('rules.' + rule.alias + '.' + option.configKey + '.name' as LanguageStringKey);
-          newSettingValues[option.configKey] = ruleSettings[configKeyName] ?? option.defaultValue;
+          newSettingValues[option.configKey] = (ruleSettings[configKeyName] as unknown) ?? option.defaultValue;
         }
 
         this.settings.ruleConfigs[rule.alias] = newSettingValues;
