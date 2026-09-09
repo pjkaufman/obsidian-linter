@@ -32,7 +32,7 @@ export abstract class Option {
    * @param {any} defaultValue - The default value of the option
    * @param {string?} ruleAlias - The alias of the rule this option belongs to
    */
-  constructor(public configKey: string, public nameKey: LanguageStringKey, public descriptionKey: LanguageStringKey, public defaultValue: any, ruleAlias?: string | null) {
+  constructor(public configKey: string, public nameKey: LanguageStringKey, public descriptionKey: LanguageStringKey, public defaultValue: unknown, ruleAlias?: string | null) {
     if (ruleAlias) {
       this.ruleAlias = ruleAlias;
     }
@@ -54,7 +54,7 @@ export abstract class Option {
 
   public abstract getSettingDefinition(plugin: LinterPlugin, update: () => void): SettingDefinitionItem;
 
-  protected setOption(value: any, settings: LinterSettings): void {
+  protected setOption(value: unknown, settings: LinterSettings): void {
     settings.ruleConfigs[this.ruleAlias][this.configKey] = value;
   }
 
@@ -65,11 +65,11 @@ export abstract class Option {
     return `ruleConfigs.${this.ruleAlias}.${this.configKey}`;
   }
 
-  protected getCurrentValue(plugin: LinterPlugin): any {
+  protected getCurrentValue(plugin: LinterPlugin): unknown {
     return plugin.settings.ruleConfigs[this.ruleAlias]?.[this.configKey] ?? this.defaultValue;
   }
 
-  protected async writeAndSave(value: any, plugin: LinterPlugin): Promise<void> {
+  protected async writeAndSave(value: unknown, plugin: LinterPlugin): Promise<void> {
     plugin.settings.ruleConfigs[this.ruleAlias] ??= {};
     plugin.settings.ruleConfigs[this.ruleAlias][this.configKey] = value;
     await plugin.saveSettings();
@@ -97,7 +97,7 @@ export class BooleanOption extends Option {
   public defaultValue: boolean;
   private toggleComponent: ToggleComponent;
 
-  constructor(configKey: string, nameKey: LanguageStringKey, descriptionKey: LanguageStringKey, defaultValue: any, ruleAlias?: string | null, public onChange?: (value: boolean, app: App) => void) {
+  constructor(configKey: string, nameKey: LanguageStringKey, descriptionKey: LanguageStringKey, defaultValue: unknown, ruleAlias?: string | null, public onChange?: (value: boolean, app: App) => void) {
     super(configKey, nameKey, descriptionKey, defaultValue, ruleAlias);
   }
 

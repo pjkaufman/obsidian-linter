@@ -34,7 +34,7 @@ export default class TestLinterPlugin extends Plugin {
   ignoreTests: Array<IntegrationIgnoreTestCase> = ignoreTestCases;
   afterCacheUpdateTests: Array<IntegrationTestCase> = [...customCommandTestCases];
   plugin: LinterPlugin;
-  private timeoutId: any = undefined;
+  private timeoutId: unknown = undefined;
   private testRunNotice: Notice;
 
   async onload() {
@@ -43,14 +43,14 @@ export default class TestLinterPlugin extends Plugin {
       name: 'Run Linter Tests',
       callback: async () => {
         if (this.timeoutId != undefined) {
-          clearTimeout(this.timeoutId);
+          window.clearTimeout(this.timeoutId);
         }
 
         await this.setup();
 
         const testStatuses = [] as testStatus[];
         const expectedTestCount = this.regularTests.length + this.ignoreTests.length + this.afterCacheUpdateTests.length;
-        this.timeoutId = setTimeout(() => {
+        this.timeoutId = window.setTimeout(() => {
           console.log(testStatuses);
           if (testStatuses.length != expectedTestCount) {
             if (this.testRunNotice) {

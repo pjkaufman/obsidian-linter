@@ -16,11 +16,11 @@ export async function downloadMisspellings(plugin: Plugin, disableCustomAutoCorr
 
   const notice = new Notice(getTextInLanguage('rules.auto-correct-common-misspellings.default-install'));
 
-  let response: RequestUrlResponse;
+  let response: RequestUrlResponse | null = null;
   try {
     response = await requestUrl(defaultCustomAutoCorrectMisspellingsLocations);
   } catch (error) {
-    logError(getTextInLanguage('rules.auto-correct-common-misspellings.default-install-failed').replace('{URL}', defaultCustomAutoCorrectMisspellingsLocations), error);
+    logError(getTextInLanguage('rules.auto-correct-common-misspellings.default-install-failed').replace('{URL}', defaultCustomAutoCorrectMisspellingsLocations), error instanceof Error ? error : new Error(String(error)));
   }
 
   if (!response || response.status !== 200) {

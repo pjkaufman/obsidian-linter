@@ -92,8 +92,8 @@ const createEsbuildArgs = function(banner, entryPoint, outfile, extraPlugins) {
 
 const esbuildArgs = [
   createEsbuildArgs(banner, 'src/main.ts', 'main.js', unusedCodeForProduction),
-  createEsbuildArgs(mockedBanner, 'src/docs.ts', 'docs.js', mockedPlugins),
-  createEsbuildArgs(mockedBanner, 'src/translation-helper.ts', 'translation-helper.js', mockedPlugins),
+  createEsbuildArgs(mockedBanner, 'scripts/js/docs.ts', 'docs.js', mockedPlugins),
+  createEsbuildArgs(mockedBanner, 'scripts/js/translation-helper.ts', 'translation-helper.js', mockedPlugins),
 ];
 
 if (!prod) {

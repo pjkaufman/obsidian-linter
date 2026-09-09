@@ -78,29 +78,42 @@ export default defineConfig([
     js.configs.recommended,
     ...obsidianmd.configs.recommended,
     {
-        files: ['src/**/*.ts'],
-        languageOptions: typescriptLanguageOptions,
-        plugins: {
-            'obsidian-linter': obsidianLinterPlugin,
-            unicorn,
-            '@typescript-eslint': tsPlugin
-        },
-        rules:  {
-          ...commonRules,
-        },
+      files: ['src/**/*.ts'],
+      languageOptions: typescriptLanguageOptions,
+      plugins: {
+          'obsidian-linter': obsidianLinterPlugin,
+          unicorn,
+          '@typescript-eslint': tsPlugin
+      },
+      rules:  {
+        ...commonRules,
+      },
     },
     {
-        files: ['__integration__/**/*.ts', '__tests__/**/*.ts', '__mocks__/**/*.ts', 'jest.config.ts'],
-        languageOptions: typescriptLanguageOptions,
-        plugins: {
-            'obsidian-linter': obsidianLinterPlugin,
-            unicorn,
-            '@typescript-eslint': tsPlugin,
-            jest: jestPlugin
-        },
-        rules:  {
-          ...commonRules,
-          ...nonSrcRules,
-        },
+      files: ['__integration__/**/*.ts', '__tests__/**/*.ts', '__mocks__/**/*.ts'],
+      languageOptions: typescriptLanguageOptions,
+      plugins: {
+          'obsidian-linter': obsidianLinterPlugin,
+          unicorn,
+          '@typescript-eslint': tsPlugin,
+          jest: jestPlugin
+      },
+      rules:  {
+        ...commonRules,
+        ...nonSrcRules,
+      },
+    },
+    {
+      files: ['jest.config.ts', 'scripts/js/*.ts'],
+      languageOptions: typescriptLanguageOptions,
+      plugins: {
+          'obsidian-linter': obsidianLinterPlugin,
+          unicorn,
+          '@typescript-eslint': tsPlugin
+      },
+      rules:  {
+        ...commonRules,
+        ...nonSrcRules,
+      },
     },
 ]);

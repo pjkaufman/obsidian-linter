@@ -13,7 +13,7 @@ import {LinterSettings} from './settings-data';
 import {App} from 'obsidian';
 import {YAMLParseError} from 'yaml';
 
-export type Options = { [optionName: string]: any};
+export type Options = object;
 
 type ApplyFunction = (text: string, options?: Options) => string;
 
@@ -80,7 +80,7 @@ export class Rule {
   }
 
   public getDefaultOptions() {
-    const options: { [optionName: string]: any } = {};
+    const options: { [optionName: string]: unknown } = {};
 
     for (const option of this.options) {
       options[option.configKey] = option.defaultValue;

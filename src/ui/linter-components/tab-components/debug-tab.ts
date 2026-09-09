@@ -8,7 +8,7 @@ import {getTextInLanguage} from '../../../lang/helpers';
 import {DropdownRecordInfo, DropdownSetting} from '../../../ui/components/dropdown-setting';
 import {ToggleSetting} from '../../../ui/components/toggle-setting';
 
-const logLevels = Object.keys(log.levels) as string[];
+const logLevels = Object.keys(log.levels);
 
 export class DebugTab extends Tab {
   constructor(navEl: HTMLElement, settingsEl: HTMLElement, isMobile: boolean, plugin: LinterPlugin) {
@@ -40,9 +40,9 @@ export class DebugTab extends Tab {
     tempDiv = this.contentEl.createDiv();
     const recordLintOnSaveLogsSetting = new ToggleSetting(tempDiv, 'tabs.debug.log-collection.name', 'tabs.debug.log-collection.description', 'recordLintOnSaveLogs', this.plugin, (value: boolean) => {
       if (value) {
-        logDisplay!.unhide();
+        logDisplay.unhide();
       } else {
-        logDisplay!.hide();
+        logDisplay.hide();
       }
     });
     this.addSettingSearchInfoForGeneralSettings(recordLintOnSaveLogsSetting);

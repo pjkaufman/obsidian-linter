@@ -30,7 +30,7 @@ export class ConfirmRuleDisableModal extends Modal {
         this.close();
         btnSubmitAction();
       });
-      setTimeout(() => {
+      window.setTimeout(() => {
         btnSubmit.focus();
       }, 50);
     });

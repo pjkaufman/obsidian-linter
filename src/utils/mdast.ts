@@ -1,5 +1,5 @@
 import {visit} from 'unist-util-visit';
-import type {Position} from 'unist';
+import type {Position, Node} from 'unist';
 import type {Root} from 'mdast';
 import {hashString53Bit, makeSureContentHasEmptyLinesAddedBeforeAndAfter, replaceTextBetweenStartAndEndWithNewValue, getStartOfLineIndex, replaceAt, getStartOfLineWhitespaceOrBlockquoteLevel} from './strings';
 import {genericLinkRegex, tableRow, tableSeparator, tableStartingPipe, customIgnoreAllStartIndicator, customIgnoreAllEndIndicator, checklistBoxStartsTextRegex, footnoteDefinitionIndicatorAtStartOfLine, emptyLineMathBlockquoteRegex, startsWithBlockquote, startsWithListMarkerRegex, calloutTypeRegex} from './regex';
@@ -108,11 +108,13 @@ export function getPositions(type: MDAstTypes, text: string): Position[] {
   const ast = parseTextToAST(text);
   const positions: Position[] = [];
   visit(ast, type as string, (node) => {
-    positions.push(node.position);
+    if (node.position) {
+      positions.push(node.position);
+    }
   });
 
   // Sort positions by start position in reverse order
-  positions.sort((a, b) => b.start.offset - a.start.offset);
+  positions.sort((a, b) => (b.start.offset ?? 0) - (a.start.offset ?? 0));
   return positions;
 }
 
@@ -127,10 +129,10 @@ export function getPositions(type: MDAstTypes, text: string): Position[] {
 function getListItemTextPositions(text: string, includeEmptyNodes: boolean = false): PositionPlusEmptyIndicator[] {
   const ast = parseTextToAST(text);
   const positions: PositionPlusEmptyIndicator[] = [];
-  visit(ast, MDAstTypes.ListItem as string, (node) => {
+  visit(ast, MDAstTypes.ListItem as string, (node: Node) => {
     // @ts-ignore the fact that not all nodes have a children property since I am skipping any that do not
-    if (!node.children || node.children.length === 0) {
-      if (includeEmptyNodes) {
+    if (!node.children || (node.children as Node[]).length === 0) {
+      if (includeEmptyNodes && node.position) {
         positions.push({
           position: node.position,
           isEmpty: true,
@@ -141,7 +143,7 @@ function getListItemTextPositions(text: string, includeEmptyNodes: boolean = fal
     }
 
     // @ts-ignore the fact that not all nodes have a children property since I have already exited the function if that is the case
-    for (const childNode of node.children) {
+    for (const childNode of (node.children as Node[])) {
       if (childNode.type === (MDAstTypes.Paragraph as string)) {
         positions.push({
           position: childNode.position,
@@ -152,7 +154,7 @@ function getListItemTextPositions(text: string, includeEmptyNodes: boolean = fal
   });
 
   // Sort positions by start position in reverse order
-  positions.sort((a, b) => b.position.start.offset - a.position.start.offset);
+  positions.sort((a, b) => (b.position.start.offset ?? 0) - (a.position.start.offset ?? 0));
   return positions;
 }
 
@@ -161,15 +163,15 @@ function getHeaderTextPositions(text: string): PositionPlusText[] {
   const positions: PositionPlusText[] = [];
   visit(ast, MDAstTypes.Heading as string, (node) => {
     // @ts-ignore the fact that not all nodes have a children property since I am skipping any that do not
-    if (!node.children || node.children.length === 0) {
+    if (!node.children || (node.children as Node[]).length === 0) {
       return;
     }
 
     // @ts-ignore the fact that not all nodes have a children property since I have already exited the function if that is the case
-    for (const childNode of node.children) {
-      if (childNode.type === (MDAstTypes.Text as string)) {
+    for (const childNode of (node.children as Node[])) {
+      if (childNode.type === (MDAstTypes.Text as string) && childNode.position) {
         positions.push({
-          position: childNode.position as Position,
+          position: childNode.position,
           text: childNode.value as string,
         });
       }
@@ -177,7 +179,7 @@ function getHeaderTextPositions(text: string): PositionPlusText[] {
   });
 
   // Sort positions by start position in reverse order
-  positions.sort((a, b) => b.position.start.offset - a.position.start.offset);
+  positions.sort((a, b) => (b.position.start.offset ?? 0) - (a.position.start.offset ?? 0));
   return positions;
 }
 
@@ -269,7 +271,7 @@ export function moveFootnotesToEnd(text: string, includeBlankLinesBetweenFootnot
 
   // Sort the footnotes into the order of their references in the text
   footnotes = footnotes.sort((f1: string, f2: string) => {
-    return mapOfFootnoteToFootnoteReferenceIndex.get(f1) - mapOfFootnoteToFootnoteReferenceIndex.get(f2);
+    return (mapOfFootnoteToFootnoteReferenceIndex.get(f1) ?? 0) - (mapOfFootnoteToFootnoteReferenceIndex.get(f2) ?? 0);
   });
 
   // Add the footnotes to the end of the document

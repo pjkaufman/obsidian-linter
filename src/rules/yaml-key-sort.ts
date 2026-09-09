@@ -91,7 +91,7 @@ export default class YamlKeySort extends RuleBuilder<YamlKeySortOptions> {
     return this.getTextWithNewYamlFrontmatter(text, oldYaml, astToString(startingPriorityKeys), astToString(remainingDocKeys), priorityAtStartOfYaml, options.dateModifiedKey, options.currentTimeFormatted, options.yamlTimestampDateModifiedEnabled);
   }
   getYAMLKeysSorted(keys: string[], yamlObject: Document, newDocument: Document): string[] {
-    const initialKeys: YamlNode[] = (yamlObject.contents as YamlNode).items as YamlNode[];
+    const initialKeys: YamlNode[] = (yamlObject.contents as YamlNode).items;
     const remainingKeys: string[] = [];
 
     for (const key of keys) {

@@ -1,4 +1,4 @@
-import {App, Platform, PluginSettingTab, moment} from 'obsidian';
+import {App, PluginSettingTab, moment} from 'obsidian';
 import type {SettingDefinition, SettingDefinitionGroup, SettingDefinitionItem, SettingDefinitionList, SettingDefinitionPage, SettingGroupItem} from 'obsidian';
 import log from 'loglevel';
 import LinterPlugin from '../main';
@@ -28,7 +28,7 @@ const tabNameKeys: Record<RuleType | 'Custom' | 'Debug', LanguageStringKey> = {
   Debug: 'tabs.names.debug',
 };
 
-const logLevels = Object.keys(log.levels) as string[];
+const logLevels = Object.keys(log.levels);
 
 export class SettingTab extends PluginSettingTab {
   navContainer: HTMLElement;
@@ -52,28 +52,6 @@ export class SettingTab extends PluginSettingTab {
     await this.plugin.saveSettings();
   }
 
-  display(): void {
-    const {containerEl} = this;
-
-    containerEl.empty();
-    const linterHeader = containerEl.createDiv('linter-setting-title');
-    if (Platform.isMobile) {
-      linterHeader.addClass('linter-mobile');
-    } else {
-      linterHeader.createEl('h1').setText(getTextInLanguage('linter-title'));
-    }
-
-    this.navContainer = containerEl.createEl('nav', {cls: 'linter-setting-header'});
-    this.tabNavEl = this.navContainer.createDiv('linter-setting-tab-group');
-    this.settingsContentEl = containerEl.createDiv('linter-setting-content');
-    this.addTabs(Platform.isMobile);
-    this.createSearchZeroState();
-    this.generateSearchBar(linterHeader);
-
-    if (this.selectedTab == '') {
-      this.tabSearcher.focusOnInput();
-    }
-  }
 
   private addTabs(isMobile: boolean) {
     this.addTab(new GeneralTab(this.tabNavEl, this.settingsContentEl, isMobile, this.plugin, this.app));
@@ -375,7 +353,7 @@ export class SettingTab extends PluginSettingTab {
                 .setTooltip(opts.editTooltip ?? 'Edit')
                 // Resolve the live index at click time — a captured map index
                 // goes stale after a reorder or delete.
-                .onClick(() => opts.openEditForm!(entry, opts.values.indexOf(entry))));
+                .onClick(() => opts.openEditForm(entry, opts.values.indexOf(entry))));
           },
         };
       }),

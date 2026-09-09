@@ -52,10 +52,10 @@ export class TextBoxFull {
   handleCopy(copyEl: HTMLSpanElement) {
     navigator.clipboard.writeText(this.getInput()).then(() => {
       setIcon(copyEl, 'linter-success');
-      setTimeout(() => {
+      window.setTimeout(() => {
         setIcon(copyEl, 'linter-clipboard');
       }, 1500);
-    }, (reason: any) => {
+    }, (reason: string) => {
       new Notice(`${getTextInLanguage('notice-text.copy-to-clipboard-failed') + reason}`, 0);
     });
   }

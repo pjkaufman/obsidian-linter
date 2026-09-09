@@ -18,7 +18,6 @@ import {AfterFileChangeLintTimes, DEFAULT_SETTINGS, LinterSettings} from './sett
 import AsyncLock from 'async-lock';
 import {warn} from 'loglevel';
 import {CustomAutoCorrectContent} from './ui/linter-components/auto-correct-files-picker-option';
-import {ChangeSpec} from '@codemirror/state';
 import {downloadMisspellings, readInMisspellingsFile} from './utils/auto-correct-misspellings';
 import {DiffPreviewView, diffPreviewViewType} from './ui/views/diff-preview-view';
 
@@ -226,7 +225,7 @@ export default class LinterPlugin extends Plugin {
       id: 'lint-all-files-in-folder',
       name: getTextInLanguage('commands.lint-all-files-in-folder.name'),
       icon: iconInfo.folder.id,
-      editorCheckCallback: (checking: Boolean, _, ctx) => {
+      editorCheckCallback: (checking: boolean, _, ctx) => {
         if (checking) {
           if (ctx && ctx.file && ctx.file instanceof TFile && ctx.file.parent) {
             return !ctx.file.parent.isRoot();
@@ -736,7 +735,7 @@ export default class LinterPlugin extends Plugin {
 
   // based on https://github.com/liamcain/obsidian-calendar-ui/blob/03ceecbf6d88ef260dadf223ee5e483d98d24ffc/src/localization.ts#L85-L109
   async setOrUpdateMomentInstance() {
-    const obsidianLang: string = localStorage.getItem('language') || 'en';
+    const obsidianLang: string = getLanguage() || 'en';
     const systemLang = navigator.language?.toLowerCase();
 
     let momentLocale = langToMomentLocale[obsidianLang as keyof typeof langToMomentLocale];
@@ -992,7 +991,7 @@ export default class LinterPlugin extends Plugin {
           changes: [{
             from: editor.posToOffset(this.endOfDocument(curText)),
             insert: value,
-          } as ChangeSpec],
+          }],
           filter: false,
         });
         curText += value;
@@ -1008,7 +1007,7 @@ export default class LinterPlugin extends Plugin {
             from: editor.posToOffset(start),
             to: editor.posToOffset(end),
             insert: '',
-          } as ChangeSpec],
+          }],
           filter: false,
         });
       } else {
