@@ -1,9 +1,9 @@
 import * as readline from 'readline';
 import {stdout, stdin, exit} from 'process';
-import {LanguageStringKey, setLanguage, getTextInLanguage, localeHasKey, localeMap, LanguageLocale, getLanguageSourceFile} from './lang/helpers';
-import {getString} from './utils/nested-keyof';
+import {LanguageStringKey, setLanguage, getTextInLanguage, localeHasKey, localeMap, LanguageLocale, getLanguageSourceFile} from '../../src/lang/helpers';
+import {getString} from '../../src/utils/nested-keyof';
 import * as fs from 'fs';
-import {ValidationInfo, validateSelectedKey, validateLanguageSelected} from './lang/validation';
+import {ValidationInfo, validateSelectedKey, validateLanguageSelected} from '../../src/lang/validation';
 import dedent from 'ts-dedent';
 
 const rl = readline.createInterface({
@@ -127,7 +127,7 @@ function translateAllKeysInALanguage(language: string, selectedLanguage: Languag
     const keyText = missingKeys.length > 1 ? 'keys' : 'key';
     console.log('"' + language + `" is missing ${missingKeys.length} ${keyText}.`);
 
-    const firstElement = missingKeys.shift();
+    const firstElement = missingKeys.shift() ?? '';
     getNextTranslation(missingKeys, firstElement, language);
   }
 }
@@ -146,7 +146,7 @@ function getNextTranslation(missingKeys: string[], element: string, language: st
         setValueInLanguage(language, element, translatedValue);
     }
 
-    const nextKey = missingKeys.shift();
+    const nextKey = missingKeys.shift() ?? '';
     getNextTranslation(missingKeys, nextKey, language);
     if (missingKeys.length === 0) {
       replaceTranslationValuesInFile(language);
@@ -156,7 +156,7 @@ function getNextTranslation(missingKeys: string[], element: string, language: st
 }
 
 function setValueInLanguage(language: string, key: string, value: string) {
-  let object = localeMap[language] as {[k: string]: any};
+  let object = localeMap[language] as {[k: string]: unknown};
   const keyParts = key.split('.');
   keyParts.forEach((keyPart: string, index: number) => {
     if (keyParts.length -1 === index) {
@@ -169,7 +169,7 @@ function setValueInLanguage(language: string, key: string, value: string) {
       object[keyPart] = {};
     }
 
-    object = object[keyPart];
+    object = (object[keyPart] as ({[k: string]: unknown}));
   });
 }
 
@@ -188,14 +188,16 @@ function getMissingKeysInLanguage(selectedLanguage: LanguageLocale, language: st
   return missingKeys;
 }
 
-function getObjectKeys(obj: any, prefix: string = ''): string[] {
-  return Object.entries(obj).reduce((collector, [key, val]) => {
+function getObjectKeys(obj: unknown, prefix: string = ''): string[] {
+  return Object.entries(obj as object).reduce((collector: string[], [key, val]) => {
     const newKeys = [...collector, prefix ? `${prefix}.${key}` : key];
     if (Object.prototype.toString.call(val) === '[object Object]') {
       const newPrefix = prefix ? `${prefix}.${key}` : key;
       const otherKeys = getObjectKeys(val, newPrefix);
+
       return [...newKeys, ...otherKeys];
     }
+
     return newKeys;
   }, []);
 }
