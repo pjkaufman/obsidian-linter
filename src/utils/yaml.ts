@@ -87,7 +87,7 @@ export function removeYamlSection(yaml: string, rawKey: string, allowNestedKey: 
   return result;
 }
 
-export function loadYAML(yaml_text: string): unknown {
+export function loadYAML(yaml_text: string): null | object {
   if (yaml_text == null) {
     return null;
   }

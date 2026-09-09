@@ -240,7 +240,7 @@ export default class TestLinterPlugin extends Plugin {
     return originalText;
   }
 
-  async onunload(): Promise<void> {
+  async onunload(): void {
     if (this.plugin) {
       await this.plugin.onunload();
     }

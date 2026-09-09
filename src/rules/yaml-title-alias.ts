@@ -54,7 +54,7 @@ export default class YamlTitleAlias extends RuleBuilder<YamlTitleAliasOptions> {
       aliasHelperKey = aliasHelperKey.substring(0, aliasHelperKey.length - 1);
     }
 
-    previousTitle = parsedYaml[aliasHelperKey] ?? null;
+    previousTitle = ((parsedYaml as {[k: string]: string})[aliasHelperKey]) ?? null;
     if (previousTitle != null) {
       // force previousTitle to be a string by concatenating with an empty string to make non-strings like numbers get handled correctly
       previousTitle = previousTitle + '';

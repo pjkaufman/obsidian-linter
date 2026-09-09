@@ -243,11 +243,13 @@ export class SettingTab extends PluginSettingTab {
         name: opts.addButtonText,
         action: opts.openAddForm,
       },
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises -- I don't have control over this, so we may as well ignore the promise mismatch
       onDelete: async (index: number) => {
         opts.onDelete(index);
         await this.plugin.saveSettings();
         this.update();
       },
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises -- I don't have control over this, so we may as well ignore the promise mismatch
       onReorder: !opts.allowReorder ? undefined : async (oldIndex: number, newIndex: number) => {
         const [moved] = opts.values.splice(oldIndex, 1);
         opts.values.splice(newIndex, 0, moved);

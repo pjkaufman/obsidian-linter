@@ -45,11 +45,11 @@ export abstract class RuleBuilderBase {
         return [newText, true];
       } catch (error) {
         timingEnd(rule.alias);
-        wrapLintError(error, rule.getName());
+        wrapLintError(error instanceof Error ? error : new Error(String(error)), rule.getName());
       }
-    } else {
-      return [text, false];
-    }
+    } 
+
+    return [text, false];
   }
 
   static getBuilderByName(name: string): RuleBuilderBase {
@@ -162,9 +162,7 @@ export default abstract class RuleBuilder<TOptions extends Options> extends Rule
 export class ExampleBuilder<TOptions extends Options> {
   readonly example: Example;
 
-  // HACK to bypass the Typescript generics system flaw
-  // https://github.com/microsoft/TypeScript/wiki/FAQ#why-is-astring-assignable-to-anumber-for-interface-at--
-  // eslint-disable-next-line no-unused-private-class-members
+  // eslint-disable-next-line no-unused-private-class-members --  HACK to bypass the Typescript generics system flaw https://github.com/microsoft/TypeScript/wiki/FAQ#why-is-astring-assignable-to-anumber-for-interface-at--
   #_: TOptions;
 
   constructor(args: {

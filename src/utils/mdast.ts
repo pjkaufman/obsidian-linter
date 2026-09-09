@@ -108,13 +108,11 @@ export function getPositions(type: MDAstTypes, text: string): Position[] {
   const ast = parseTextToAST(text);
   const positions: Position[] = [];
   visit(ast, type as string, (node) => {
-    if (node.position) {
-      positions.push(node.position);
-    }
+    positions.push(node.position);
   });
 
   // Sort positions by start position in reverse order
-  positions.sort((a, b) => (b.start.offset ?? 0) - (a.start.offset ?? 0));
+  positions.sort((a, b) => b.start.offset - a.start.offset);
   return positions;
 }
 
@@ -129,10 +127,10 @@ export function getPositions(type: MDAstTypes, text: string): Position[] {
 function getListItemTextPositions(text: string, includeEmptyNodes: boolean = false): PositionPlusEmptyIndicator[] {
   const ast = parseTextToAST(text);
   const positions: PositionPlusEmptyIndicator[] = [];
-  visit(ast, MDAstTypes.ListItem as string, (node: Node) => {
+  visit(ast, MDAstTypes.ListItem as string, (node) => {
     // @ts-ignore the fact that not all nodes have a children property since I am skipping any that do not
     if (!node.children || (node.children as Node[]).length === 0) {
-      if (includeEmptyNodes && node.position) {
+      if (includeEmptyNodes) {
         positions.push({
           position: node.position,
           isEmpty: true,
@@ -154,7 +152,7 @@ function getListItemTextPositions(text: string, includeEmptyNodes: boolean = fal
   });
 
   // Sort positions by start position in reverse order
-  positions.sort((a, b) => (b.position.start.offset ?? 0) - (a.position.start.offset ?? 0));
+  positions.sort((a, b) => b.position.start.offset - a.position.start.offset);
   return positions;
 }
 
@@ -169,7 +167,7 @@ function getHeaderTextPositions(text: string): PositionPlusText[] {
 
     // @ts-ignore the fact that not all nodes have a children property since I have already exited the function if that is the case
     for (const childNode of (node.children as Node[])) {
-      if (childNode.type === (MDAstTypes.Text as string) && childNode.position) {
+      if (childNode.type === (MDAstTypes.Text as string)) {
         positions.push({
           position: childNode.position,
           text: childNode.value as string,
@@ -179,7 +177,7 @@ function getHeaderTextPositions(text: string): PositionPlusText[] {
   });
 
   // Sort positions by start position in reverse order
-  positions.sort((a, b) => (b.position.start.offset ?? 0) - (a.position.start.offset ?? 0));
+  positions.sort((a, b) => b.position.start.offset - a.position.start.offset);
   return positions;
 }
 
@@ -271,7 +269,7 @@ export function moveFootnotesToEnd(text: string, includeBlankLinesBetweenFootnot
 
   // Sort the footnotes into the order of their references in the text
   footnotes = footnotes.sort((f1: string, f2: string) => {
-    return (mapOfFootnoteToFootnoteReferenceIndex.get(f1) ?? 0) - (mapOfFootnoteToFootnoteReferenceIndex.get(f2) ?? 0);
+    return mapOfFootnoteToFootnoteReferenceIndex.get(f1) - mapOfFootnoteToFootnoteReferenceIndex.get(f2);
   });
 
   // Add the footnotes to the end of the document
@@ -416,7 +414,7 @@ export function makeEmphasisOrBoldConsistent(text: string, style: string, type: 
   }
 
   // make the size two for the indicator when the type is strong
-  if (type === 'strong') {
+  if (type === MDAstTypes.Bold) {
     indicator += indicator;
   }
 
@@ -1017,7 +1015,7 @@ function addBlankLinesAroundStartAndStopMathIndicators(text: string, mathBlockSt
 
   // try to cleanup whitespace that may get left behind by this logic when moving the opening
   // math block indicators to its own line
-  // eslint-disable-next-line no-unmodified-loop-condition -- the loop does break out of things, so the eslint error can be ignored
+  // eslint-disable-next-line no-unmodified-loop-condition -- the logic here does break, so there is no need to be stringent about no loop condition changing
   while (startingNewLineAdded && mathBlockStartIndex > 0) {
     const previousChar = text[mathBlockStartIndex-1];
     if (previousChar !== ' ' && previousChar !== '\t') {

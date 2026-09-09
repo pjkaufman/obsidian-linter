@@ -111,7 +111,7 @@ export default class LinterPlugin extends Plugin {
     this.addSettingTab(this.settingsTab);
   }
 
-  async onunload() {
+  async onunload(): void {
     logInfo(getTextInLanguage('logs.plugin-unload'));
     this.isEnabled = false;
 
@@ -128,7 +128,7 @@ export default class LinterPlugin extends Plugin {
   }
 
   async loadSettings() {
-    const data = await this.loadData();
+    const data = await this.loadData() as object;
     this.settings = Object.assign({}, DEFAULT_SETTINGS, data);
     if (typeof this.settings.suppressMessageWhenNoChange !== 'boolean') {
       this.settings.suppressMessageWhenNoChange = false;
@@ -170,16 +170,15 @@ export default class LinterPlugin extends Plugin {
   }
 
   addCommands() {
-    const that = this;
     this.addCommand({
       id: 'lint-file',
       name: getTextInLanguage('commands.lint-file.name'),
-      editorCheckCallback(checking, editor, ctx) {
+      editorCheckCallback: (checking, editor, ctx) => {
         if (checking) {
-          return that.isMarkdownFile(ctx.file) && editor.cm != null;
+          return this.isMarkdownFile(ctx.file) && editor.cm != null;
         }
 
-        void that.runLinterEditor(editor);
+        void this.runLinterEditor(editor);
       },
       icon: iconInfo.file.id,
     });
@@ -187,13 +186,13 @@ export default class LinterPlugin extends Plugin {
     this.addCommand({
       id: 'lint-file-unless-ignored',
       name: getTextInLanguage('commands.lint-file-unless-ignored.name'),
-      editorCheckCallback(checking, editor, ctx) {
+      editorCheckCallback: (checking, editor, ctx) => {
         if (checking) {
-          return that.isMarkdownFile(ctx.file);
+          return this.isMarkdownFile(ctx.file);
         }
 
-        if (!that.shouldIgnoreFile(ctx.file) && editor.cm) {
-          void that.runLinterEditor(editor);
+        if (!this.shouldIgnoreFile(ctx.file) && editor.cm) {
+          void this.runLinterEditor(editor);
         }
       },
       icon: iconInfo.file.id,
@@ -234,7 +233,7 @@ export default class LinterPlugin extends Plugin {
           return false;
         }
 
-        that.createFolderLintModal(ctx.file.parent);
+        this.createFolderLintModal(ctx.file.parent);
       },
     });
 
@@ -263,19 +262,19 @@ export default class LinterPlugin extends Plugin {
           return false;
         }
 
-        void that.addFolderToIgnoreList(ctx.file.parent);
+        void this.addFolderToIgnoreList(ctx.file.parent);
       },
     });
 
     this.addCommand({
       id: 'ignore-file',
       name: getTextInLanguage('commands.ignore-file.name'),
-      editorCheckCallback(checking, _, ctx) {
+      editorCheckCallback: (checking, _, ctx) => {
         if (checking && ctx.file) {
-          return that.isMarkdownFile(ctx.file) && !that.shouldIgnoreFile(ctx.file);
+          return this.isMarkdownFile(ctx.file) && !this.shouldIgnoreFile(ctx.file);
         }
 
-        void that.addFileToIgnoreList(ctx.file);
+        void this.addFileToIgnoreList(ctx.file);
       },
       icon: iconInfo.ignoreFile.id,
     });
@@ -288,16 +287,15 @@ export default class LinterPlugin extends Plugin {
       return;
     }
 
-    const that = this;
     this.addCommand({
       id: previewLintFileCommandId,
       name: getTextInLanguage('commands.preview-lint-file.name'),
-      editorCheckCallback(checking, editor, ctx) {
+      editorCheckCallback: (checking, editor, ctx) => {
         if (checking) {
-          return that.isMarkdownFile(ctx.file) && editor.cm != null;
+          return this.isMarkdownFile(ctx.file) && editor.cm != null;
         }
 
-        void that.previewLinterEditor(editor);
+        void this.previewLinterEditor(editor);
       },
       icon: iconInfo.file.id,
     });
@@ -410,9 +408,8 @@ export default class LinterPlugin extends Plugin {
 
     // defines the vim command for saving a file and lets the linter run on save for it
     // accounts for https://github.com/platers/obsidian-linter/issues/19
-    const that = this;
     window.CodeMirrorAdapter.commands.save = () => {
-      that.app.commands.executeCommandById('editor:save-file');
+      this.app.commands.executeCommandById('editor:save-file');
     };
   }
 
@@ -521,7 +518,7 @@ export default class LinterPlugin extends Plugin {
     try {
       await this.runLinterFile(this.lastActiveFile, true);
     } catch (error) {
-      this.handleLintError(this.lastActiveFile, error, getTextInLanguage('commands.lint-file.error-message') + ' \'{FILE_PATH}\'', false);
+      this.handleLintError(this.lastActiveFile, error instanceof Error ? error : new Error(String(error)), getTextInLanguage('commands.lint-file.error-message') + ' \'{FILE_PATH}\'', false);
     } finally {
       this.lastActiveFile = currentActiveFile;
     }
@@ -587,7 +584,7 @@ export default class LinterPlugin extends Plugin {
         try {
           await this.runLinterFile(file);
         } catch (error) {
-          this.handleLintError(file, error, getTextInLanguage('commands.lint-all-files.error-message') + ' \'{FILE_PATH}\'');
+          this.handleLintError(file, error instanceof Error ? error : new Error(String(error)), getTextInLanguage('commands.lint-all-files.error-message') + ' \'{FILE_PATH}\'');
 
           numberOfErrors += 1;
         }
@@ -613,7 +610,7 @@ export default class LinterPlugin extends Plugin {
         try {
           await this.runLinterFile(file);
         } catch (error) {
-          this.handleLintError(file, error, getTextInLanguage('commands.lint-all-files-in-folder.error-message') + ' \'{FILE_PATH}\'');
+          this.handleLintError(file, error instanceof Error ? error : new Error(String(error)), getTextInLanguage('commands.lint-all-files-in-folder.error-message') + ' \'{FILE_PATH}\'');
 
           numberOfErrors += 1;
         }
@@ -659,7 +656,7 @@ export default class LinterPlugin extends Plugin {
     try {
       newText = this.rulesRunner.lintText(createRunLinterRulesOptions(oldText, file, this.momentLocale, this.settings, this.defaultAutoCorrectMisspellings));
     } catch (error) {
-      this.handleLintError(file, error, getTextInLanguage('commands.lint-file.error-message') + ' \'{FILE_PATH}\'', false);
+      this.handleLintError(file, error instanceof Error ? error : new Error(String(error)), getTextInLanguage('commands.lint-file.error-message') + ' \'{FILE_PATH}\'', false);
       return;
     }
 
@@ -680,7 +677,7 @@ export default class LinterPlugin extends Plugin {
     try {
       newText = this.rulesRunner.lintText(createRunLinterRulesOptions(oldText, file, this.momentLocale, this.settings, this.defaultAutoCorrectMisspellings));
     } catch (error) {
-      this.handleLintError(file, error, getTextInLanguage('commands.lint-file.error-message') + ' \'{FILE_PATH}\'', false);
+      this.handleLintError(file, error instanceof Error ? error : new Error(String(error)), getTextInLanguage('commands.lint-file.error-message') + ' \'{FILE_PATH}\'', false);
       setCollectLogs(false);
       return;
     }
@@ -923,7 +920,7 @@ export default class LinterPlugin extends Plugin {
               try {
                 newText = this.rulesRunner.runYAMLTimestampByItself(createRunLinterRulesOptions(oldText, file, this.momentLocale, this.settings, null));
               } catch (error) {
-                this.handleLintError(file, error, getTextInLanguage('commands.lint-file.error-message') + ' \'{FILE_PATH}\'', false);
+                this.handleLintError(file, error instanceof Error ? error : new Error(String(error)), getTextInLanguage('commands.lint-file.error-message') + ' \'{FILE_PATH}\'', false);
                 return;
               }
 
@@ -961,7 +958,7 @@ export default class LinterPlugin extends Plugin {
                 try {
                   return this.rulesRunner.runYAMLTimestampByItself(createRunLinterRulesOptions(oldText, file, this.momentLocale, this.settings, null));
                 } catch (error) {
-                  this.handleLintError(file, error, getTextInLanguage('commands.lint-file.error-message') + ' \'{FILE_PATH}\'', false);
+                  this.handleLintError(file, error instanceof Error ? error : new Error(String(error)), getTextInLanguage('commands.lint-file.error-message') + ' \'{FILE_PATH}\'', false);
                   return data;
                 }
               });
@@ -1209,7 +1206,7 @@ export default class LinterPlugin extends Plugin {
       try {
         this.rulesRunner.runCustomCommands(this.settings.lintCommands, this.app.commands);
       } catch (error) {
-        this.handleLintError(file, error, getTextInLanguage('commands.lint-file.error-message') + ' \'{FILE_PATH}\'', false);
+        this.handleLintError(file, error instanceof Error ? error : new Error(String(error)), getTextInLanguage('commands.lint-file.error-message') + ' \'{FILE_PATH}\'', false);
       }
 
       if (this.customCommandsCallback) {

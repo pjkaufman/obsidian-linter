@@ -13,6 +13,7 @@ const typescriptLanguageOptions = {
     ecmaVersion: 2021,
     parserOptions: {
         projectService: true,
+        extraFileExtensions: [".json"],
     },
     globals: {
         ...globals.es2020,
@@ -55,10 +56,14 @@ const commonRules = {
 const nonSrcRules = {
   'obsidianmd/no-nodejs-modules': 'off', // fs and other node libraries are pefectly fine in non-plugin code
   'obsidianmd/rule-custom-message': 'off', // this should not be enabled for tests as console logs are valid for my uses
-  'obsidianmd/ui/sentence-case': 'off', // this shouldn't affect the integration tests
   'obsidianmd/commands/no-plugin-name-in-command-name': 'off', // this shouldn't affect the integration tests
   "import/no-extraneous-dependencies": ["warn", { "devDependencies": true }], // check for dev dependencies for tests
-  '@typescript-eslint/no-restricted-imports': 'off', // moment is to be used in the UTs and integration tests and should not be listed as an issue
+}
+const commonDisabledRules = {
+  '@typescript-eslint/no-restricted-imports': 'off', // moment is going to be used for UTs and integration tests, but even as a dev import it triggers this rule
+  'obsidianmd/object-assign': 'off', // I will determine when to actual use object assign
+  'depend/ban-dependencies': 'off', // I am only importing moment for the UTs and integration tests as needed. So there is no need to have this enabled as it will just say there is an issue when there isn't
+   'obsidianmd/ui/sentence-case': 'off', // this shouldn't affect the integration tests and it is not used in the scanner, so I am turning it off
 }
 
 export default defineConfig([
@@ -78,6 +83,16 @@ export default defineConfig([
     js.configs.recommended,
     ...obsidianmd.configs.recommended,
     {
+      files: ['package.json'],
+      languageOptions: typescriptLanguageOptions,
+      plugins: {
+          unicorn,
+      },
+      rules:  {
+        ...commonDisabledRules,
+      },
+    },
+    {
       files: ['src/**/*.ts'],
       languageOptions: typescriptLanguageOptions,
       plugins: {
@@ -87,6 +102,7 @@ export default defineConfig([
       },
       rules:  {
         ...commonRules,
+        ...commonDisabledRules,
       },
     },
     {
@@ -101,6 +117,7 @@ export default defineConfig([
       rules:  {
         ...commonRules,
         ...nonSrcRules,
+        ...commonDisabledRules,
       },
     },
     {
@@ -114,6 +131,7 @@ export default defineConfig([
       rules:  {
         ...commonRules,
         ...nonSrcRules,
+        ...commonDisabledRules,
       },
     },
 ]);

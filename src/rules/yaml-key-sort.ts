@@ -3,9 +3,8 @@ import RuleBuilder, {BooleanOptionBuilder, DropdownOptionBuilder, ExampleBuilder
 import dedent from 'ts-dedent';
 import {parseYAML, getYAMLText, loadYAML, setYamlSection, astToString, getEmptyDocument} from '../utils/yaml';
 import {escapeDollarSigns} from '../utils/regex';
-import {Document} from 'yaml';
+import {Document, CST} from 'yaml';
 import {YamlCSTTokens, YamlNode} from '../typings/yaml';
-import {FlowCollection} from 'yaml/dist/parse/cst';
 
 type YamlSortOrderForOtherKeys = 'None' | 'Ascending Alphabetical' | 'Descending Alphabetical';
 
@@ -100,8 +99,8 @@ export default class YamlKeySort extends RuleBuilder<YamlKeySortOptions> {
         if (node.key.value === key) {
           newDocument.add(node);
           initialKeys.splice(i, 1);
-          (newDocument.contents.srcToken as YamlCSTTokens).items.push((yamlObject.contents.srcToken as FlowCollection).items[i]);
-          (yamlObject.contents.srcToken as FlowCollection).items.splice(i, 1);
+          (newDocument.contents.srcToken as YamlCSTTokens).items.push((yamlObject.contents.srcToken as CST.FlowCollection).items[i]);
+          (yamlObject.contents.srcToken as CST.FlowCollection).items.splice(i, 1);
 
           break;
         }
@@ -136,13 +135,13 @@ export default class YamlKeySort extends RuleBuilder<YamlKeySortOptions> {
     // Escape it the same way formatYAML() already does. See #1532.
     return text.replace(oldYaml, escapeDollarSigns(newYaml));
   }
-  sortAlphabeticallyAsc(previousKey: string, currentKey: string): number {
+  sortAlphabeticallyAsc(this:void, previousKey: string, currentKey: string): number {
     previousKey = previousKey.toLowerCase();
     currentKey = currentKey.toLowerCase();
 
     return previousKey < currentKey ? -1 : currentKey < previousKey ? 1 : 0;
   }
-  sortAlphabeticallyDesc(previousKey: string, currentKey: string): number {
+  sortAlphabeticallyDesc(this:void, previousKey: string, currentKey: string): number {
     previousKey = previousKey.toLowerCase();
     currentKey = currentKey.toLowerCase();
 
