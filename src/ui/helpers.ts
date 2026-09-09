@@ -1,13 +1,5 @@
 import { sanitizeHTMLToDom } from 'obsidian';
 
-export function hideEl(el: HTMLElement) {
-  el.addClass('linter-visually-hidden');
-}
-
-export function unhideEl(el: HTMLElement) {
-  el.removeClass('linter-visually-hidden');
-}
-
 export function setElContent(text: string, el: HTMLElement) {
   if (text.includes('</')) {
     el.append(sanitizeHTMLToDom(text));

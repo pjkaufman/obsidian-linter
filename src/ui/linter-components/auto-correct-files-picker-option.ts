@@ -5,6 +5,7 @@ import MdFileSuggester from '../suggesters/md-file-suggester';
 import {parseCustomReplacements, stripCr} from '../../utils/strings';
 import {ParseResultsModal} from '../modals/parse-results-modal';
 
+// TODO: move this to the settings data file
 export type CustomAutoCorrectContent = {filePath: string, customReplacements: Map<string, string>};
 
 export class AutoCorrectFilesPickerOption extends AddCustomRefreshableRow {
