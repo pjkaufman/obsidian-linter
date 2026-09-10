@@ -380,7 +380,7 @@ export class SettingTab extends PluginSettingTab {
                     settings.ruleConfigs[rule.alias] = rule.getDefaultOptions();
                   }
                   settings.ruleConfigs[rule.alias].enabled = value;
-                  rule.runEnabledSideEffect(value, this.app);
+                  rule.runEnabledSideEffect(value, this.app, this.plugin);
                   await this.plugin.saveSettings();
                   this.update();
                 }));

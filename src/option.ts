@@ -69,9 +69,9 @@ export abstract class Option {
 
 export class BooleanOption extends Option {
   public defaultValue: boolean;
-  private toggleComponent: ToggleComponent;
+  private toggleComponent: ToggleComponent | null = null;
 
-  constructor(configKey: string, nameKey: LanguageStringKey, descriptionKey: LanguageStringKey, defaultValue: unknown, ruleAlias?: string | null, public onChange?: (value: boolean, app: App) => void) {
+  constructor(configKey: string, nameKey: LanguageStringKey, descriptionKey: LanguageStringKey, defaultValue: unknown, ruleAlias?: string | null, public onChange?: (value: boolean, app: App, plugin: LinterPlugin) => void) {
     super(configKey, nameKey, descriptionKey, defaultValue, ruleAlias);
   }
 
@@ -83,12 +83,15 @@ export class BooleanOption extends Option {
         name: this.getName(),
         desc: richDescription(this.getDescription()),
         render: (setting) => {
-          setting.addToggle((toggle) => toggle
+          setting.addToggle((toggle) => {
+            this.toggleComponent = toggle;
+            toggle
               .setValue(this.getCurrentValue(plugin) as boolean)
               .onChange(async (value) => {
                 await this.writeAndSave(value, plugin);
-                this.onChange?.(value, plugin.app);
-              }));
+                this.onChange?.(value, plugin.app, plugin);
+              })
+        });
         },
       };
     }
@@ -100,12 +103,20 @@ export class BooleanOption extends Option {
     };
   }
 
-  getValue(): boolean {
-    return this.toggleComponent.getValue();
+  getValue(plugin: LinterPlugin): boolean {
+    if (this.toggleComponent != null) {
+      return this.toggleComponent.getValue();
+    }
+
+    return this.getCurrentValue(plugin);
   }
 
-  setValue(value: boolean) {
-    this.toggleComponent.setValue(value);
+  async setValue(value: boolean, plugin: LinterPlugin) {
+    if (this.toggleComponent != null) {
+      this.toggleComponent.setValue(value);
+    }
+
+    await this.writeAndSave(value, plugin);
   }
 }
 

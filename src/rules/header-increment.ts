@@ -176,11 +176,11 @@ export default class HeaderIncrement extends RuleBuilder<HeaderIncrementOptions>
           const filenameHeadingEnableOption = rulesDict['file-name-heading'].options[0] as BooleanOption;
 
           if (value && filenameHeadingEnableOption.getValue()) {
-            new ConfirmRuleDisableModal(app, 'rules.header-increment.start-at-h2.name', 'rules.file-name-heading.name', () => {
-              filenameHeadingEnableOption.setValue(false);
+            new ConfirmRuleDisableModal(app, 'rules.header-increment.start-at-h2.name', 'rules.file-name-heading.name', async () => {
+              await filenameHeadingEnableOption.setValue(false);
             },
-            () => {
-              (rulesDict['header-increment'].options[1] as BooleanOption).setValue(false);
+            async () => {
+              await (rulesDict['header-increment'].options[1] as BooleanOption).setValue(false);
             }).open();
           }
         },

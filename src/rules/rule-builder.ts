@@ -5,6 +5,7 @@ import {getTextInLanguage, LanguageStringKey} from '../lang/helpers';
 import {IgnoreType, IgnoreTypes} from '../utils/ignore-types';
 import {LinterSettings} from '../settings-data';
 import {App} from 'obsidian';
+import LinterPlugin from '../main';
 
 // limit the amount of text that can be written to the logs to try to prevent memory issues
 const maxFileSizeLength = 10000;
@@ -76,7 +77,7 @@ type RuleBuilderConstructorArgs = {
   // ignore types to use on the entirety of the rule and not just a part
   // Note: this value should not contain custom ignore as that is added to all rules except Paste rules which do not use this property
   ruleIgnoreTypes?: IgnoreType[],
-  disableConflictingOptions?: (value: boolean, app: App) => void,
+  disableConflictingOptions?: (value: boolean, app: App, plugin: LinterPlugin) => void,
 };
 
 export default abstract class RuleBuilder<TOptions extends Options> extends RuleBuilderBase {
@@ -87,7 +88,7 @@ export default abstract class RuleBuilder<TOptions extends Options> extends Rule
   public type: RuleType;
   public hasSpecialExecutionOrder: boolean;
   public ignoreTypes: IgnoreType[];
-  public disableConflictingOptions: (value: boolean, app: App) => void;
+  public disableConflictingOptions: (value: boolean, app: App, plugin: LinterPlugin) => void;
   constructor(args: RuleBuilderConstructorArgs) {
     super();
 

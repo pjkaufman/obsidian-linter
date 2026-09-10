@@ -12,6 +12,7 @@ import {ignoreListOfTypes, IgnoreType} from './utils/ignore-types';
 import {LinterSettings} from './settings-data';
 import {App} from 'obsidian';
 import {YAMLParseError} from 'yaml';
+import LinterPlugin from './main';
 
 export type Options = object;
 
@@ -55,15 +56,17 @@ export class Rule {
       public options: Array<Option> = [],
       public readonly hasSpecialExecutionOrder: boolean = false,
       public readonly ignoreTypes: IgnoreType[] = [],
-      disableConflictingOptions: (value: boolean, app: App) => void = null,
+      disableConflictingOptions: (value: boolean, app: App, plugin: LinterPlugin) => void = null,
   ) {
     this.ruleHeading = this.getName().toLowerCase().replaceAll(' ', '-');
 
-    options.unshift(new BooleanOption('enabled', this.descriptionKey, '' as LanguageStringKey, false, alias, (value: boolean, app: App) => {
-      if (value && disableConflictingOptions) {
-        disableConflictingOptions(value, app);
+    const onChange = disableConflictingOptions ? (value: boolean, app: App, plugin: LinterPlugin) => {
+      if (value) {
+        disableConflictingOptions(value, app, plugin);
       }
-    }));
+    }: undefined;
+
+    options.unshift(new BooleanOption('enabled', this.descriptionKey, '' as LanguageStringKey, false, alias, onChange));
     for (const option of options) {
       option.ruleAlias = alias;
     }
@@ -99,9 +102,9 @@ export class Rule {
     return this.options[0].configKey;
   }
 
-  public runEnabledSideEffect(value: boolean, app: App): void {
+  public runEnabledSideEffect(value: boolean, app: App, plugin: LinterPlugin): void {
     const enabled = this.options[0] as BooleanOption;
-    enabled.onChange?.(value, app);
+    enabled.onChange?.(value, app, plugin);
   }
 
   public apply(text: string, options?: Options): string {
