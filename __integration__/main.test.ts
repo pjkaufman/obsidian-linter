@@ -6,6 +6,7 @@ import {customCommandTestCases} from './custom-commands.test';
 import {obsidianYAMLRuleTestCases} from './yaml-rule.test';
 import expect from 'expect';
 import {ignoreTestCases} from './ignore.test';
+import {DiffPreviewView, diffPreviewViewType} from '../src/ui/views/diff-preview-view';
 
 export type IntegrationTestCase = {
   name: string,
@@ -240,6 +241,13 @@ export default class TestLinterPlugin extends Plugin {
 
   async onunload(): void {
     if (this.plugin) {
+      // based on https://github.com/dbarenholz/obsidian-plaintext/blob/2c30a6e957e5cc9ac7757cc9fbeb641de1b158dc/src/main.ts#L160
+      const view = this.app.workspace.getActiveViewOfType(DiffPreviewView);
+      if (view) {
+        view.leaf.detach();
+      }
+      
+      this.app.viewRegistry.unregisterView(diffPreviewViewType);
       this.plugin.onunload();
     }
   }

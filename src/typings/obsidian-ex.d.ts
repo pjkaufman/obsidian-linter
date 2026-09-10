@@ -19,6 +19,11 @@ declare module 'obsidian' {
       appContainerEl: HTMLElement;
     };
     workspace: Workspace;
+    viewRegistry: ViewRegistry
+  }
+
+  interface ViewRegistry {
+    unregisterView(type: string): void
   }
 
   interface Workspace {
