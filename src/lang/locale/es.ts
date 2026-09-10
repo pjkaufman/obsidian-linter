@@ -79,7 +79,6 @@ export default {
   'warning-text': 'Advertencia',
   'file-backup-text': 'Asegúrese de haber realizado una copia de seguridad de sus archivos.',
   'do-not-show-again': 'No mostrar esta confirmación de nuevo',
-  'copy-aria-label': 'Copiar',
   'tabs': {
     'names': {
       'general': 'General',
@@ -92,7 +91,6 @@ export default {
       'paste': 'Pegar',
       'debug': 'Depurar',
     },
-    'default-search-bar-text': 'Buscar en todos los ajustes',
     'general': {
       'lint-on-save': {
         'name': 'Analizar en guardar',
@@ -111,14 +109,12 @@ export default {
         'description': 'Carpetas que se deben omitir al analizar todos los archivos o al guardar en línea.',
         'folder-search-placeholder-text': 'El nombre de la carpeta',
         'add-input-button-text': 'Agregar otra carpeta para ignorar',
-        'delete-tooltip': 'Borrar',
       },
       'additional-file-extensions': {
         'name': 'Extensiones de archivo adicionales',
         'description': 'Extensiones de archivo a analizar además de md. Por ejemplo, mdx o svx. No incluir el punto inicial. <b>Nota: Solo se analizarán los archivos que Obsidian considera markdown (de forma nativa o mediante otros complementos), independientemente de las extensiones añadidas.</b>',
         'extension-placeholder': 'p. ej. mdx',
         'add-input-button-text': 'Añadir otra extensión',
-        'delete-tooltip': 'Borrar',
       },
       'lint-on-file-change': {
         'name': 'Analizar archivo en cambiar',
@@ -177,29 +173,22 @@ export default {
     'custom-command': {
       'name': 'Comandos personalizados',
       'description': 'Los comandos personalizados son comandos de Obsidian que se ejecutan después de que Linter termina de ejecutar sus reglas regulares. Esto significa que no se ejecutan antes de que se ejecute la lógica de marca de tiempo YAML, por lo que pueden hacer que la marca de tiempo de YAML se active en la siguiente ejecución del Linter. Solo puede seleccionar un comando de Obsidian una vez.',
-      'warning': 'Al seleccionar una opción, asegúrese de seleccionar la opción usando el ratón o presionando la clave Intro. Es posible que otros métodos de selección no funcionen y solo se guardarán las selecciones de un comando de Obsidian real o una cadena vacía.',
       'add-input-button-text': 'Agregar nuevo comando',
       'command-search-placeholder-text': 'Comando de Obsidian',
-      'move-up-tooltip': 'Desplazar hacia arriba',
-      'move-down-tooltip': 'Desplazar hacia abajo',
-      'delete-tooltip': 'Borrar',
     },
     'custom-replace': {
       'name': 'Reemplazo regex personalizado',
       'description': 'El reemplazo de regex personalizado se puede usar para reemplazar cualquier cosa que coincida con el valor de búsqueda de regex con el valor de reemplazo. Los valores de reemplazo y búsqueda deberán ser valores regex válidos.',
-      'warning': 'Use esto con precaución si no conoce regex. Además, asegúrese de no usar lookbehinds en su regex en dispositivos móviles iOS, ya que eso hará que falle analizar ya que no es compatible con esa plataforma.',
       'add-input-button-text': 'Agregar nuevo reemplazo de regex',
       'regex-to-find-placeholder-text': 'Regex para encontrar',
       'flags-placeholder-text': 'Marcas',
       'regex-to-replace-placeholder-text': 'Regex para reemplazar',
       'label-placeholder-text': 'etiqueta',
-      'move-up-tooltip': 'Desplazar hacia arriba',
-      'move-down-tooltip': 'Desplazar hacia abajo',
-      'delete-tooltip': 'Borrar',
     },
   },
   'rules': {
     'auto-correct-common-misspellings': {
+      'delete-tooltip': 'Borrar',
       'name': 'Corrección automática de errores ortográficos comunes',
       'description': 'Utiliza un diccionario de errores ortográficos comunes para convertirlos automáticamente a su ortografía correcta. Consulte <a href="https://github.com/platers/obsidian-linter/tree/master/src/utils/default-misspellings.md">mapa de autocorrección</a> para obtener la lista completa de palabras corregidas automáticamente. <b>Nota: esta lista puede funcionar en texto de varios idiomas, pero esta lista es la misma sin importar qué idioma esté en uso actualmente.</b>',
       'ignore-words': {

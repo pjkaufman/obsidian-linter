@@ -116,8 +116,6 @@ export default {
       'paste': 'Yapıştır',
       'debug': 'Hata ayıkla',
     },
-    // tab-searcher.ts
-    'default-search-bar-text': 'Tüm ayarları ara',
     'general': {
       // general-tab.ts
       'lint-on-save': {
@@ -149,7 +147,6 @@ export default {
         'description': 'md dosyalarına ek olarak lintlenecek dosya uzantıları. Örneğin mdx veya svx. Baştaki noktayı eklemeyin. <b>Not: Yalnızca Obsidian\'ın markdown olarak gördüğü dosyalar (yerel veya diğer eklentiler aracılığıyla) lintlenecektir, eklenen uzantılardan bağımsız olarak.</b>',
         'extension-placeholder': 'örn. mdx',
         'add-input-button-text': 'Başka uzantı ekle',
-        'delete-tooltip': 'Sil',
       },
       'override-locale': {
         'name': 'Yerel ayarların üzerine yaz',
@@ -203,27 +200,19 @@ export default {
       // custom-command-option.ts
       'name': 'Özel Komutlar',
       'description': 'Özel komutlar, linter normal kurallarını çalıştırmayı bitirdikten sonra çalıştırılan Obsidyen komutlardır. Bu, YAML zaman damgası mantığı çalışmadan önce çalışmadıkları anlamına gelir, dolayısıyla linterin bir sonraki çalışmasında YAML zaman damgasının tetiklenmesine neden olabilirler. Bir Obsidyen komutunu yalnızca bir kez seçebilirsiniz.',
-      'warning': 'Bir seçeneği seçerken, seçeneği fareyi kullanarak veya enter tuşuna basarak seçtiğinizden emin olun. Diğer seçim yöntemleri çalışmayabilir ve yalnızca gerçek bir Obsidian komutunun veya boş bir dizinin seçimleri kaydedilir.',
 
       'add-input-button-text': 'Yeni komut ekle',
       'command-search-placeholder-text': 'Obsidian komutu',
-      'move-up-tooltip': 'Yukarı',
-      'move-down-tooltip': 'Aşağı',
-      'delete-tooltip': 'Sil',
     },
     'custom-replace': {
       // custom-replace-option.ts
       'name': 'Özel Regex Değiştirme',
       'description': 'Özel regex değiştirme, bulunan regex ile eşleşen her şeyi değiştirme değeri ile değiştirmek için kullanılabilir. Değiştirme ve bulma değerleri geçerli regex değerleri olmalıdır.',
-      'warning': 'Regex hakkında bilginiz yoksa dikkatli kullanın. Ayrıca, lütle iOS mobil platformunda regexinizde geriye dönük aramaları kullanmayın çünkü bu, o platformda desteklenmediği için lint işleminin başarısız olmasına neden olur.',
       'add-input-button-text': 'Yeni regex değiştirme ekle',
       'regex-to-find-placeholder-text': 'bulunacak regex',
       'flags-placeholder-text': 'bayraklar',
       'regex-to-replace-placeholder-text': 'değiştirilecek regex',
       'label-placeholder-text': 'etiket',
-      'move-up-tooltip': 'Yukarı taşı',
-      'move-down-tooltip': 'Aşağı taşı',
-      'delete-tooltip': 'Sil',
     },
   },
 
@@ -231,6 +220,7 @@ export default {
   'rules': {
     // auto-correct-common-misspellings.ts
     'auto-correct-common-misspellings': {
+      'delete-tooltip': 'Sil',
       'name': 'Yaygın Yanlış Yazımları Otomatik Düzelt',
       'description': 'Yaygın yanlış yazımların sözlüğünü kullanarak bunları doğru yazımlarına otomatik olarak dönüştürür. Otomatik düzeltilen kelimelerin tam listesi için <a href="https://github.com/platers/obsidian-linter/tree/master/src/utils/default-misspellings.md">otomatik-düzeltme haritasına</a> bakın.',
       'ignore-words': {

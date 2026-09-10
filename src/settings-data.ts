@@ -20,6 +20,11 @@ export enum AfterFileChangeLintTimes {
   After1Minute = 'after 1 minute',
 }
 
+export type CustomAutoCorrectContent = { filePath: string; customReplacements: Map<string, string>; };
+export type LintCommand = { id: string; name: string; enabled: boolean; };
+export type CustomReplace = { label: string; find: string; replace: string; flags: string; enabled: boolean; };
+export type FileToIgnore = { label: string; match: string; flags: string; };
+
 export interface LinterSettings {
   ruleConfigs: {
     [ruleName: string]: Options;
@@ -73,12 +78,3 @@ export const DEFAULT_SETTINGS: Partial<LinterSettings> = {
     removeUnnecessaryEscapeCharsForMultiLineArrays: false,
   },
 };
-// TODO: move this to the settings data file
-
-export type CustomAutoCorrectContent = { filePath: string; customReplacements: Map<string, string>; };// TODO: move this to the setting data file
-export type LintCommand = { id: string; name: string; enabled: boolean; };
-// TODO: move this to the settings data file
-export type CustomReplace = { label: string; find: string; replace: string; flags: string; enabled: boolean; };
-// TODO: move this to the settings data file
-export type FileToIgnore = { label: string; match: string; flags: string; };
-

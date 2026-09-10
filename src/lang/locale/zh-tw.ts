@@ -105,7 +105,6 @@ export default {
     'empty-clipboard': '剪貼簿中沒有內容。',
     'characters-added': '個字元被添加',
     'characters-removed': '個字元被移除',
-    'copy-to-clipboard-failed': '將文字複製到剪貼簿失敗： ',
   },
 
   // rule-alias-suggester.ts
@@ -121,8 +120,6 @@ export default {
   'custom-command-warning': '使用自訂命令格式化多個檔案是一個緩慢的過程，需要在側邊面板中開啟窗格。它的速度明顯慢於在未啟用自訂命令的情況下執行。請謹慎操作。',
   'cancel-button-text': '取消',
   'do-not-show-again': '不再顯示此確認',
-
-  'copy-aria-label': '複製',
 
   'disabled-other-rule-notice': '如果您啟用 <code>{NAME_1}</code>，它將停用 <code>{NAME_2}</code>。您要繼續嗎？',
   'disabled-conflicting-rule-notice': '{NAME_1} 與 {NAME_2} 衝突，因此已被關閉。您可以在設定分頁中切換要關閉的設定。',
@@ -151,8 +148,6 @@ export default {
       'paste': '貼上',
       'debug': '偵錯',
     },
-    // tab-searcher.ts
-    'default-search-bar-text': '搜尋所有設定',
     'general': {
       // general-tab.ts
       'lint-on-save': {
@@ -176,24 +171,20 @@ export default {
         'description': '在格式化所有檔案或儲存時格式化時要忽略的資料夾。',
         'folder-search-placeholder-text': '資料夾名稱',
         'add-input-button-text': '新增另一個要忽略的資料夾',
-        'delete-tooltip': '刪除',
       },
       'files-to-ignore': {
         'name': '要忽略的檔案',
         'description': '在格式化所有檔案或儲存時格式化時要忽略的檔案。',
         'file-search-placeholder-text': '要忽略的檔案的正規表示式',
         'add-input-button-text': '新增另一個要忽略的檔案的正規表示式',
-        'delete-tooltip': '刪除',
         'label-placeholder-text': '標籤',
         'flags-placeholder-text': '旗標',
-        'warning': '如果您不了解正規表示式，請謹慎使用。此外，請確保如果您在 iOS 行動裝置上的正規表示式中使用 lookbehind，您使用的版本支援它們。',
       },
       'additional-file-extensions': {
         'name': '額外的檔案副檔名',
         'description': '除了 md 之外要進行 Lint 的檔案副檔名。例如 mdx 或 svx。請勿包含開頭的點號。<b>注意：不論新增哪些副檔名，只有 Obsidian 視為 Markdown 的檔案（無論是內建或透過其他外掛）才會被 Lint。</b>',
         'extension-placeholder': '例如：mdx',
         'add-input-button-text': '新增副檔名',
-        'delete-tooltip': '刪除',
       },
       'override-locale': {
         'name': '覆寫地區設定',
@@ -247,27 +238,19 @@ export default {
       // custom-command-option.ts
       'name': '自訂命令',
       'description': '自訂命令是在 Linter 完成其一般規則後執行的 Obsidian 命令。這表示它們不會在 YAML 時間戳記邏輯執行之前執行，因此它們可能會導致 YAML 時間戳記在下一次 linter 執行時觸發。您只能選擇一個 Obsidian 命令一次。',
-      'warning': '選擇選項時，請務必使用滑鼠或按 Enter 鍵選擇選項。其他選擇方法可能無效，只有選擇實際的 Obsidian 命令或空字串才會被儲存。',
 
       'add-input-button-text': '新增命令',
       'command-search-placeholder-text': 'Obsidian 命令',
-      'move-up-tooltip': '上移',
-      'move-down-tooltip': '下移',
-      'delete-tooltip': '刪除',
     },
     'custom-replace': {
       // custom-replace-option.ts
       'name': '自訂正規表示式取代',
       'description': '自訂正規表示式取代可用於將任何符合尋找正規表示式的內容取代為取代值。取代和尋找值都必須是有效的正規表示式值。',
-      'warning': '如果您不了解正規表示式，請謹慎使用。此外，請確保如果您在 iOS 行動裝置上的正規表示式中使用 lookbehind，您使用的版本支援它們。',
       'add-input-button-text': '新增正規表示式取代',
       'regex-to-find-placeholder-text': '要尋找的正規表示式',
       'flags-placeholder-text': '旗標',
       'regex-to-replace-placeholder-text': '要取代的正規表示式',
       'label-placeholder-text': '標籤',
-      'move-up-tooltip': '上移',
-      'move-down-tooltip': '下移',
-      'delete-tooltip': '刪除',
     },
     'custom-auto-correct': {
       'delete-tooltip': '刪除',

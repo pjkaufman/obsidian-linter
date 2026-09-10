@@ -321,7 +321,7 @@ export default class LinterPlugin extends Plugin {
         return;
       }
 
-      void this.modifyPasteEvent(clipboardEv, editor);
+      await this.modifyPasteEvent(clipboardEv, editor);
     });
     this.registerEvent(eventRef);
     this.eventRefs.push(eventRef);

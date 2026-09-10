@@ -105,7 +105,6 @@ export default {
     'empty-clipboard': 'クリップボードに内容がありません。',
     'characters-added': '文字が追加されました',
     'characters-removed': '文字が削除されました',
-    'copy-to-clipboard-failed': 'クリップボードへのテキストのコピーに失敗しました: ',
   },
 
   // rule-alias-suggester.ts
@@ -121,8 +120,6 @@ export default {
   'custom-command-warning': 'カスタムコマンドが有効になっている状態で複数のファイルをLintするのは、サイドパネルでペインを開く能力が必要な遅いプロセスです。カスタムコマンドが無効な状態で実行するよりも明らかに遅くなります。注意して進めてください。',
   'cancel-button-text': 'キャンセル',
   'do-not-show-again': 'この確認を今後表示しない',
-
-  'copy-aria-label': 'コピー',
 
   'disabled-other-rule-notice': '<code>{NAME_1}</code>を有効にすると、<code>{NAME_2}</code>が無効になります。続行しますか？',
   'disabled-conflicting-rule-notice': '{NAME_1}は{NAME_2}と競合しているため、無効になりました。設定タブでどの設定をオフにするかを切り替えることができます。',
@@ -151,8 +148,6 @@ export default {
       'paste': '貼り付け',
       'debug': 'デバッグ',
     },
-    // tab-searcher.ts
-    'default-search-bar-text': 'すべての設定から検索',
     'general': {
       // general-tab.ts
       'lint-on-save': {
@@ -180,24 +175,20 @@ export default {
         'description': 'すべてのファイルをLintするときや、保存時にLintするときに無視するフォルダ。',
         'folder-search-placeholder-text': 'フォルダ名',
         'add-input-button-text': '無視するフォルダを追加',
-        'delete-tooltip': '削除',
       },
       'files-to-ignore': {
         'name': '無視するファイル',
         'description': 'すべてのファイルをLintするときや、保存時にLintするときに無視するファイル。',
         'file-search-placeholder-text': '無視するファイルの正規表現',
         'add-input-button-text': '無視するファイルの正規表現を追加',
-        'delete-tooltip': '削除',
         'label-placeholder-text': 'ラベル',
         'flags-placeholder-text': 'フラグ',
-        'warning': '正規表現を知らない場合は注意して使用してください。また、iOSモバイルで正規表現の後読みを使用する場合は、それをサポートするバージョンであることを確認してください。',
       },
       'additional-file-extensions': {
         'name': '追加のファイル拡張子',
         'description': 'md に加えて Lint するファイル拡張子。例: mdx、svx。先頭のドットは含めません。<b>注: 追加した拡張子に関係なく、Obsidian が Markdown として認識するファイル（ネイティブまたは他のプラグイン経由）のみが Lint されます。</b>',
         'extension-placeholder': '例: mdx',
         'add-input-button-text': '拡張子を追加',
-        'delete-tooltip': '削除',
       },
       'override-locale': {
         'name': 'ロケールを上書きする',
@@ -251,27 +242,19 @@ export default {
       // custom-command-option.ts
       'name': 'カスタムコマンド',
       'description': 'カスタムコマンドは、Linterが通常のルールを実行した後に実行されるObsidianコマンドです。これは、YAMLタイムスタンプロジックが実行される前に実行されないことを意味し、Linterの次の実行でYAMLタイムスタンプがトリガーされる可能性があります。1つのObsidianコマンドのみを選択できます。',
-      'warning': 'オプションを選択する際は、マウスを使用するか、Enterキーを押して選択してください。他の選択方法は機能しない場合があり、実際のObsidianコマンドまたは空の文字列の選択のみが保存されます。',
 
       'add-input-button-text': '新しいコマンドを追加',
       'command-search-placeholder-text': 'Obsidianコマンド',
-      'move-up-tooltip': '上に移動',
-      'move-down-tooltip': '下に移動',
-      'delete-tooltip': '削除',
     },
     'custom-replace': {
       // custom-replace-option.ts
       'name': 'カスタム正規表現置換',
       'description': 'カスタム正規表現置換は、"検索する正規表現に一致するもの"を、"置換する値"に置き換えるために使用できます。"置換する値"と"検索する値"は有効な正規表現である必要があります。',
-      'warning': '正規表現を知らない場合は注意して使用してください。また、iOSモバイルで正規表現の後読みを使用する場合は、それをサポートするバージョンであることを確認してください。',
       'add-input-button-text': '新しい正規表現置換を追加',
       'regex-to-find-placeholder-text': '検索する正規表現',
       'flags-placeholder-text': 'フラグ',
       'regex-to-replace-placeholder-text': '置換する正規表現',
       'label-placeholder-text': 'ラベル',
-      'move-up-tooltip': '上に移動',
-      'move-down-tooltip': '下に移動',
-      'delete-tooltip': '削除',
     },
     'custom-auto-correct': {
       'delete-tooltip': '削除',
