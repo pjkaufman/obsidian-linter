@@ -4,7 +4,7 @@ import {getTextInLanguage, LanguageStringKey} from './lang/helpers';
 import LinterPlugin from './main';
 import {richDescription} from './ui/helpers';
 import {LinterSettings} from './settings-data';
-import {CustomAutoCorrectContent} from './ui/linter-components/auto-correct-files-picker-option';
+import { CustomAutoCorrectContent } from './settings-data';
 import MdFileSuggester from './ui/suggesters/md-file-suggester';
 import {ParseResultsModal} from './ui/modals/parse-results-modal';
 import {parseCustomReplacements, stripCr} from './utils/strings';

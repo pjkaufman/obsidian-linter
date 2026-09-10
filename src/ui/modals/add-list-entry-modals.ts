@@ -1,11 +1,11 @@
 import {App, displayTooltip} from 'obsidian';
 import {getTextInLanguage} from '../../lang/helpers';
-import {FileToIgnore} from '../linter-components/files-to-ignore-option';
+import { FileToIgnore } from "../../settings-data";
 import FolderSuggester from '../suggesters/folder-suggester';
 import {FormModal} from './form-modal';
 import CommandSuggester from '../suggesters/command-suggester';
-import {LintCommand} from '../linter-components/custom-command-option';
-import {CustomReplace} from '../linter-components/custom-replace-option';
+import { LintCommand } from "../../settings-data";
+import { CustomReplace } from "../../settings-data";
 
 const filesToIgnoreDefaultFlags = 'i';
 const customRegexDefaultFlags = 'gm';

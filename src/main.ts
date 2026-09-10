@@ -17,7 +17,7 @@ import {RuleAliasSuggest} from './cm6/rule-alias-suggester';
 import {AfterFileChangeLintTimes, DEFAULT_SETTINGS, LinterSettings} from './settings-data';
 import AsyncLock from 'async-lock';
 import {warn} from 'loglevel';
-import {CustomAutoCorrectContent} from './ui/linter-components/auto-correct-files-picker-option';
+import { CustomAutoCorrectContent } from './settings-data';
 import {downloadMisspellings, readInMisspellingsFile} from './utils/auto-correct-misspellings';
 import {DiffPreviewView, diffPreviewViewType} from './ui/views/diff-preview-view';
 

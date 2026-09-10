@@ -1,7 +1,4 @@
 import {Options} from './rules';
-import {LintCommand} from './ui/linter-components/custom-command-option';
-import {CustomReplace} from './ui/linter-components/custom-replace-option';
-import {FileToIgnore} from './ui/linter-components/files-to-ignore-option';
 import {NestedKeyOf} from './utils/nested-keyof';
 import {NormalArrayFormats, QuoteCharacter, SpecialArrayFormats, TagSpecificArrayFormats} from './utils/yaml';
 
@@ -76,3 +73,12 @@ export const DEFAULT_SETTINGS: Partial<LinterSettings> = {
     removeUnnecessaryEscapeCharsForMultiLineArrays: false,
   },
 };
+// TODO: move this to the settings data file
+
+export type CustomAutoCorrectContent = { filePath: string; customReplacements: Map<string, string>; };// TODO: move this to the setting data file
+export type LintCommand = { id: string; name: string; enabled: boolean; };
+// TODO: move this to the settings data file
+export type CustomReplace = { label: string; find: string; replace: string; flags: string; enabled: boolean; };
+// TODO: move this to the settings data file
+export type FileToIgnore = { label: string; match: string; flags: string; };
+

@@ -1,8 +1,8 @@
 import {Command} from 'obsidian';
 import {RulesRunner} from '../src/rules-runner';
-import {CustomReplace} from '../src/ui/linter-components/custom-replace-option';
+import { CustomReplace } from "../src/settings-data";
 import dedent from 'ts-dedent';
-import {LintCommand} from '../src/ui/linter-components/custom-command-option';
+import { LintCommand } from "../src/settings-data";
 import { ObsidianCommandInterface } from '../src/typings/obsidian-ex';
 
 const rulesRunner = new RulesRunner();
