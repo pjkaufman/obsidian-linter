@@ -116,8 +116,6 @@ export default {
       'paste': 'Einfügen',
       'debug': 'Debuggen',
     },
-    // tab-searcher.ts
-    'default-search-bar-text': 'Alle Einstellungen durchsuchen',
     'general': {
       // general-tab.ts
       'lint-on-save': {

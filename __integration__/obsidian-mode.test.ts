@@ -20,8 +20,8 @@ function modeSetup(plugin: TestLinterPlugin, editor: Editor): Promise<void> {
 }
 
 function modeAssertions(editor: Editor) {
-  // one character was added before the cursor
-  expect(editor.posToOffset(editor.getCursor())).toBe(cursorStart+1);
+  // a space was removed in the test so it will be at the start instead of one character after the start (1-1 = 0)
+  expect(editor.posToOffset(editor.getCursor())).toBe(cursorStart);
 }
 
 function edgeCaseExpectedTextModifications(text: string, file: TFile):string {

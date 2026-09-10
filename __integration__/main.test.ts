@@ -152,7 +152,7 @@ export default class TestLinterPlugin extends Plugin {
           await t.setup(this);
         }
 
-        if (this.plugin.shouldIgnoreFile(file) == t.expectedShouldIgnore) {
+        if ((!this.plugin.isMarkdownFile(file) || this.plugin.shouldIgnoreFile(file)) == t.expectedShouldIgnore) {
           this.handleTestCompletion(t.name, true, testStatuses, totalTestCount);
           console.log('✅', t.name);
         } else {
