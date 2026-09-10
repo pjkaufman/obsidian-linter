@@ -563,7 +563,7 @@ export function escapeMarkdownSpecialCharacters(text: string): string {
  * ```
  */
 export function unescapeMarkdownSpecialCharacters(text: string): string {
-  return text.replace(/(\\+)([!"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~])/g, (_, backslashes, specialChar) => {
+  return text.replace(/(\\+)([!"#$%&'()*+,-./:;<=>?@[\\\]^_`{|}~])/g, (_, backslashes: string, specialChar) => {
     const backslashCount = backslashes.length;
     const keepCount = Math.floor(backslashCount / 2);
     return '\\'.repeat(keepCount) + specialChar;

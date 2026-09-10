@@ -88,7 +88,7 @@ export default class RuleTemplate extends RuleBuilder<DedupeYamlArrayValuesOptio
 
         for (const key of Object.keys(yaml)) {
           // skip non-arrays, arrays of objects, ignored keys, and already accounted for keys
-          if (keysToIgnore.includes(key) || !Array.isArray(yaml[key]) || (yaml[key].length !== 0 && typeof yaml[key][0] === 'object' && yaml[key][0] !== null)) {
+          if (keysToIgnore.includes(key) || !Array.isArray(yaml[key]) || ((yaml as {[k: string]: object[]})[key].length !== 0 && typeof (yaml as {[k: string]: object[]})[key][0] === 'object' && (yaml as {[k: string]: object[]})[key][0] !== null)) {
             continue;
           }
 

@@ -93,6 +93,7 @@ function findValueFromPath<ObjectType>(object: Partial<ObjectType>, path: string
   let result = object;
   for (const key of keys) {
     // @ts-ignore ignore the fact that result is technically of type any
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- while this is of type any, it works. So I am going to keep this as is
     result = result[key];
 
     if (result == undefined) {

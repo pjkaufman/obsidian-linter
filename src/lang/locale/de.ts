@@ -89,7 +89,6 @@ export default {
     'empty-clipboard': 'Es gibt keinen Inhalt in der Zwischenablage.',
     'characters-added': 'Zeichen hinzugefügt',
     'characters-removed': 'Zeichen entfernt',
-    'copy-to-clipboard-failed': 'Kopieren des Textes in die Zwischenablage fehlgeschlagen: ',
   },
 
   // rule-alias-suggester.ts
@@ -117,8 +116,6 @@ export default {
       'paste': 'Einfügen',
       'debug': 'Debuggen',
     },
-    // tab-searcher.ts
-    'default-search-bar-text': 'Alle Einstellungen durchsuchen',
     'general': {
       // general-tab.ts
       'lint-on-save': {
@@ -146,14 +143,12 @@ export default {
         'description': 'Ordner, die ignoriert werden sollen, wenn alle Dateien gelinted oder beim Speichern gelinted werden. Geben Sie Ordnerpfade ein, die durch Zeilenumbrüche getrennt sind',
         'folder-search-placeholder-text': 'Ordner-Name',
         'add-input-button-text': 'Einen anderen zu ignorierenden Ordner hinzufügen',
-        'delete-tooltip': 'Löschen',
       },
       'additional-file-extensions': {
         'name': 'Zusätzliche Dateierweiterungen',
         'description': 'Dateierweiterungen, die zusätzlich zu md gelinted werden sollen. Zum Beispiel mdx oder svx. Führenden Punkt nicht angeben. <b>Hinweis: Es werden nur Dateien gelinted, die Obsidian als Markdown ansieht (nativ oder über andere Plugins), unabhängig von hinzugefügten Erweiterungen.</b>',
         'extension-placeholder': 'z.B. mdx',
         'add-input-button-text': 'Weitere Erweiterung hinzufügen',
-        'delete-tooltip': 'Löschen',
       },
       'override-locale': {
         'name': 'Gebietsschema überschreiben',
@@ -207,27 +202,19 @@ export default {
       // custom-command-option.ts
       'name': 'Benutzerdefinierte Befehle',
       'description': 'Benutzerdefinierte Befehle sind Obsidian-Befehle, die ausgeführt werden, nachdem der Linter seine regulären Regeln ausgeführt hat. Dies bedeutet, dass sie nicht ausgeführt werden, bevor die YAML-Zeitstempellogik ausgeführt wird, sodass sie dazu führen können, dass der YAML-Zeitstempel bei der nächsten Ausführung des Linters ausgelöst wird. Sie können einen Obsidian-Befehl nur einmal auswählen.',
-      'warning': 'Wenn Sie eine Option auswählen, stellen Sie sicher, dass Sie die Option entweder mit der Maus oder durch Drücken der Eingabetaste auswählen. Andere Auswahlmethoden funktionieren möglicherweise nicht und es werden nur Auswahlen eines tatsächlichen Obsidian-Befehls oder einer leeren Zeichenfolge gespeichert.',
 
       'add-input-button-text': 'Neuen Befehl hinzufügen',
       'command-search-placeholder-text': 'Obsidian-Befehl',
-      'move-up-tooltip': 'Aufrücken',
-      'move-down-tooltip': 'Bewegen Sie sich nach unten',
-      'delete-tooltip': 'Löschen',
     },
     'custom-replace': {
       // custom-replace-option.ts
       'name': 'Benutzerdefinierter Regex-Ersatz',
       'description': 'Der benutzerdefinierte Regex-Ersatz kann verwendet werden, um alles zu ersetzen, was mit dem Such-Regex mit dem Ersatzwert übereinstimmt. Bei den Werten replace und find muss es sich um gültige Regex-Werte handeln.',
-      'warning': 'Verwenden Sie dies mit Vorsicht, wenn Sie Regex nicht kennen. Stellen Sie außerdem sicher, dass Sie keine Lookbehinds in Ihrem regulären Ausdruck auf iOS-Mobilgeräten verwenden, da dies dazu führt, dass Lints fehlschlagen, da dies auf dieser Plattform nicht unterstützt wird.',
       'add-input-button-text': 'Neuen Regex-Ersatz hinzufügen',
       'regex-to-find-placeholder-text': 'Regex zu finden',
       'flags-placeholder-text': 'Flaggen',
       'regex-to-replace-placeholder-text': 'Regex zu ersetzen',
       'label-placeholder-text': 'Etikett',
-      'move-up-tooltip': 'Aufrücken',
-      'move-down-tooltip': 'Bewegen Sie sich nach unten',
-      'delete-tooltip': 'Löschen',
     },
   },
 

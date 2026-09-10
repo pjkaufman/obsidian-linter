@@ -1,5 +1,5 @@
 import {visit} from 'unist-util-visit';
-import type {Position} from 'unist';
+import type {Position, Node} from 'unist';
 import type {Root} from 'mdast';
 import {hashString53Bit, makeSureContentHasEmptyLinesAddedBeforeAndAfter, replaceTextBetweenStartAndEndWithNewValue, getStartOfLineIndex, replaceAt, getStartOfLineWhitespaceOrBlockquoteLevel} from './strings';
 import {genericLinkRegex, tableRow, tableSeparator, tableStartingPipe, customIgnoreAllStartIndicator, customIgnoreAllEndIndicator, checklistBoxStartsTextRegex, footnoteDefinitionIndicatorAtStartOfLine, emptyLineMathBlockquoteRegex, startsWithBlockquote, startsWithListMarkerRegex, calloutTypeRegex} from './regex';
@@ -129,7 +129,7 @@ function getListItemTextPositions(text: string, includeEmptyNodes: boolean = fal
   const positions: PositionPlusEmptyIndicator[] = [];
   visit(ast, MDAstTypes.ListItem as string, (node) => {
     // @ts-ignore the fact that not all nodes have a children property since I am skipping any that do not
-    if (!node.children || node.children.length === 0) {
+    if (!node.children || (node.children as Node[]).length === 0) {
       if (includeEmptyNodes) {
         positions.push({
           position: node.position,
@@ -141,7 +141,7 @@ function getListItemTextPositions(text: string, includeEmptyNodes: boolean = fal
     }
 
     // @ts-ignore the fact that not all nodes have a children property since I have already exited the function if that is the case
-    for (const childNode of node.children) {
+    for (const childNode of (node.children as Node[])) {
       if (childNode.type === (MDAstTypes.Paragraph as string)) {
         positions.push({
           position: childNode.position,
@@ -161,15 +161,15 @@ function getHeaderTextPositions(text: string): PositionPlusText[] {
   const positions: PositionPlusText[] = [];
   visit(ast, MDAstTypes.Heading as string, (node) => {
     // @ts-ignore the fact that not all nodes have a children property since I am skipping any that do not
-    if (!node.children || node.children.length === 0) {
+    if (!node.children || (node.children as Node[]).length === 0) {
       return;
     }
 
     // @ts-ignore the fact that not all nodes have a children property since I have already exited the function if that is the case
-    for (const childNode of node.children) {
+    for (const childNode of (node.children as Node[])) {
       if (childNode.type === (MDAstTypes.Text as string)) {
         positions.push({
-          position: childNode.position as Position,
+          position: childNode.position,
           text: childNode.value as string,
         });
       }
@@ -414,7 +414,7 @@ export function makeEmphasisOrBoldConsistent(text: string, style: string, type: 
   }
 
   // make the size two for the indicator when the type is strong
-  if (type === 'strong') {
+  if (type === MDAstTypes.Bold) {
     indicator += indicator;
   }
 
@@ -1015,7 +1015,7 @@ function addBlankLinesAroundStartAndStopMathIndicators(text: string, mathBlockSt
 
   // try to cleanup whitespace that may get left behind by this logic when moving the opening
   // math block indicators to its own line
-  // eslint-disable-next-line no-unmodified-loop-condition
+  // eslint-disable-next-line no-unmodified-loop-condition -- the logic here does break, so there is no need to be stringent about no loop condition changing
   while (startingNewLineAdded && mathBlockStartIndex > 0) {
     const previousChar = text[mathBlockStartIndex-1];
     if (previousChar !== ' ' && previousChar !== '\t') {

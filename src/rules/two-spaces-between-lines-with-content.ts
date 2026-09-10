@@ -6,6 +6,7 @@ import {LineBreakIndicators, addTwoSpacesAtEndOfLinesFollowedByAnotherLineOfText
 import {BooleanOption} from '../option';
 import {ConfirmRuleDisableModal} from '../ui/modals/confirm-rule-disable-modal';
 import {App} from 'obsidian';
+import LinterPlugin from '../main';
 
 class TwoSpacesBetweenLinesWithContentOptions implements Options {
   lineBreakIndicator?: LineBreakIndicators = LineBreakIndicators.TwoSpaces;
@@ -19,14 +20,16 @@ export default class TwoSpacesBetweenLinesWithContent extends RuleBuilder<TwoSpa
       descriptionKey: 'rules.two-spaces-between-lines-with-content.description',
       type: RuleType.CONTENT,
       ruleIgnoreTypes: [IgnoreTypes.obsidianMultiLineComments, IgnoreTypes.yaml, IgnoreTypes.table],
-      disableConflictingOptions(value: boolean, app: App): void {
+      disableConflictingOptions(value: boolean, app: App, plugin: LinterPlugin): void {
         const paragraphBlankLinesEnableOption = rulesDict['paragraph-blank-lines'].options[0] as BooleanOption;
-        if (value && paragraphBlankLinesEnableOption.getValue()) {
-          new ConfirmRuleDisableModal(app, 'rules.paragraph-blank-lines.name', 'rules.two-spaces-between-lines-with-content.name', () => {
-            paragraphBlankLinesEnableOption.setValue(false);
+        if (value && paragraphBlankLinesEnableOption.getValue(plugin)) {
+          new ConfirmRuleDisableModal(app, 'rules.two-spaces-between-lines-with-content.name', 'rules.paragraph-blank-lines.name', async () => {
+            await paragraphBlankLinesEnableOption.setValue(false, plugin);
+            plugin.settingsTab.update();
           },
-          () => {
-            (rulesDict['two-spaces-between-lines-with-content'].options[0] as BooleanOption).setValue(false);
+          async () => {
+            await (rulesDict['two-spaces-between-lines-with-content'].options[0] as BooleanOption).setValue(false, plugin);
+            plugin.settingsTab.update();
           }).open();
         }
       },

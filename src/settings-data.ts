@@ -1,7 +1,4 @@
 import {Options} from './rules';
-import {LintCommand} from './ui/linter-components/custom-command-option';
-import {CustomReplace} from './ui/linter-components/custom-replace-option';
-import {FileToIgnore} from './ui/linter-components/files-to-ignore-option';
 import {NestedKeyOf} from './utils/nested-keyof';
 import {NormalArrayFormats, QuoteCharacter, SpecialArrayFormats, TagSpecificArrayFormats} from './utils/yaml';
 
@@ -22,6 +19,11 @@ export enum AfterFileChangeLintTimes {
   After30Seconds = 'after 30 seconds',
   After1Minute = 'after 1 minute',
 }
+
+export type CustomAutoCorrectContent = { filePath: string; customReplacements: Map<string, string>; };
+export type LintCommand = { id: string; name: string; enabled: boolean; };
+export type CustomReplace = { label: string; find: string; replace: string; flags: string; enabled: boolean; };
+export type FileToIgnore = { label: string; match: string; flags: string; };
 
 export interface LinterSettings {
   ruleConfigs: {

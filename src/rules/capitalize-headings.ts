@@ -341,8 +341,8 @@ export default class CapitalizeHeadings extends RuleBuilder<CapitalizeHeadingsOp
         return headerText;
       }
 
-      const startingCustomRegexGroup = options.startingWordIgnoreCharacters?.length == 0 ? '' : `[${escapeRegExp(options.startingWordIgnoreCharacters!)}]?`;
-      const endingCustomRegexGroup = options.endingWordIgnoreCharacters?.length == 0 ? '' : `[${escapeRegExp(options.endingWordIgnoreCharacters!)}]*`;
+      const startingCustomRegexGroup = options.startingWordIgnoreCharacters?.length == 0 ? '' : `[${escapeRegExp(options.startingWordIgnoreCharacters)}]?`;
+      const endingCustomRegexGroup = options.endingWordIgnoreCharacters?.length == 0 ? '' : `[${escapeRegExp(options.endingWordIgnoreCharacters)}]*`;
       const wordRegex = new RegExp(`^${startingCustomRegexGroup}[\\p{L}’'-]{1,}${endingCustomRegexGroup}$`, 'u');
       const keepCasing = options.ignoreWords;
       const ignoreShortWords = options.lowercaseWords;

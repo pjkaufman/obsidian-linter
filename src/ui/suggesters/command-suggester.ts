@@ -1,5 +1,5 @@
 import {AbstractInputSuggest, App, Command} from 'obsidian';
-import {LintCommand} from '../linter-components/custom-command-option';
+import { LintCommand } from "../../settings-data";
 
 export default class CommandSuggester extends AbstractInputSuggest<Command> {
   constructor(

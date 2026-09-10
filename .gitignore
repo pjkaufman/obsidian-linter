@@ -41,6 +41,6 @@ yarn.lock
 .DS_Store
 
 !__mocks__/*.js
-!eslint.config.js
+!eslint.config.mjs
 !babel.config.js
 !postcss.config.js

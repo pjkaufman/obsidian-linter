@@ -6,6 +6,7 @@ import {allHeadersRegex} from '../utils/regex';
 import {BooleanOption} from '../option';
 import {ConfirmRuleDisableModal} from '../ui/modals/confirm-rule-disable-modal';
 import {App} from 'obsidian';
+import LinterPlugin from '../main';
 
 class HeaderIncrementOptions implements Options {
   startAtH2?: boolean = false;
@@ -172,15 +173,15 @@ export default class HeaderIncrement extends RuleBuilder<HeaderIncrementOptions>
         nameKey: 'rules.header-increment.start-at-h2.name',
         descriptionKey: 'rules.header-increment.start-at-h2.description',
         optionsKey: 'startAtH2',
-        onChange(value: boolean, app: App): void {
+        onChange(value: boolean, app: App, plugin: LinterPlugin): void {
           const filenameHeadingEnableOption = rulesDict['file-name-heading'].options[0] as BooleanOption;
 
-          if (value && filenameHeadingEnableOption.getValue()) {
-            new ConfirmRuleDisableModal(app, 'rules.header-increment.start-at-h2.name', 'rules.file-name-heading.name', () => {
-              filenameHeadingEnableOption.setValue(false);
+          if (value && filenameHeadingEnableOption.getValue(plugin)) {
+            new ConfirmRuleDisableModal(app, 'rules.header-increment.start-at-h2.name', 'rules.file-name-heading.name', async () => {
+              await filenameHeadingEnableOption.setValue(false, plugin);
             },
-            () => {
-              (rulesDict['header-increment'].options[1] as BooleanOption).setValue(false);
+            async () => {
+              await (rulesDict['header-increment'].options[1] as BooleanOption).setValue(false, plugin);
             }).open();
           }
         },

@@ -33,6 +33,7 @@ export class LintConfirmationModal extends Modal {
         cls: 'mod-cta',
         text: submitBtnText,
       });
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises -- I don't have control over this, so we may as well ignore the promise mismatch
       btnSubmit.addEventListener('click', async (_e) => {
         if (saveSuppressPreference && suppressCheckbox?.checked) {
           await saveSuppressPreference();
@@ -41,7 +42,7 @@ export class LintConfirmationModal extends Modal {
         this.close();
         await btnSubmitAction();
       });
-      setTimeout(() => {
+      window.setTimeout(() => {
         btnSubmit.focus();
       }, 50);
     });

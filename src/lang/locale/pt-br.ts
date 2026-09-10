@@ -106,7 +106,6 @@ export default {
     'empty-clipboard': 'Não há conteúdo na área de transferência.',
     'characters-added': 'caracteres adicionados',
     'characters-removed': 'caracteres removidos',
-    'copy-to-clipboard-failed': 'Falha ao copiar texto para a área de transferência: ',
   },
 
   // rule-alias-suggester.ts
@@ -122,8 +121,6 @@ export default {
   'custom-command-warning': 'Executar o linter em múltiplos arquivos com comandos personalizados ativados é um processo lento que requer a habilidade de abrir painéis no painel lateral. É notavelmente mais lento do que executar sem os comandos personalizados ativados. Por favor, proceda com cautela.',
   'cancel-button-text': 'Cancelar',
   'do-not-show-again': 'Não mostrar esta confirmação novamente',
-
-  'copy-aria-label': 'Copiar',
 
   'disabled-other-rule-notice': 'Se você ativar <code>{NAME_1}</code>, isso desativará <code>{NAME_2}</code>. Deseja prosseguir?',
   'disabled-conflicting-rule-notice': '{NAME_1} entra em conflito com {NAME_2}, portanto foi desativada. Você pode alternar qual configuração está desativada na aba de configurações.',
@@ -152,8 +149,6 @@ export default {
       'paste': 'Colar',
       'debug': 'Depuração',
     },
-    // tab-searcher.ts
-    'default-search-bar-text': 'Pesquisar em todas as configurações',
     'general': {
       // general-tab.ts
       'lint-on-save': {
@@ -181,24 +176,20 @@ export default {
         'description': 'Pastas a ignorar ao executar o linter em todos os arquivos ou ao salvar.',
         'folder-search-placeholder-text': 'Nome da pasta',
         'add-input-button-text': 'Adicionar outra pasta para ignorar',
-        'delete-tooltip': 'Excluir',
       },
       'files-to-ignore': {
         'name': 'Arquivos a ignorar',
         'description': 'Arquivos a ignorar ao executar o linter em todos os arquivos ou ao salvar.',
         'file-search-placeholder-text': 'regex para arquivos a ignorar',
         'add-input-button-text': 'Adicionar outra regex de arquivo para ignorar',
-        'delete-tooltip': 'Excluir',
         'label-placeholder-text': 'rótulo',
         'flags-placeholder-text': 'flags',
-        'warning': 'Use com cautela se não conhecer regex. Além disso, certifique-se de que, se você usar lookbehinds em sua regex no iOS (móvel), você esteja em uma versão que os suporte.',
       },
       'additional-file-extensions': {
         'name': 'Extensões de arquivo adicionais',
         'description': 'Extensões de arquivo para executar o linter além de md. Por exemplo, mdx ou svx. Não inclua o ponto inicial. <b>Nota: Apenas os arquivos que o Obsidian considera como markdown (seja nativamente ou por meio de outros plugins) sofrerão a execução do linter, independentemente das extensões adicionadas.</b>',
         'extension-placeholder': 'ex. mdx',
         'add-input-button-text': 'Adicionar outra extensão',
-        'delete-tooltip': 'Excluir',
       },
       'override-locale': {
         'name': 'Substituir localidade',
@@ -252,27 +243,19 @@ export default {
       // custom-command-option.ts
       'name': 'Comandos personalizados',
       'description': 'Comandos personalizados são comandos do Obsidian que são executados após o linter finalizar a execução de suas regras regulares. Isso significa que eles não são executados antes da lógica de timestamp do YAML, então podem fazer com que o timestamp do YAML seja acionado na próxima execução do linter. Você pode selecionar um comando do Obsidian apenas uma vez.',
-      'warning': 'Ao selecionar uma opção, certifique-se de usar o mouse ou pressionar a tecla Enter. Outros métodos de seleção podem não funcionar e apenas seleções de um comando real do Obsidian ou de uma string vazia serão salvas.',
 
       'add-input-button-text': 'Adicionar novo comando',
       'command-search-placeholder-text': 'Comando do Obsidian',
-      'move-up-tooltip': 'Mover para cima',
-      'move-down-tooltip': 'Mover para baixo',
-      'delete-tooltip': 'Excluir',
     },
     'custom-replace': {
       // custom-replace-option.ts
       'name': 'Substituição de regex personalizada',
       'description': 'A substituição de regex personalizada pode ser usada para substituir qualquer coisa que corresponda à regex de busca pelo valor de substituição. Os valores de substituição e de busca precisarão ser valores de regex válidos.',
-      'warning': 'Use com cautela se você não conhecer regex. Além disso, certifique-se de que, se você usar lookbehinds na sua regex no iOS (móvel), você esteja em uma versão que os suporte.',
       'add-input-button-text': 'Adicionar nova substituição de regex',
       'regex-to-find-placeholder-text': 'regex de busca',
       'flags-placeholder-text': 'flags',
       'regex-to-replace-placeholder-text': 'regex de substituição',
       'label-placeholder-text': 'rótulo',
-      'move-up-tooltip': 'Mover para cima',
-      'move-down-tooltip': 'Mover para baixo',
-      'delete-tooltip': 'Excluir',
     },
     'custom-auto-correct': {
       'delete-tooltip': 'Excluir',

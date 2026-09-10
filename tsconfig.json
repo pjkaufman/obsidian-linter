@@ -2,10 +2,12 @@
   "compilerOptions": {
     "inlineSourceMap": true,
     "inlineSources": true,
-    "module": "es2020",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "target": "es6",
     "allowJs": true,
     "noImplicitAny": true,
+    "noImplicitThis": true,
     "allowSyntheticDefaultImports": true,
     "importHelpers": true,
     "experimentalDecorators": true,
@@ -15,7 +17,8 @@
       "es5",
       "scripthost",
       "ESNext"
-    ]
+    ],
+    "types": ["jest"]
   },
   "include": [
     "**/*.ts",

@@ -3,7 +3,7 @@ import {Options, RuleType} from '../rules';
 import RuleBuilder, {BooleanOptionBuilder, ExampleBuilder, MdFilePickerOptionBuilder, OptionBuilderBase, TextAreaOptionBuilder} from './rule-builder';
 import dedent from 'ts-dedent';
 import {wordRegex, wordSplitterRegex} from '../utils/regex';
-import {CustomAutoCorrectContent} from '../ui/linter-components/auto-correct-files-picker-option';
+import { CustomAutoCorrectContent } from '../settings-data';
 
 class AutoCorrectCommonMisspellingsOptions implements Options {
   ignoreWords?: string[] = [];

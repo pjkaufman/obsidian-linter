@@ -4,7 +4,7 @@ import RuleBuilder, {ExampleBuilder, NumberOptionBuilder, OptionBuilderBase} fro
 import dedent from 'ts-dedent';
 
 class ConvertSpacesToTabsOptions implements Options {
-  tabsize: Number = 4;
+  tabsize: number = 4;
 }
 
 @RuleBuilder.register

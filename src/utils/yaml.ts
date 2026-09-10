@@ -3,7 +3,6 @@ import {escapeDollarSigns, yamlRegex} from './regex';
 import {isNumeric} from './strings';
 import {parse, parseDocument, Document, stringify, CST, YAMLMap} from 'yaml';
 import {YamlNode} from '../typings/yaml';
-import {FlowCollection} from 'yaml/dist/parse/cst';
 
 export const OBSIDIAN_TAG_KEY_SINGULAR = 'tag';
 export const OBSIDIAN_TAG_KEY_PLURAL = 'tags';
@@ -36,12 +35,13 @@ export function getYAMLText(text: string): string | null {
 }
 
 export function formatYAML(text: string, func: (text: string) => string): string {
-  if (!text.match(yamlRegex)) {
+  const oldYamlMatch = text.match(yamlRegex);
+  if (!oldYamlMatch) {
     return text;
   }
 
-  const oldYaml = text.match(yamlRegex)[0];
-  const newYaml = func(oldYaml);
+  const oldYaml = oldYamlMatch[0];
+  const newYaml = func(oldYaml );
   text = text.replace(oldYaml, escapeDollarSigns(newYaml));
 
   return text;
@@ -87,14 +87,14 @@ export function removeYamlSection(yaml: string, rawKey: string, allowNestedKey: 
   return result;
 }
 
-export function loadYAML(yaml_text: string): any {
+export function loadYAML(yaml_text: string): null | object {
   if (yaml_text == null) {
     return null;
   }
 
   // replacing tabs at the beginning of new lines with 2 spaces fixes loading YAML that has tabs at the start of a line
   // https://github.com/platers/obsidian-linter/issues/157
-  const parsed_yaml = parse(yaml_text.replace(/\n(\t)+/g, '\n  ')) as {};
+  const parsed_yaml = parse(yaml_text.replace(/\n(\t)+/g, '\n  ')) as unknown;
   if (parsed_yaml == null) {
     return {};
   }
@@ -102,7 +102,7 @@ export function loadYAML(yaml_text: string): any {
   return parsed_yaml;
 }
 
-export function parseYAML(yaml_text: string): Document {
+export function parseYAML(yaml_text: string): null | Document {
   if (yaml_text == null) {
     return null;
   }
@@ -121,7 +121,7 @@ export function getEmptyDocument(doc: Document): Document {
   const newDocument = new Document(doc.options);
   newDocument.contents = new YAMLMap();
 
-  const originalToken = doc.contents.srcToken as FlowCollection;
+  const originalToken = doc.contents?.srcToken as CST.FlowCollection;
   newDocument.contents.srcToken = {
     offset: originalToken.offset,
     type: originalToken.type,
@@ -135,7 +135,7 @@ export function getEmptyDocument(doc: Document): Document {
 }
 
 export function astToString(ast: Document): string {
-  if (!ast || !ast.contents) {
+  if (!ast || !ast.contents || !ast.contents.srcToken) {
     return '';
   }
 
@@ -251,7 +251,7 @@ export function formatYamlArrayValue(value: string | string[], format: NormalArr
 
       return ' ' + convertStringArrayToSingleLineArray(value).replaceAll(', ', ' ');
   }
-  /* eslint-enable no-fallthrough */
+  /* eslint-enable no-fallthrough -- needed to renable fallthrough checks disabled above */
 }
 
 function getDefaultYAMLArrayValue(format: NormalArrayFormats | SpecialArrayFormats | TagSpecificArrayFormats): string {
@@ -289,9 +289,9 @@ function convertStringArrayToMultilineArray(arrayItems: string[]): string {
 /**
  * Parses single-line and multi-line arrays into an array that can be used for formatting down the line
  * @param {string} value The value to see about parsing if it is a sing-line or multi-line array
- * @return {string|string[]} The original value if it was not a single or multi-line array or the an array of the values from the array (multi-line arrays will have empty values removed)
+ * @return {null|string|string[]} The original value if it was not a single or multi-line array or the an array of the values from the array (multi-line arrays will have empty values removed)
  */
-export function splitValueIfSingleOrMultilineArray(value: string): string | string[] {
+export function splitValueIfSingleOrMultilineArray(value: string): null | string | string[] {
   if (value == null || value.length === 0) {
     return null;
   }
@@ -309,7 +309,7 @@ export function splitValueIfSingleOrMultilineArray(value: string): string | stri
       return null;
     }
 
-    const arrayItems = convertYAMLStringToArray(value, ',');
+    const arrayItems = convertYAMLStringToArray(value, ',') ?? [];
 
     return arrayItems.filter((el: string) => {
       return el != '';
@@ -349,9 +349,9 @@ export function convertTagValueToStringOrStringArray(value: string | string[]): 
   if (Array.isArray(value)) {
     originalTagValues = value;
   } else if (value.includes(',')) {
-    originalTagValues = convertYAMLStringToArray(value, ',');
+    originalTagValues = convertYAMLStringToArray(value, ',') ?? [];
   } else {
-    originalTagValues = convertYAMLStringToArray(value, ' ');
+    originalTagValues = convertYAMLStringToArray(value, ' ') ?? [];
   }
 
   for (const tagValue of originalTagValues) {
@@ -368,13 +368,13 @@ export function convertTagValueToStringOrStringArray(value: string | string[]): 
  */
 export function convertAliasValueToStringOrStringArray(value: string | string[]): string[] {
   if (typeof value === 'string') {
-    return convertYAMLStringToArray(value, ',');
+    return convertYAMLStringToArray(value, ',') ?? [];
   }
 
   return value;
 }
 
-export function convertYAMLStringToArray(value: string, delimiter: string = ','): string[] {
+export function convertYAMLStringToArray(value: string, delimiter: string = ','): null|string[] {
   if (value == '' || value == null) {
     return null;
   }

@@ -1,30 +1,37 @@
 import {Command} from 'obsidian';
 import {RulesRunner} from '../src/rules-runner';
-import {CustomReplace} from '../src/ui/linter-components/custom-replace-option';
+import { CustomReplace } from "../src/settings-data";
 import dedent from 'ts-dedent';
-import {LintCommand} from 'src/ui/linter-components/custom-command-option';
+import { LintCommand } from "../src/settings-data";
+import { ObsidianCommandInterface } from '../src/typings/obsidian-ex';
 
 const rulesRunner = new RulesRunner();
-const appCommandsMock = {
+interface AppCommandsMock extends ObsidianCommandInterface {
+  numberOfCommands: number;
+  numberOfHitsPerId: Map<string, number>;
+  resetStats(): void;
+}
+
+const appCommandsMock: AppCommandsMock = {
   numberOfCommands: 0,
   numberOfHitsPerId: new Map<string, number>(),
-  executeCommandById: function(id: string): void {
+  executeCommandById(this: AppCommandsMock, id: string): void {
     this.numberOfCommands += 1;
-    if (!this.numberOfHitsPerId.has(id)) {
+    if (this.numberOfHitsPerId.has(id)) {
       this.numberOfHitsPerId.set(id, 1);
     } else {
-      this.numberOfHitsPerId.set(id, this.numberOfHitsPerId.get(id) + 1);
+      this.numberOfHitsPerId.set(id, (this.numberOfHitsPerId.get(id) ?? 0) + 1);
     }
   },
   commands: {
     'editor:save-file': {
-      callback: () => {},
+      checkCallback: () => {},
     },
   },
-  listCommands: (): Command[] => {
+  listCommands(): Command[] {
     return [];
   },
-  resetStats: function() {
+  resetStats(this: AppCommandsMock) {
     this.numberOfCommands = 0;
     this.numberOfHitsPerId = new Map<string, number>();
   },

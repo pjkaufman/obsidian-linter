@@ -168,7 +168,6 @@ export default {
       'debug': 'Debug Settings',
     },
     // tab-searcher.ts
-    'default-search-bar-text': 'Search all settings',
     'general': {...},
     'debug': {...},
   },

@@ -1,8 +1,8 @@
 import {readFileSync, writeFileSync, existsSync} from 'fs';
 import dedent from 'ts-dedent';
-import {DropdownOption} from './option';
-import {rules, sortRules} from './rules';
-import './rules-registry';
+import {DropdownOption} from '../../src/option';
+import {rules, RuleType, sortRules} from '../../src/rules';
+import '../../src/rules-registry';
 
 const autogen_warning = '<!--- This file was automatically generated. See docs.ts and *_template.md files for the source. -->\n';
 
@@ -26,7 +26,7 @@ function generateReadme() {
   const readme_template = readFileSync(`${pathToDocsFolder}/templates/readme_template.md`, 'utf8');
 
   let rules_list = '';
-  let prevSection = '';
+  let prevSection: RuleType | null = null;
   for (const rule of rules) {
     if (rule.type !== prevSection) {
       rules_list += `\n### ${rule.type} rules\n\n`;
@@ -42,7 +42,7 @@ function generateReadme() {
 
 function generateDocs() {
   let rules_docs = '';
-  let prevSection = '';
+  let prevSection: RuleType | null = null;
   for (const rule of rules) {
     const examples = rule.examples.map((test) => dedent`
       <details><summary>${test.description}</summary>
@@ -90,7 +90,7 @@ function generateDocs() {
       }
       listItems = listItems || 'N/A';
 
-      let defaultValue = option.defaultValue;
+      let defaultValue = option.defaultValue as string;
       if (defaultValue != '') {
         defaultValue = `\`${defaultValue}\``;
       }
@@ -113,7 +113,7 @@ function generateDocs() {
     }
 
     if (rule.type !== prevSection) {
-      if (prevSection !== '') {
+      if (prevSection !== null) {
         writeRuleDocument(prevSection, rules_docs);
       }
 
@@ -149,12 +149,14 @@ function generateDocs() {
     `;
   }
 
-  writeRuleDocument(prevSection, rules_docs);
+  if (prevSection) {
+    writeRuleDocument(prevSection, rules_docs);
+  }
 
   console.log('Rules documentation updated');
 }
 
-function writeRuleDocument(ruleTypeName: string, rules_docs: string) {
+function writeRuleDocument(ruleTypeName: RuleType, rules_docs: string) {
   const rules_documentation = dedent`
     ${autogen_warning}
     ${''}
@@ -218,7 +220,7 @@ function generateContributing() {
 
   for (const file of filesInOrder) {
     let sectionContent = fileToContent.get(file);
-    sectionContent = incrementHeaders(sectionContent);
+    sectionContent = incrementHeaders(sectionContent ?? '');
 
     actualSections += sectionContent + '\n';
   }
@@ -226,7 +228,7 @@ function generateContributing() {
   for (const referencedFile of filesInOrder) {
     actualSections = actualSections.replaceAll(referencedFile + '#', '#');
 
-    const header = fileToHeader.get(referencedFile)!;
+    const header = fileToHeader.get(referencedFile) ?? '';
     actualSections = actualSections.replaceAll(referencedFile, header);
   }
 

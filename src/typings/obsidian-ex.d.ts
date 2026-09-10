@@ -53,12 +53,12 @@ declare module 'obsidian' {
     /**
      * @public
      */
-    getState(): any;
+    getState(): Record<string, unknown>;
 
     /**
      * @public
      */
-    setState(state: any, result: ViewStateResult): Promise<void>;
+    setState(state: unknown, result: ViewStateResult): Promise<void>;
   }
 
   interface ViewStateResult {

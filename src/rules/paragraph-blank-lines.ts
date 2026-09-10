@@ -6,6 +6,7 @@ import dedent from 'ts-dedent';
 import {BooleanOption} from '../option';
 import {ConfirmRuleDisableModal} from '../ui/modals/confirm-rule-disable-modal';
 import {App} from 'obsidian';
+import LinterPlugin from '../main';
 
 class ParagraphBlankLinesOptions implements Options {}
 
@@ -17,14 +18,16 @@ export default class ParagraphBlankLines extends RuleBuilder<ParagraphBlankLines
       descriptionKey: 'rules.paragraph-blank-lines.description',
       type: RuleType.SPACING,
       ruleIgnoreTypes: [IgnoreTypes.obsidianMultiLineComments, IgnoreTypes.yaml, IgnoreTypes.table],
-      disableConflictingOptions(value: boolean, app: App): void {
+      disableConflictingOptions(value: boolean, app: App, plugin: LinterPlugin ): void {
         const twoSpacesEnableOption = rulesDict['two-spaces-between-lines-with-content'].options[0] as BooleanOption;
-        if (value && twoSpacesEnableOption.getValue()) {
-          new ConfirmRuleDisableModal(app, 'rules.paragraph-blank-lines.name', 'rules.two-spaces-between-lines-with-content.name', () => {
-            twoSpacesEnableOption.setValue(false);
+        if (value && twoSpacesEnableOption.getValue(plugin)) {
+          new ConfirmRuleDisableModal(app, 'rules.paragraph-blank-lines.name', 'rules.two-spaces-between-lines-with-content.name', async () => {
+            await twoSpacesEnableOption.setValue(false, plugin);
+            plugin.settingsTab.update();
           },
-          () => {
-            (rulesDict['paragraph-blank-lines'].options[0] as BooleanOption).setValue(false);
+          async () => {
+            await (rulesDict['paragraph-blank-lines'].options[0] as BooleanOption).setValue(false, plugin);
+            plugin.settingsTab.update();
           }).open();
         }
       },

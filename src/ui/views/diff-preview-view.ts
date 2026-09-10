@@ -136,7 +136,7 @@ export class DiffPreviewView extends ItemView {
     this.bodyEl.empty();
     const diffs = this.createLineDiff(this.previewState.oldText, this.previewState.newText);
     const summary = this.createSummary(diffs);
-    this.bodyEl.createEl('div', {
+    this.bodyEl.createDiv({
       text: getTextInLanguage('notice-text.diff-summary')
           .replace('{LINES_ADDED}', summary.linesAdded.toString())
           .replace('{LINES_REMOVED}', summary.linesRemoved.toString())
