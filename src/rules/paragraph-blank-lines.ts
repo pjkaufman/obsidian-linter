@@ -23,9 +23,11 @@ export default class ParagraphBlankLines extends RuleBuilder<ParagraphBlankLines
         if (value && twoSpacesEnableOption.getValue(plugin)) {
           new ConfirmRuleDisableModal(app, 'rules.paragraph-blank-lines.name', 'rules.two-spaces-between-lines-with-content.name', async () => {
             await twoSpacesEnableOption.setValue(false, plugin);
+            plugin.settingsTab.update();
           },
           async () => {
             await (rulesDict['paragraph-blank-lines'].options[0] as BooleanOption).setValue(false, plugin);
+            plugin.settingsTab.update();
           }).open();
         }
       },

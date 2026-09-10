@@ -21,14 +21,15 @@ export default class TwoSpacesBetweenLinesWithContent extends RuleBuilder<TwoSpa
       type: RuleType.CONTENT,
       ruleIgnoreTypes: [IgnoreTypes.obsidianMultiLineComments, IgnoreTypes.yaml, IgnoreTypes.table],
       disableConflictingOptions(value: boolean, app: App, plugin: LinterPlugin): void {
-        debugger;
         const paragraphBlankLinesEnableOption = rulesDict['paragraph-blank-lines'].options[0] as BooleanOption;
         if (value && paragraphBlankLinesEnableOption.getValue(plugin)) {
-          new ConfirmRuleDisableModal(app, 'rules.paragraph-blank-lines.name', 'rules.two-spaces-between-lines-with-content.name', async () => {
+          new ConfirmRuleDisableModal(app, 'rules.two-spaces-between-lines-with-content.name', 'rules.paragraph-blank-lines.name', async () => {
             await paragraphBlankLinesEnableOption.setValue(false, plugin);
+            plugin.settingsTab.update();
           },
           async () => {
             await (rulesDict['two-spaces-between-lines-with-content'].options[0] as BooleanOption).setValue(false, plugin);
+            plugin.settingsTab.update();
           }).open();
         }
       },

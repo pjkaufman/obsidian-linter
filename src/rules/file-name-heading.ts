@@ -28,9 +28,11 @@ export default class FileNameHeading extends RuleBuilder<FileNameHeadingOptions>
         if (value && headerIncrementEnableOption.getValue(plugin)) {
           new ConfirmRuleDisableModal(app, 'rules.file-name-heading.name', 'rules.header-increment.start-at-h2.name', async () => {
             await headerIncrementStartAtH2Option.setValue(false, plugin);
+            plugin.settingsTab.update();
           },
           async () => {
             await (rulesDict['file-name-heading'].options[0] as BooleanOption).setValue(false, plugin);
+            plugin.settingsTab.update();
           }).open();
         }
       },
