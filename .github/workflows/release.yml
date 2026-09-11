@@ -5,6 +5,11 @@ on:
     tags:
       - "*"
 
+permissions:
+  id-token: write
+  contents: write
+  attestations: write
+
 env:
   PLUGIN_NAME: obsidian-linter
 
@@ -25,6 +30,13 @@ jobs:
           npm ci
           npm run build
           npm run minify-css
+      
+      - name: Generate artifact attestation
+        uses: actions/attest@v4
+        with:
+          subject-path: |
+            main.js
+            styles.css
 
       - name: Create Manual Install Zip
         run: |
@@ -38,8 +50,14 @@ jobs:
         run: |
           tag="${GITHUB_REF#refs/tags/}"
 
+          prerelease=""
+          if [[ "$tag" == *-rc* ]]; then
+            prerelease="--prerelease"
+          fi
+
           gh release create "$tag" \
             --title="$tag" \
             --generate-notes \
             --draft \
+            $prerelease \
             main.js manifest.json styles.css ${{ env.PLUGIN_NAME }}.zip
