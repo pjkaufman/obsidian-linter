@@ -5,9 +5,10 @@ module.exports = {
     '@babel/preset-typescript',
   ],
   plugins: [
-    ['@babel/plugin-proposal-decorators', {version: 'legacy'}],
+    ['@babel/plugin-proposal-decorators', { version: '2023-11' }],
     ['@babel/plugin-transform-class-properties'],
     ['@babel/plugin-transform-private-methods'],
+    ['@babel/plugin-transform-class-static-block'],
     ['import-glob'],
   ],
 };

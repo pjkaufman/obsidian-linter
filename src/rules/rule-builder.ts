@@ -110,10 +110,10 @@ export default abstract class RuleBuilder<TOptions extends Options> extends Rule
 
   abstract get OptionsClass(): (new() => TOptions);
 
-  static register<TOptions extends Options>(this: void, RuleBuilderClass: typeof RuleBuilderBase & (new() => RuleBuilder<TOptions>)): void {
-    const rule = RuleBuilderClass.getRule();
-    registerRule(rule);
-  }
+  static register<TOptions extends Options, T extends typeof RuleBuilderBase & (new () => RuleBuilder<TOptions>)>( ruleBuilderClass: T, _context: ClassDecoratorContext,): void {
+  const rule = ruleBuilderClass.getRule();
+  registerRule(rule);
+}
 
   safeApply(text: string, options?: Options): string {
     return this.apply(text, this.buildRuleOptions(options));
@@ -153,11 +153,21 @@ export default abstract class RuleBuilder<TOptions extends Options> extends Rule
   }
 
   static noSettingControl() {
-    return (target: object, propertyKey: string) => {
-      const optionsClassName = target.constructor.name;
-      RuleBuilderBase.setNoSettingControl(optionsClassName, propertyKey);
-    };
+  return function (
+    _value: unknown,
+    context: ClassFieldDecoratorContext,
+  ): void {
+    const propertyKey = String(context.name);
+
+    context.addInitializer(function () {
+      RuleBuilderBase.setNoSettingControl(
+        this.constructor.name,
+        propertyKey,
+      );
+    });
+  };
   }
+
 }
 
 export class ExampleBuilder<TOptions extends Options> {
