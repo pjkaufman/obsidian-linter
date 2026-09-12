@@ -69,7 +69,7 @@ function generateDocs() {
         let listItemNumber = 0;
         for (const record of option.options) {
           const nameParts = record.value.split('.');
-          let name = '';
+          let name: string;
           if (nameParts.length === 1) {
             name = nameParts[0];
           } else {

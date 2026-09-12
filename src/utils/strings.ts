@@ -155,7 +155,7 @@ function makeSureContentHasASingleEmptyLineBeforeItUnlessItStartsAFileForBlockqu
   }
 
   const indexOfLastNewLine = text.lastIndexOf('\n', startOfNewContent - 1);
-  let priorLine = '';
+  let priorLine: string;
   if (indexOfLastNewLine === -1) {
     priorLine = text.substring(0, startOfNewContent);
   } else {
@@ -281,7 +281,7 @@ function makeSureContentHasASingleEmptyLineAfterItUnlessItEndsAFileForBlockquote
   }
 
   const indexOfSecondNewLineAfterContent = text.indexOf('\n', endOfNewContent + 1);
-  let nextLine = '';
+  let nextLine: string;
   if (indexOfSecondNewLineAfterContent === -1) {
     nextLine = text.substring(endOfNewContent);
   } else {
@@ -448,7 +448,7 @@ export function getSubstringIndex(substring: string, text: string): number[] {
 function getIndexOfStartOfFirstNonEmptyLine(text: string, currentStartOfBlockquote: number, blockquoteLevel: number): number {
   let actualStartOfBlockquote = currentStartOfBlockquote;
   let blockquoteIndex = currentStartOfBlockquote+1;
-  let currentChar = '';
+  let currentChar: string;
   let foundNewStart = false;
   let level = 0;
   while (blockquoteIndex < text.length) {
@@ -480,7 +480,7 @@ function getIndexOfStartOfFirstNonEmptyLine(text: string, currentStartOfBlockquo
 function getIndexOfEndOfLastNonEmptyLine(text: string, currentEndOfBlockquote: number, blockquoteLevel: number): number {
   let actualEndOfBlockquote = currentEndOfBlockquote;
   let blockquoteIndex = currentEndOfBlockquote-1;
-  let currentChar = '';
+  let currentChar: string;
   let foundNewEnd = false;
   let level = 0;
   while (blockquoteIndex >= 0) {
@@ -513,9 +513,9 @@ export function parseCustomReplacements(text: string): Map<string, string> {
   const tableInfo = getAllTablesInText(text);
   const customReplacements = new Map<string, string>();
 
-  let tableContent = '';
-  let tableRows = [] as string[];
-  let rowParts = [] as string[];
+  let tableContent: string;
+  let tableRows:string[];
+  let rowParts: string[];
   for (const table of tableInfo) {
     tableContent = text.substring(table.startIndex, table.endIndex);
     tableRows = tableContent.split('\n');

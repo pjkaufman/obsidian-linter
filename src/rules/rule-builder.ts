@@ -110,7 +110,7 @@ export default abstract class RuleBuilder<TOptions extends Options> extends Rule
 
   abstract get OptionsClass(): (new() => TOptions);
 
-  static register<TOptions extends Options, T extends typeof RuleBuilderBase & (new () => RuleBuilder<TOptions>)>( ruleBuilderClass: T, _context: ClassDecoratorContext,): void {
+  static register<TOptions extends Options, T extends typeof RuleBuilderBase & (new () => RuleBuilder<TOptions>)>(this: void, ruleBuilderClass: T, _context: ClassDecoratorContext,): void {
   const rule = ruleBuilderClass.getRule();
   registerRule(rule);
 }

@@ -403,7 +403,7 @@ export function makeEmphasisOrBoldConsistent(text: string, style: string, type: 
     return text;
   }
 
-  let indicator = '';
+  let indicator: string;
   if (style === 'underscore') {
     indicator = '_';
   } else if (style === 'asterisk') {
@@ -1144,7 +1144,7 @@ function countTableDelimiters(line: string): number {
   let previousCharIsEscapeChar = false;
   let numEscapeCharsInARow = 0;
   let numDelimiters = 0;
-  let currentChar = '';
+  let currentChar: string;
   for (let i = 0; i < line.length; i++) {
     currentChar = line[i];
     if (currentChar === '\\') {

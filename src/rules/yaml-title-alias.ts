@@ -42,7 +42,7 @@ export default class YamlTitleAlias extends RuleBuilder<YamlTitleAliasOptions> {
     text = initYAML(text);
     const [unescapedTitle, title] = this.getTitleInfo(text, options.fileName, options.aliasArrayStyle, options.defaultEscapeCharacter);
 
-    let previousTitle: string = null;
+    let previousTitle: string;
     const yaml = text.match(yamlRegex)[1];
 
     const shouldRemoveTitleAlias = !options.keepAliasThatMatchesTheFilename && unescapedTitle === options.fileName;

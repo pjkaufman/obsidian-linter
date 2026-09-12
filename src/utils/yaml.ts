@@ -345,7 +345,7 @@ export function convertTagValueToStringOrStringArray(value: string | string[]): 
   }
 
   const tags: string[] = [];
-  let originalTagValues: string[] = [];
+  let originalTagValues: string[];
   if (Array.isArray(value)) {
     originalTagValues = value;
   } else if (value.includes(',')) {
