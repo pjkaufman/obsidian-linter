@@ -914,7 +914,7 @@ export default class LinterPlugin extends Plugin {
           if (editorIsWholeFile) {
             oldText = editorValue;
 
-            let newText = oldText;
+            let newText: string;
             if (oldText != activeFileChangeInfo.originalText ) {
               logInfo(getTextInLanguage('logs.file-change-yaml-lint-run'));
               try {

@@ -68,7 +68,7 @@ export default class YamlTimestamp extends RuleBuilder<YamlTimestampOptions> {
 
     return formatYAML(newText, (text) => {
       if (options.dateCreated) {
-        let newTextModified = false;
+        let newTextModified: boolean;
         [text, newTextModified] = this.handleDateCreatedValue(text, options);
 
         textModified = textModified || newTextModified;

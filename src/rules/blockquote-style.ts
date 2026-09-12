@@ -57,10 +57,10 @@ export default class BlockquoteStyle extends RuleBuilder<BlockquoteStyleOptions>
   }
   updateBlockquoteLines(blockquote: string, startOfLineModification: (startOfLine: string, isListMarker: boolean) => string): string {
     let currentIndex = 0;
-    let nextNewLine = 0;
-    let startOfLine = '';
-    let updatedStartOfLine = '';
-    let startOfIndex = 0;
+    let nextNewLine: number;
+    let startOfLine: string;
+    let updatedStartOfLine: string;
+    let startOfIndex: number;
     let newBlockquote = blockquote;
     let breakOutOfLoop = false;
     const mathPlaceHolderRegex = new RegExp(IgnoreTypes.math.placeholder.replace('}', '.+}'), '');

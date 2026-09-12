@@ -10,7 +10,6 @@
     "noImplicitThis": true,
     "allowSyntheticDefaultImports": true,
     "importHelpers": true,
-    "experimentalDecorators": true,
     "strictBindCallApply": true,
     "lib": [
       "dom",
@@ -18,7 +17,7 @@
       "scripthost",
       "ESNext"
     ],
-    "types": ["jest"]
+    "types": ["jest", "node"]
   },
   "include": [
     "**/*.ts",

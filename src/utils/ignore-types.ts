@@ -228,7 +228,7 @@ function removeOverlappingPositions(positions: Position[]): Position[] {
   }
 
   let lastPosition: Position = positions.pop();
-  let currentPosition: Position = null;
+  let currentPosition: Position;
   const result: Position[] = [lastPosition];
   while (positions.length > 0) {
     currentPosition = positions.pop();

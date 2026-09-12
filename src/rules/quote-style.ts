@@ -69,13 +69,13 @@ export default class QuoteStyle extends RuleBuilder<QuoteStyleOptions> {
 
     const endOfText = text.length - 1;
     let quoteReplacement: string;
-    let previousChar = '';
-    let nextChar = '';
-    let previousCharIsALetter = false;
-    let nextCharIsALetter = false;
-    let previousCharIsWhitespace = false;
-    let nextCharIsWhitespace = false;
-    let isContraction = false;
+    let previousChar: string;
+    let nextChar: string;
+    let previousCharIsALetter: boolean;
+    let nextCharIsALetter: boolean;
+    let previousCharIsWhitespace: boolean;
+    let nextCharIsWhitespace: boolean;
+    let isContraction: boolean;
     let previousQuote = '';
     for (const index of indices) {
       previousChar = index == 0 ? '' : text.charAt(index - 1);
