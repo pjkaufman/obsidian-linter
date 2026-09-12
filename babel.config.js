@@ -9,6 +9,6 @@ module.exports = {
     ['@babel/plugin-transform-class-properties'],
     ['@babel/plugin-transform-private-methods'],
     ['@babel/plugin-transform-class-static-block'],
-    ['import-glob'],
+    ['@jteppinette/babel-plugin-import-glob'],
   ],
 };
