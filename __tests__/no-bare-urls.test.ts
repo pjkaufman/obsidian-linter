@@ -16,6 +16,19 @@ ruleTest({
         ![image alt text](https://github.com/favicon.ico)
       `,
     },
+    {// accounts for https://github.com/platers/obsidian-linter/issues/1568
+      testName: 'Urls with text fragments are detected as part of the URL',
+      before: dedent`
+        https://example.com/page#:~:text=fragment
+        <https://example.com/page#:~:text=fragment>
+        https://example.com/p?q=1&x=#:~:text=a
+      `,
+      after: dedent`
+        <https://example.com/page#:~:text=fragment>
+        <https://example.com/page#:~:text=fragment>
+        <https://example.com/p?q=1&x=#:~:text=a>
+      `,
+    },
     {// accounts for https://github.com/platers/obsidian-linter/issues/339
       testName: 'Urls with a hashtag referring to header that are surrounded by `<` and `> should be left alone',
       before: dedent`
