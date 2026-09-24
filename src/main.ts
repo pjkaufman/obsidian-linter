@@ -1100,24 +1100,29 @@ export default class LinterPlugin extends Plugin {
       return;
     }
 
-    const sidebarTab = this.app.workspace.getRightLeaf(false);
+    const sidebarTab = this.app.workspace.getRightLeaf(true);
     const activeEditor = this.getEditor();
 
-    await this.customCommandsLock.acquire('command', async () => {
-      this.currentlyOpeningSidebar = true;
+    try {
+      await this.customCommandsLock.acquire('command', async () => {
+        this.currentlyOpeningSidebar = true;
 
-      await sidebarTab.openFile(file, { active: true });
-      this.rulesRunner.runCustomCommands(this.settings.lintCommands, this.app.commands);
-      if (this.customCommandsCallback) {
-        await this.customCommandsCallback(file);
+        await sidebarTab.openFile(file, { active: true });
+        console.log('Active file should be: ' + file.name);
+        await this.rulesRunner.runCustomCommands(this.settings.lintCommands, this.app.commands);
+        if (this.customCommandsCallback) {
+          await this.customCommandsCallback(file);
+        }
+      });
+    } finally {
+      console.log('Active file should no longer be: ' + file.name);
+      sidebarTab.detach();
+      if (activeEditor) {
+        activeEditor.focus();
       }
-    });
-    sidebarTab.detach();
-    if (activeEditor) {
-      activeEditor.focus();
-    }
 
-    this.currentlyOpeningSidebar = false;
+      this.currentlyOpeningSidebar = false;
+    }
   }
 
   private async runCustomCommands(file: TFile) {
@@ -1127,7 +1132,7 @@ export default class LinterPlugin extends Plugin {
 
     await this.customCommandsLock.acquire('command', async () => {
       try {
-        this.rulesRunner.runCustomCommands(this.settings.lintCommands, this.app.commands);
+        await this.rulesRunner.runCustomCommands(this.settings.lintCommands, this.app.commands);
       } catch (error) {
         this.handleLintError(file, error instanceof Error ? error : new Error(String(error)), getTextInLanguage('commands.lint-file.error-message') + ' \'{FILE_PATH}\'', false);
       }

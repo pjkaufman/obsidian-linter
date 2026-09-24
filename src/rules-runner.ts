@@ -1,6 +1,6 @@
-import {TFile, moment} from 'obsidian';
-import {logDebug, logWarn, timingBegin, timingEnd} from './utils/logger';
-import {getDisabledRules, rules, wrapLintError, Rule, RuleType, Options} from './rules';
+import { Command, TFile, moment } from 'obsidian';
+import { logDebug, logWarn, timingBegin, timingEnd } from './utils/logger';
+import { getDisabledRules, rules, wrapLintError, Rule, RuleType, Options } from './rules';
 import BlockquotifyOnPaste from './rules/blockquotify-on-paste';
 import EscapeYamlSpecialCharacters from './rules/escape-yaml-special-characters';
 import ForceYamlEscape from './rules/force-yaml-escape';
@@ -12,27 +12,27 @@ import RemoveHyphensOnPaste from './rules/remove-hyphens-on-paste';
 import RemoveLeadingOrTrailingWhitespaceOnPaste from './rules/remove-leading-or-trailing-whitespace-on-paste';
 import RemoveLeftoverFootnotesFromQuoteOnPaste from './rules/remove-leftover-footnotes-from-quote-on-paste';
 import RemoveMultipleBlankLinesOnPaste from './rules/remove-multiple-blank-lines-on-paste';
-import {RuleBuilderBase} from './rules/rule-builder';
+import { RuleBuilderBase } from './rules/rule-builder';
 import YamlKeySort from './rules/yaml-key-sort';
 import YamlTimestamp from './rules/yaml-timestamp';
-import {ObsidianCommandInterface} from './typings/obsidian-ex';
+import { ObsidianCommandInterface } from './typings/obsidian-ex';
 import { CustomReplace } from "./settings-data";
 import { LintCommand } from "./settings-data";
-import {convertStringVersionOfEscapeCharactersToEscapeCharacters, replaceTextRanges, textReplacement} from './utils/strings';
-import {getTextInLanguage} from './lang/helpers';
+import { convertStringVersionOfEscapeCharactersToEscapeCharacters, replaceTextRanges, textReplacement } from './utils/strings';
+import { getTextInLanguage } from './lang/helpers';
 import CapitalizeHeadings from './rules/capitalize-headings';
 import YamlTitle from './rules/yaml-title';
 import YamlTitleAlias from './rules/yaml-title-alias';
 import BlockquoteStyle from './rules/blockquote-style';
-import {IgnoreTypes} from './utils/ignore-types';
-import {LintContext, replaceUnprotectedRegexMatches} from './utils/protected-ranges';
-import {addEditsIfTheyDoNotClash, getEditsBetween} from './utils/text-edits';
+import { IgnoreTypes } from './utils/ignore-types';
+import { LintContext, replaceUnprotectedRegexMatches } from './utils/protected-ranges';
+import { addEditsIfTheyDoNotClash, getEditsBetween } from './utils/text-edits';
 import MoveMathBlockIndicatorsToOwnLine from './rules/move-math-block-indicators-to-own-line';
-import {LinterSettings} from './settings-data';
+import { LinterSettings } from './settings-data';
 import TrailingSpaces from './rules/trailing-spaces';
 import { CustomAutoCorrectContent } from './settings-data';
 import AutoCorrectCommonMisspellings from './rules/auto-correct-common-misspellings';
-import {yamlRegex} from './utils/regex';
+import { yamlRegex } from './utils/regex';
 import AddBlankLineAfterYAML from './rules/add-blank-line-after-yaml';
 import ConsecutiveBlankLines from './rules/consecutive-blank-lines';
 
@@ -80,7 +80,7 @@ export class RulesRunner {
     timingEnd(preRuleText);
 
     let hasCustomCorrections = false;
-    for (const replacementFileInfo of (runOptions.settings.ruleConfigs['auto-correct-common-misspellings'] as {[k: string]: CustomAutoCorrectContent[] | null})['extra-auto-correct-files'] ?? [] as CustomAutoCorrectContent[]) {
+    for (const replacementFileInfo of (runOptions.settings.ruleConfigs['auto-correct-common-misspellings'] as { [k: string]: CustomAutoCorrectContent[] | null })['extra-auto-correct-files'] ?? [] as CustomAutoCorrectContent[]) {
       if (replacementFileInfo.filePath != '') {
         hasCustomCorrections = true;
         break;
@@ -117,7 +117,7 @@ export class RulesRunner {
 
       if (rule.alias === 'auto-correct-common-misspellings' && hasCustomCorrections) {
         let skipRule = false;
-        for (const replacementFileInfo of (runOptions.settings.ruleConfigs['auto-correct-common-misspellings'] as {[k: string]: CustomAutoCorrectContent[] | null})['extra-auto-correct-files'] ?? [] as CustomAutoCorrectContent[]) {
+        for (const replacementFileInfo of (runOptions.settings.ruleConfigs['auto-correct-common-misspellings'] as { [k: string]: CustomAutoCorrectContent[] | null })['extra-auto-correct-files'] ?? [] as CustomAutoCorrectContent[]) {
           if (replacementFileInfo.filePath == runOptions.fileInfo.path) {
             skipRule = true;
             break;
@@ -147,7 +147,7 @@ export class RulesRunner {
 
   private runRulesInBatches(rulesToRun: Rule[], text: string, settings: LinterSettings, extraOptions: Options): string {
     return this.runBatches(rulesToRun, text, settings, extraOptions,
-        (rule) => rule.type === RuleType.YAML || rulesThatMustSeeEarlierWork.includes(rule.alias));
+      (rule) => rule.type === RuleType.YAML || rulesThatMustSeeEarlierWork.includes(rule.alias));
   }
 
   private runBatches(rulesToRun: Rule[], text: string, settings: LinterSettings, extraOptions: Options, mustRunOnItsOwn: (rule: Rule) => boolean): string {
@@ -296,7 +296,7 @@ export class RulesRunner {
     return newText;
   }
 
-  runCustomCommands(lintCommands: LintCommand[], commands: ObsidianCommandInterface) {
+  async runCustomCommands(lintCommands: LintCommand[], commands: ObsidianCommandInterface): Promise<void> {
     if (this.skipFile) {
       return;
     }
@@ -313,7 +313,18 @@ export class RulesRunner {
 
       try {
         commandsRun.add(commandInfo.id);
-        commands.executeCommandById(commandInfo.id);
+        if (!(commandInfo.id in commands.commands)) {
+          continue;
+        }
+
+        const command = commands.commands[commandInfo.id] as Command;
+        if (command.checkCallback && command.checkCallback(true)) {
+          command.checkCallback();
+        }
+
+        if (command.callback) {
+          await command.callback();
+        }
       } catch (error) {
         wrapLintError(error instanceof Error ? error : new Error(String(error)), `${getTextInLanguage('logs.custom-lint-error-message')} ${commandInfo.id}`);
       }
@@ -336,7 +347,7 @@ export class RulesRunner {
       if (debugMsg && debugMsg.trim() != '') {
         debugMsg += ':\n';
       }
-      debugMsg +=`/${eachRegex.find}/${eachRegex.flags}/${eachRegex.replace}/`;
+      debugMsg += `/${eachRegex.find}/${eachRegex.flags}/${eachRegex.replace}/`;
 
       logDebug(debugMsg);
       const regex = new RegExp(`${eachRegex.find}`, eachRegex.flags);
@@ -367,11 +378,11 @@ export class RulesRunner {
 
     [newText] = RemoveLeadingOrTrailingWhitespaceOnPaste.applyIfEnabled(newText, runOptions.settings, []);
 
-    [newText] = PreventDoubleChecklistIndicatorOnPaste.applyIfEnabled(newText, runOptions.settings, [], {lineContent: currentLine, selectedText: selectedText});
+    [newText] = PreventDoubleChecklistIndicatorOnPaste.applyIfEnabled(newText, runOptions.settings, [], { lineContent: currentLine, selectedText: selectedText });
 
-    [newText] = PreventDoubleListItemIndicatorOnPaste.applyIfEnabled(newText, runOptions.settings, [], {lineContent: currentLine, selectedText: selectedText});
+    [newText] = PreventDoubleListItemIndicatorOnPaste.applyIfEnabled(newText, runOptions.settings, [], { lineContent: currentLine, selectedText: selectedText });
 
-    [newText] = BlockquotifyOnPaste.applyIfEnabled(newText, runOptions.settings, [], {lineContent: currentLine});
+    [newText] = BlockquotifyOnPaste.applyIfEnabled(newText, runOptions.settings, [], { lineContent: currentLine });
 
     return newText;
   }
@@ -393,9 +404,9 @@ export class RulesRunner {
 }
 
 export function createRunLinterRulesOptions(text: string, file: TFile | null = null, momentLocale: string, settings: LinterSettings, defaultMisspellings: Map<string, string>): RunLinterRulesOptions {
-  const createdAt = (file && file.stat.ctime !== 0) ? moment(file.stat.ctime): moment();
+  const createdAt = (file && file.stat.ctime !== 0) ? moment(file.stat.ctime) : moment();
   createdAt.locale(momentLocale);
-  const modifiedAt = file ? moment(file.stat.mtime): moment();
+  const modifiedAt = file ? moment(file.stat.mtime) : moment();
   modifiedAt.locale(momentLocale);
   const modifiedAtTime = modifiedAt.format();
   const createdAtTime = createdAt.format();
@@ -403,10 +414,10 @@ export function createRunLinterRulesOptions(text: string, file: TFile | null = n
   return {
     oldText: text,
     fileInfo: {
-      name: file ? file.basename: '',
+      name: file ? file.basename : '',
       createdAtFormatted: createdAtTime,
       modifiedAtFormatted: modifiedAtTime,
-      path: file ? file.path: '',
+      path: file ? file.path : '',
     },
     settings: settings,
     momentLocale: momentLocale,
