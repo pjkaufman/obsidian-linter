@@ -1,7 +1,7 @@
 import MoveTagsToYaml from '../src/rules/move-tags-to-yaml';
-import {NormalArrayFormats, SpecialArrayFormats, TagSpecificArrayFormats} from '../src/utils/yaml';
+import { ArrayFormats } from '../src/utils/yaml';
 import dedent from 'ts-dedent';
-import {ruleTest} from './common';
+import { ruleTest } from './common';
 
 ruleTest({
   RuleBuilderClass: MoveTagsToYaml,
@@ -10,13 +10,13 @@ ruleTest({
       testName: 'Does not collect or remove tags inside fenced code',
       before: '```\n#inside\n```\n\nText #outside',
       after: '---\ntags: [outside]\n---\n```\n#inside\n```\n\nText',
-      options: {howToHandleExistingTags: 'Remove whole tag'},
+      options: { howToHandleExistingTags: 'Remove whole tag' },
     },
     {
       testName: 'Does not collect or remove tags inside disabled sections',
       before: '<!-- linter-disable -->\n#inside\n<!-- linter-enable -->\n\nText #outside',
       after: '---\ntags: [outside]\n---\n<!-- linter-disable -->\n#inside\n<!-- linter-enable -->\n\nText',
-      options: {howToHandleExistingTags: 'Remove whole tag'},
+      options: { howToHandleExistingTags: 'Remove whole tag' },
     },
     {
       testName: 'Nothing happens when there is no tag in the content of the text',
@@ -40,7 +40,7 @@ ruleTest({
         #test
       `,
       options: {
-        tagArrayStyle: NormalArrayFormats.MultiLine,
+        tagArrayStyle: ArrayFormats.MultiLine,
       },
     },
     {
@@ -54,21 +54,6 @@ ruleTest({
         ---
         #test
       `,
-    },
-    {
-      testName: 'Creates single string tag when missing',
-      before: dedent`
-        #test
-      `,
-      after: dedent`
-        ---
-        tags: test
-        ---
-        #test
-      `,
-      options: {
-        tagArrayStyle: SpecialArrayFormats.SingleStringToMultiLine,
-      },
     },
     {
       testName: 'Creates multi-line array tags when empty',
@@ -86,7 +71,7 @@ ruleTest({
         #test
       `,
       options: {
-        tagArrayStyle: NormalArrayFormats.MultiLine,
+        tagArrayStyle: ArrayFormats.MultiLine,
       },
     },
     {
@@ -108,18 +93,18 @@ ruleTest({
       testName: 'Nothing happens when the tags in the body are covered by the tags in the YAML already',
       before: dedent`
         ---
-        tags: test
+        tags: [test]
         ---
         #test
       `,
       after: dedent`
         ---
-        tags: test
+        tags: [test]
         ---
         #test
       `,
       options: {
-        tagArrayStyle: SpecialArrayFormats.SingleStringToSingleLine,
+        tagArrayStyle: ArrayFormats.SingleLine,
       },
     },
     { // accounts for https://github.com/platers/obsidian-linter/issues/472
@@ -141,23 +126,8 @@ ruleTest({
         #test
       `,
       options: {
-        tagArrayStyle: SpecialArrayFormats.SingleStringToSingleLine,
+        tagArrayStyle: ArrayFormats.SingleLine,
       },
-    },
-    { // relates to https://github.com/platers/obsidian-linter/issues/441
-      testName: 'Creates single-line array tags when empty and the existing tags key is `tag`',
-      before: dedent`
-        ---
-        tag: ${''}
-        ---
-        #test
-      `,
-      after: dedent`
-        ---
-        tag: [test]
-        ---
-        #test
-      `,
     },
     { // accounts for https://github.com/platers/obsidian-linter/issues/489
       testName: 'CSS styles are not included in tags',
@@ -184,13 +154,13 @@ ruleTest({
       `,
       after: dedent`
         ---
-        tags: tag1 tag2
+        tags: [tag1, tag2]
         ---
         #ignored-tag test data
         #ignored-tag/nested-tag more tested data
       `,
       options: {
-        tagArrayStyle: TagSpecificArrayFormats.SingleStringSpaceDelimited,
+        tagArrayStyle: ArrayFormats.SingleLine,
         howToHandleExistingTags: 'Remove whole tag',
         tagsToIgnore: ['ignored-tag', 'ignored-tag/nested-tag'],
       },
@@ -206,7 +176,7 @@ ruleTest({
         [[some_link|Issue #152 on Github]]]
       `,
       options: {
-        tagArrayStyle: TagSpecificArrayFormats.SingleStringSpaceDelimited,
+        tagArrayStyle: ArrayFormats.SingleLine,
       },
     },
     { // accounts for https://github.com/platers/obsidian-linter/issues/573
@@ -224,11 +194,11 @@ ruleTest({
         title: Move Tags to YAML Duplicates YAML
         date: 2023-01-13
         edit: 2023-01-231
-        tags: tag-error
+        tags: [tag-error]
         ---
       `,
       options: {
-        tagArrayStyle: TagSpecificArrayFormats.SingleStringSpaceDelimited,
+        tagArrayStyle: ArrayFormats.SingleLine,
         howToHandleExistingTags: 'Remove whole tag',
       },
     },
@@ -248,14 +218,14 @@ ruleTest({
         ---
         BC-dataview-note: "#tag1 and #tag2"
         BC-dataview-note-field: parent
-        tags: tag-body
+        tags: [tag-body]
         ---
         ${''}
         # Title
         ${''}
       `,
       options: {
-        tagArrayStyle: TagSpecificArrayFormats.SingleStringSpaceDelimited,
+        tagArrayStyle: ArrayFormats.SingleLine,
         howToHandleExistingTags: 'Remove whole tag',
       },
     },
@@ -275,12 +245,12 @@ ruleTest({
         title: Note
         Date: 2023-10-24T23:00:00+08:00
         lastMod: 2023-11-28T17:36:29+08:00
-        tags: tag
+        tags: [tag]
         ---
         ![[image.png]]
       `,
       options: {
-        tagArrayStyle: TagSpecificArrayFormats.SingleStringSpaceDelimited,
+        tagArrayStyle: ArrayFormats.SingleLine,
         howToHandleExistingTags: 'Remove whole tag',
       },
     },
@@ -300,13 +270,13 @@ ruleTest({
         title: Note
         Date: 2023-10-24T23:00:00+08:00
         lastMod: 2023-11-28T17:36:29+08:00
-        tags: tag
+        tags: [tag]
         ---
         ${''}
         #tag![[image.png]]
       `,
       options: {
-        tagArrayStyle: TagSpecificArrayFormats.SingleStringSpaceDelimited,
+        tagArrayStyle: ArrayFormats.SingleLine,
       },
     },
     { // accounts for https://github.com/platers/obsidian-linter/issues/1068
@@ -332,7 +302,7 @@ ruleTest({
         #\`
       `,
       options: {
-        tagArrayStyle: NormalArrayFormats.SingleLine,
+        tagArrayStyle: ArrayFormats.SingleLine,
       },
     },
     { // accounts for https://github.com/platers/obsidian-linter/issues/1116
@@ -357,7 +327,7 @@ ruleTest({
         :
       `,
       options: {
-        tagArrayStyle: NormalArrayFormats.SingleLine,
+        tagArrayStyle: ArrayFormats.SingleLine,
         howToHandleExistingTags: 'Remove whole tag',
       },
     },
@@ -392,7 +362,7 @@ ruleTest({
         Nested emoji:
       `,
       options: {
-        tagArrayStyle: NormalArrayFormats.SingleLine,
+        tagArrayStyle: ArrayFormats.SingleLine,
         howToHandleExistingTags: 'Remove whole tag',
       },
     },
